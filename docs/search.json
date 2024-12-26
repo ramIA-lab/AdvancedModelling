@@ -1,0 +1,58 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Preprocessament i Modelatge Avançat d’Anàlisi de Dades (PMAAD)",
+    "section": "",
+    "text": "Preprocessament i models avançats d’anàlisis de dades és la tercera assignatura d’una seqüència on s’han adquirit ja els rudiments de Probabilitat i Estadística que inclou Introducció a l’Estadística (IE, Quadrimestre 2) i els Models estadístics més bàsics (ME, Quadrimestre 3). En aquestes assignatures prèvies, l’estudiant de grau de IA ha pogut aprendre nocions bàsiques d’anàlisi exploratòria i descriptiva de dades, teoria de probabilitat i mostreig, nocions d’inferència estadística i disseny d’experiments i models lineals de regressió simple, respectivament. Mentre que, a Modelització estadística, s’introdueix a l’alumne en models més complexos que inclouen, d’una banda, models de classificació, model lineal general i generalitzat i una introducció a sèries temporals com a algorismes supervisats, i, d’altra banda, models no supervisats que inclouen clustering i tècniques d’anàlisi multivariant del tipus PCA.\nEn aquesta assignatura es treballarà la metodologia de preprocessament de dades des d’una perspectiva de sistematització del procés i abordatge d’escenaris més complexos, dades composicionals, variables multivaluades, dades multilingües, … i s’estudiaran mètodes més complexos d’imputació de dades mancants o de diagnòstic i tractament d’outliers que permetin portar la dada a la presa de decisions complexes en aplicacions reals.\nAquesta assignatura integrarà les tècniques més complexes de preprocessament de dades en un escenari genèric de ciència de dades per connectar les dades depurades a models ja sigui d’estadística multivariant, com d’aprenentatge automàtic.\nRespecte als mètodes avançats d’anàlisi de dades, es veuran tècniques d’anàlisi multivariant noves, com les que permeten escalar el clustering jeràrquic, noves formes de representar les dades (variables semàntiques) o generalitzen la topologia de classes que es poden reconèixer i l’automatització del postprocessament de dades, que ajuda a interpretar els patron representants en les classes. D’altra banda, s’exploraran diferents tècniques d’estadística multivariant per tractar dades espai-temporals i textuals, així com l’extracció de topics.\nAquesta web està creada por Dante Conti y Sergi Ramírez, (c) 2024"
+  },
+  {
+    "objectID": "index.html#advanced-preprocessing",
+    "href": "index.html#advanced-preprocessing",
+    "title": "Preprocessament i Modelatge Avançat d’Anàlisi de Dades (PMAAD)",
+    "section": "1 Advanced Preprocessing",
+    "text": "1 Advanced Preprocessing\n\n1.1 Basic Imputation methods\nBasic Imputation method\nLab sesion 1 - Basic Imputation method\n\n\n1.2 Outliers Multivariates\nOutiliers Multivariates\nLab sesion 2 - Outliers Multivariates\n\n\n1.3 MICE/MIMMI/CURE\nAdvanced Imputation Methods\nLab sesion 3 - MICE/MIMMI/CURE"
+  },
+  {
+    "objectID": "index.html#advanced-clustering",
+    "href": "index.html#advanced-clustering",
+    "title": "Preprocessament i Modelatge Avançat d’Anàlisi de Dades (PMAAD)",
+    "section": "2 Advanced Clustering",
+    "text": "2 Advanced Clustering\n\n2.1 DBSCAN/OPTICS\nDBSCAN\nOPTICS\nLab sesion 4 - DBSCAN/OPTICS\n\n\n2.2 Times Series Clustering\nTimes Series Clustering\nLab sesion 5 - Times Series Clustering"
+  },
+  {
+    "objectID": "index.html#advanced-profiling",
+    "href": "index.html#advanced-profiling",
+    "title": "Preprocessament i Modelatge Avançat d’Anàlisi de Dades (PMAAD)",
+    "section": "3 Advanced Profiling",
+    "text": "3 Advanced Profiling\nAdvanced Profiling\nLab sesion 6 - TLP, TERMOMETRO, aTLP"
+  },
+  {
+    "objectID": "index.html#correspondence-analysis",
+    "href": "index.html#correspondence-analysis",
+    "title": "Preprocessament i Modelatge Avançat d’Anàlisi de Dades (PMAAD)",
+    "section": "4 Correspondence Analysis",
+    "text": "4 Correspondence Analysis\n\n4.1 Simple Correspondence Analysis (ACS)\nACS\nLab sesion 7 - ACS\n\n\n4.2 Multiple Correspondence Analysis (ACM) and Factor Analysis of mixed data (FAMD)\nACM\nFAMD\nLab sesion 8 - ACM\nLab sesion 8 - FAMD"
+  },
+  {
+    "objectID": "index.html#geospatial-analysis",
+    "href": "index.html#geospatial-analysis",
+    "title": "Preprocessament i Modelatge Avançat d’Anàlisi de Dades (PMAAD)",
+    "section": "5 Geospatial Analysis",
+    "text": "5 Geospatial Analysis\n\n5.1 Geovisualitzation\nGeovisualitzation\nLab sesion 9 - Geovisualitzation\n\n\n5.2 Geostatatistica\nGeostatatistica\nGeomodelling\nLab sesion 10 - Geostatistica\nLab sesion 11 - Geomodelling"
+  },
+  {
+    "objectID": "index.html#texual-analysis",
+    "href": "index.html#texual-analysis",
+    "title": "Preprocessament i Modelatge Avançat d’Anàlisi de Dades (PMAAD)",
+    "section": "6 Texual Analysis",
+    "text": "6 Texual Analysis\n\n6.1 Topic Modelling\nTopic Modelling\nLab sesion 12 - Topic Modelling\n\n\n6.2 Latent Semantic Analysis\nLatent Semanitc Analysis\nLab sesion 13 - LDA"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site\n\n1 + 1\n\n[1] 2\n\n\n\n\n\nAquesta web està creada por Dante Conti y Sergi Ramírez, (c) 2024"
+  }
+]
