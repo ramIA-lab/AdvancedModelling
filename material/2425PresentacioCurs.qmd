@@ -2,7 +2,7 @@
 title: "Presentació del curs"
 subtitle: "2024 - 2025"
 title-slide-attributes:
-    data-background-image: ../../imagenes/ideai_logo.png
+    data-background-image: ../imagenes/ideai_logo.png
     data-background-size: contain
     data-background-opacity: "0.25"
     data-background-color: "white"
@@ -14,8 +14,8 @@ format:
     # theme: night
     theme: [night, ../ideai.scss]
     background-transition: slide
-    logo: ../../imagenes/Logo_UPC.svg.png
-    css: ../../logo.css
+    logo: ../imagenes/Logo_UPC.svg.png
+    css: ../logo.css
     footer: "Preprocessing i Models Avançats d'Anàlisis de Dades (PMAAD)"
     # slide-tone: true # Introduce sonido al cambio de transparencias para gente ciega
     # embed-resources: true # Para generar un fichero html con todo completo sin necesidad de tener varios ficheros con los estilos
