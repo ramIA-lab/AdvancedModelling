@@ -1,0 +1,91 @@
+---
+title: "Basic Imputation Methods"
+title-slide-attributes:
+    data-background-image: ../../../imagenes/ideai_logo.png
+    data-background-size: contain
+    data-background-opacity: "0.25"
+    data-background-color: "white"
+author: "Dante Conti i Sergi Ramirez"
+format: 
+  revealjs:
+    incremental: true
+    # theme: night
+    theme: [night, ../../../ideai.scss]
+    background-transition: slide
+    logo: ../../../imagenes/Logo_UPC.svg.png
+    css: ../../../logo.css
+    footer: "Preprocessing i Models Avançats d'Anàlisis de Dades (PMAAD)"
+    # slide-tone: true # Introduce sonido al cambio de transparencias para gente ciega
+    # embed-resources: true # Para generar un fichero html con todo completo sin necesidad de tener varios ficheros con los estilos
+    multiplex: true # Para que puedan ver lo que se esta presentando
+    controls-tutorial: true
+    scale: 0.9
+editor: visual
+---
+
+#### Introducción
+
+En estadística, la imputación se refiere al procedimiento de utilizar valores alternativos en lugar de datos faltantes. Se denomina "imputación de unidad" cuando se reemplaza un punto de datos y "imputación de elemento" cuando se reemplaza un componente de un punto de datos.
+
+------------------------------------------------------------------------
+
+#### Valor fijo
+
+La imputación de valores fijos es una técnica universal que reemplaza los datos nulos por un valor fijo y es aplicable a todos los tipos de datos. Puede imputar los valores nulos en una encuesta utilizando "sin respuesta" como ejemplo de uso de la imputación fija en características nominales.
+
+Ahora que hemos explorado la imputación única, su importancia y sus técnicas, aprendamos sobre la imputación múltiple.
+
+
+$$
+\bar{y} = \beta_0 + \beta_1·x
+$$
+
+------------------------------------------------------------------------
+
+#### Valor siguiente o anterior
+
+Existen técnicas de imputación específicas para los datos de series temporales o datos ordenados. Estas técnicas tienen en cuenta la estructura ordenada del conjunto de datos, en la que los valores cercanos son probablemente más comparables que los lejanos. El valor siguiente o anterior dentro de la serie temporal suele sustituir al valor faltante como parte de un método común para imputar datos incompletos en la serie temporal. Esta estrategia es eficaz tanto para valores nominales como numéricos.
+
+------------------------------------------------------------------------
+
+#### Valor máximo o mínimo
+
+Puede utilizar el mínimo o máximo del rango como costo de reemplazo de los valores faltantes si sabe que los datos deben ajustarse a un rango específico \[mínimo, máximo\] y si sabe, a partir del proceso de recopilación de datos, que el instrumento de medición deja de registrar y el mensaje se satura más allá de uno de dichos límites. Por ejemplo, si se ha alcanzado un precio límite en un intercambio financiero y el procedimiento de intercambio se ha detenido, el precio faltante se puede sustituir por el valor mínimo del límite del intercambio.
+
+------------------------------------------------------------------------
+
+#### Valor más frecuente
+
+El valor más frecuente en la columna se utiliza para reemplazar los valores faltantes en otra técnica popular que es efectiva tanto para características nominales como numéricas.
+
+------------------------------------------------------------------------
+
+#### (Redondeado) Media o Promedio Móvil o Valor Mediano
+
+La mediana, la media o la media redondeada son otras técnicas de imputación populares para las características numéricas. La técnica, en este caso, reemplaza los valores nulos con la media, la media redondeada o los valores de la mediana determinados para esa característica en todo el conjunto de datos. Se recomienda utilizar la mediana en lugar de la media cuando el conjunto de datos tiene una cantidad significativa de valores atípicos.
+
+------------------------------------------------------------------------
+
+#### K Vecinos más cercanos
+
+El objetivo es encontrar los k ejemplos más cercanos en los datos donde el valor de la característica relevante no esté ausente y luego sustituir el valor de la característica que ocurre con mayor frecuencia en el grupo.
+
+------------------------------------------------------------------------
+
+#### Interpolación media o lineal
+
+La interpolación lineal o promedio, que calcula entre el valor anterior y el siguiente accesible y sustituye el valor faltante, es similar a la imputación del valor anterior/siguiente, pero solo se aplica a datos numéricos. Por supuesto, como ocurre con otras operaciones sobre datos ordenados, es fundamental ordenar los datos con precisión de antemano, por ejemplo, en el caso de datos de series temporales, según una marca de tiempo.
+
+------------------------------------------------------------------------
+
+#### Predicción de valores faltantes
+
+Otro método popular para la imputación única es utilizar un modelo de aprendizaje automático para determinar el valor de imputación final de la característica x en función de otras características. El modelo se entrena utilizando los valores de las columnas restantes y las filas de la característica x sin valores faltantes se utilizan como conjunto de entrenamiento.
+
+------------------------------------------------------------------------
+
+#### Predicción de valores faltantes
+
+Dependiendo del tipo de característica, podemos emplear cualquier modelo de regresión o clasificación en esta situación. En el entrenamiento de resistencia, el algoritmo se utiliza para pronosticar el valor más probable de cada valor faltante en todas las muestras.
+
+Se utiliza un enfoque de imputación básico, como el valor medio, para imputar temporalmente todos los valores faltantes cuando hay datos faltantes en más de un campo de características. Luego, los valores de una columna se restauran a faltantes. Después del entrenamiento, el modelo se utiliza para completar las variables faltantes. De esta manera, se entrena un modelo para cada característica que tiene un valor faltante hasta que pueda imputar todos los valores faltantes.

@@ -1,6 +1,6 @@
 ---
 title: "Preprocessament i Modelatge Avançat d'Anàlisi de Dades (PMAAD)"
-toc: false
+toc: true
 number-sections: true
 ---
 
@@ -12,11 +12,13 @@ Aquesta assignatura integrarà les tècniques més complexes de preprocessament 
 
 Respecte als mètodes avançats d'anàlisi de dades, es veuran tècniques d'anàlisi multivariant noves, com les que permeten escalar el clustering jeràrquic, noves formes de representar les dades (variables semàntiques) o generalitzen la topologia de classes que es poden reconèixer i l'automatització del postprocessament de dades, que ajuda a interpretar els patron representants en les classes. D'altra banda, s'exploraran diferents tècniques d'estadística multivariant per tractar dades espai-temporals i textuals, així com l'extracció de topics.
 
+[Introducció de l'assignatura](material/2425PresentacioCurs.qmd)
+
 ## Advanced Preprocessing
 
 ### Basic Imputation methods
 
-[Basic Imputation method](material/01_AdvancedPreprocessing/teoria/)
+[Basic Imputation method](material/01_AdvancedPreprocessing/teoria/basicImputation.qmd)
 
 [Lab sesion 1 - Basic Imputation method](material/01_AdvancedPreprocessing/laboratorio/)
 

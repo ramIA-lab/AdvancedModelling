@@ -1,0 +1,35 @@
+/**
+ * Black theme for reveal.js.
+ *
+ * Copyright (C) 2011-2012 Hakim El Hattab, http://hakim.se
+ *
+ * Adapted for Quarto by Posit, PBC
+ * Copyright (C) 2024 Posit, PBC
+ */
+
+/*-- scss:defaults --*/
+
+//Tamaño fuentes
+// https://emtopx.com/rem-to-pt/
+// $font-size-root: 14px !default;
+// $h1-font-size: 32px !default;
+// $h2-font-size: 24px !default;
+$font-size-root: 12px !default;
+
+// colors
+$body-bg: #ffffff !default;
+$body-color: #000 !default;
+$link-color: #51483d !default;
+$selection-bg: #26351c !default;
+$light-bg-text-color: #0477BF !default;
+$dark-bg-text-color: #0477BF !default;
+
+// headings
+$presentation-heading-color: #0477BF !default;
+// $presentation-heading-color: #0477BF !default;
+
+/*-- scss:rules --*/
+
+.reveal a {
+  line-height: 1.3em;
+}
