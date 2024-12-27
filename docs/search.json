@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "Preprocessament i Modelatge Avançat d’Anàlisi de Dades (PMAAD)",
     "section": "",
-    "text": "Preprocessament i models avançats d’anàlisis de dades és la tercera assignatura d’una seqüència on s’han adquirit ja els rudiments de Probabilitat i Estadística que inclou Introducció a l’Estadística (IE, Quadrimestre 2) i els Models estadístics més bàsics (ME, Quadrimestre 3). En aquestes assignatures prèvies, l’estudiant de grau de IA ha pogut aprendre nocions bàsiques d’anàlisi exploratòria i descriptiva de dades, teoria de probabilitat i mostreig, nocions d’inferència estadística i disseny d’experiments i models lineals de regressió simple, respectivament. Mentre que, a Modelització estadística, s’introdueix a l’alumne en models més complexos que inclouen, d’una banda, models de classificació, model lineal general i generalitzat i una introducció a sèries temporals com a algorismes supervisats, i, d’altra banda, models no supervisats que inclouen clustering i tècniques d’anàlisi multivariant del tipus PCA.\nEn aquesta assignatura es treballarà la metodologia de preprocessament de dades des d’una perspectiva de sistematització del procés i abordatge d’escenaris més complexos, dades composicionals, variables multivaluades, dades multilingües, … i s’estudiaran mètodes més complexos d’imputació de dades mancants o de diagnòstic i tractament d’outliers que permetin portar la dada a la presa de decisions complexes en aplicacions reals.\nAquesta assignatura integrarà les tècniques més complexes de preprocessament de dades en un escenari genèric de ciència de dades per connectar les dades depurades a models ja sigui d’estadística multivariant, com d’aprenentatge automàtic.\nRespecte als mètodes avançats d’anàlisi de dades, es veuran tècniques d’anàlisi multivariant noves, com les que permeten escalar el clustering jeràrquic, noves formes de representar les dades (variables semàntiques) o generalitzen la topologia de classes que es poden reconèixer i l’automatització del postprocessament de dades, que ajuda a interpretar els patron representants en les classes. D’altra banda, s’exploraran diferents tècniques d’estadística multivariant per tractar dades espai-temporals i textuals, així com l’extracció de topics.\nAquesta web està creada por Dante Conti y Sergi Ramírez, (c) 2024"
+    "text": "Preprocessament i models avançats d’anàlisis de dades és la tercera assignatura d’una seqüència on s’han adquirit ja els rudiments de Probabilitat i Estadística que inclou Introducció a l’Estadística (IE, Quadrimestre 2) i els Models estadístics més bàsics (ME, Quadrimestre 3). En aquestes assignatures prèvies, l’estudiant de grau de IA ha pogut aprendre nocions bàsiques d’anàlisi exploratòria i descriptiva de dades, teoria de probabilitat i mostreig, nocions d’inferència estadística i disseny d’experiments i models lineals de regressió simple, respectivament. Mentre que, a Modelització estadística, s’introdueix a l’alumne en models més complexos que inclouen, d’una banda, models de classificació, model lineal general i generalitzat i una introducció a sèries temporals com a algorismes supervisats, i, d’altra banda, models no supervisats que inclouen clustering i tècniques d’anàlisi multivariant del tipus PCA.\nEn aquesta assignatura es treballarà la metodologia de preprocessament de dades des d’una perspectiva de sistematització del procés i abordatge d’escenaris més complexos, dades composicionals, variables multivaluades, dades multilingües, … i s’estudiaran mètodes més complexos d’imputació de dades mancants o de diagnòstic i tractament d’outliers que permetin portar la dada a la presa de decisions complexes en aplicacions reals.\nAquesta assignatura integrarà les tècniques més complexes de preprocessament de dades en un escenari genèric de ciència de dades per connectar les dades depurades a models ja sigui d’estadística multivariant, com d’aprenentatge automàtic.\nRespecte als mètodes avançats d’anàlisi de dades, es veuran tècniques d’anàlisi multivariant noves, com les que permeten escalar el clustering jeràrquic, noves formes de representar les dades (variables semàntiques) o generalitzen la topologia de classes que es poden reconèixer i l’automatització del postprocessament de dades, que ajuda a interpretar els patron representants en les classes. D’altra banda, s’exploraran diferents tècniques d’estadística multivariant per tractar dades espai-temporals i textuals, així com l’extracció de topics.\nIntroducció de l’assignatura\nAquesta web està creada por Dante Conti y Sergi Ramírez, (c) 2024"
   },
   {
     "objectID": "index.html#advanced-preprocessing",
@@ -54,5 +54,110 @@
     "title": "About",
     "section": "",
     "text": "About this site\n\n1 + 1\n\n[1] 2\n\n\n\n\n\nAquesta web està creada por Dante Conti y Sergi Ramírez, (c) 2024"
+  },
+  {
+    "objectID": "material/01_AdvancedPreprocessing/teoria/basicImputation.html#indice",
+    "href": "material/01_AdvancedPreprocessing/teoria/basicImputation.html#indice",
+    "title": "Basic Imputation Methods",
+    "section": "indice",
+    "text": "indice\nSFFAÇÑDDKFDA.ADN´KFNAÇ&lt;DÑVFNAÇ&lt;DKNÇÑASKNFCÑÇASKN&lt;ÇÑFNA"
+  },
+  {
+    "objectID": "material/01_AdvancedPreprocessing/teoria/basicImputation.html#introducción",
+    "href": "material/01_AdvancedPreprocessing/teoria/basicImputation.html#introducción",
+    "title": "Basic Imputation Methods",
+    "section": "Introducción",
+    "text": "Introducción\nEn estadística, la imputación se refiere al procedimiento de utilizar valores alternativos en lugar de datos faltantes. Se denomina “imputación de unidad” cuando se reemplaza un punto de datos y “imputación de elemento” cuando se reemplaza un componente de un punto de datos."
+  },
+  {
+    "objectID": "material/2425PresentacioCurs.html#lecturers",
+    "href": "material/2425PresentacioCurs.html#lecturers",
+    "title": "Presentació del curs",
+    "section": "Lecturers",
+    "text": "Lecturers\n\nDante Conti:\n\nIDEAI (Nexus II)\nC5 - 219\nemail: dante.conti@upc.edu\n\nSergi Ramirez \n\nIDEAI (Nexus II)\nC5 - 212b\nemail: sergi.ramirez@upc.edu"
+  },
+  {
+    "objectID": "material/2425PresentacioCurs.html#practical-information",
+    "href": "material/2425PresentacioCurs.html#practical-information",
+    "title": "Presentació del curs",
+    "section": "Practical Information",
+    "text": "Practical Information\nLecturers\n\n\n\nDante Conti:\n\nIDEAI (Nexus II)\nC5 - 219\nemail: dante.conti@upc.edu\n\n\n\n\nSergi Ramirez\n\nIDEAI (Nexus II)\nC5 - 212b\nemail: sergi.ramirez@upc.edu"
+  },
+  {
+    "objectID": "material/2425PresentacioCurs.html#practical-information-1",
+    "href": "material/2425PresentacioCurs.html#practical-information-1",
+    "title": "Presentació del curs",
+    "section": "Practical information",
+    "text": "Practical information\nStructure\n\n- Theory Sessions:\nMonday (10:00h to 12:00h) A6203 (D.Conti)\n\n- Practical Sessions:\nTuesday (08:00h to 10:00h) A6203 (D.Conti)\n\n- STUDENTS’ ASSISTANCE:\nSchendule by mail with teacher"
+  },
+  {
+    "objectID": "material/2425PresentacioCurs.html#evaluation",
+    "href": "material/2425PresentacioCurs.html#evaluation",
+    "title": "Presentació del curs",
+    "section": "Evaluation",
+    "text": "Evaluation\n\\[\nCalificación = 0.2 · Q + 0.2 · E_3 + 0.2 · E_4 + 0.4 · EF\n\\]\ndónde:\n\n\\(Q\\): 4 Quizes de preguntas cortas.\n\\(E_{1, 2}\\): Entrega de las partes administrativas del proyecto\n\n\\(E_1\\) Fecha entrega: 18 de febrero de 2025\n\\(E_2\\) Fecha entrega: 25 de febrero de 2025\n\n\\(E_{3, 4}\\): Entrega de los bloques de análisis del proyecto\n\n\\(E_3\\) Fecha entrega: 31 de marzo de 2025\n\\(E_4\\) Fecha entrega: 26 de mayo de 2025\nImportante: No se permitirá ninguna entrega fuera del plazo\n\n\\(EF\\): Exámen final de la asignatura (Tots el temaris)"
+  },
+  {
+    "objectID": "material/2425PresentacioCurs.html#evaluation-1",
+    "href": "material/2425PresentacioCurs.html#evaluation-1",
+    "title": "Presentació del curs",
+    "section": "Evaluation",
+    "text": "Evaluation\nQuizes\n\nQuizes de preguntes curtes\nDuració: 20 minuts\nPonderació: 5% (cada quiz) de la qualificació final.\n\n\n\n\n\n\nQuiz 1\nQuiz 2\nQuiz 3\nQuiz 4\n\n\n\n\n11/03/2025\n31/03/2025\n06/05/2025\n26/05/2025\n\n\n\n\nAquesta distribució temporal está subjectes a canvis per part dels docents"
+  },
+  {
+    "objectID": "material/2425PresentacioCurs.html#evaluation-2",
+    "href": "material/2425PresentacioCurs.html#evaluation-2",
+    "title": "Presentació del curs",
+    "section": "Evaluation",
+    "text": "Evaluation\nProjectes"
+  },
+  {
+    "objectID": "material/2425PresentacioCurs.html#evaluació",
+    "href": "material/2425PresentacioCurs.html#evaluació",
+    "title": "Presentació del curs",
+    "section": "Evaluació",
+    "text": "Evaluació\n\n\\[\nQualificació = 0.2 · Q + 0.2 · E_3 + 0.2 · E_4 + 0.4 · EF\n\\]\n\n\n\n\nÓn:\n\n\n\\(Q\\): 4 Quizes de preguntes curtes.\n\\(E_{3, 4}\\): Entrega del treball en grup\n\\(EF\\): Exàmen final de la asignatura\n\n\n\n\n\n\nLes matrícules d’honor s’assignarán segons els criteri dels docents valorant les aportacions dels alumnes en les classes tant teòriques com pràctiques."
+  },
+  {
+    "objectID": "material/2425PresentacioCurs.html#evaluació-1",
+    "href": "material/2425PresentacioCurs.html#evaluació-1",
+    "title": "Presentació del curs",
+    "section": "Evaluació",
+    "text": "Evaluació\nQuizes\n\n\n\nQuizes de preguntes curtes\nDuració: 20 minuts\nPonderació: 5% (cada quiz) de la qualificació final.\n\n\n\n\n\n\n\n\n\nQuiz 1\nQuiz 2\nQuiz 3\nQuiz 4\n\n\n\n\n11/03/2025\n31/03/2025\n06/05/2025\n26/05/2025\n\n\n\n\nAquesta distribució temporal está subjectes a canvis per part dels docents"
+  },
+  {
+    "objectID": "material/2425PresentacioCurs.html#evaluació-2",
+    "href": "material/2425PresentacioCurs.html#evaluació-2",
+    "title": "Presentació del curs",
+    "section": "Evaluació",
+    "text": "Evaluació\nProjectes\n\nEs formaran grups de 6 persones\nS’ha de mantenir la paritat de gènere en el grup\nEs realitzarán dues presentacions en públic respecte les entregues 3 i 4.\nLes presentacions són en horari de classe de pràctiques\n\n\n\n\n\n\n\n\n\n\n\n\n\nE1\nE2\nE3\nE4\n\n\n\n\nEntregues\n18/02/2025\n25/02/2025\n31/03/2025 a les 23:59\n26/05/2025 a les 23:59\n\n\nPresentacions\n\n\n01/04/2025\n27/05/2025\n\n\n\n\nImportant: No es permetrà cap entrega fora de plaç sense raons justificades"
+  },
+  {
+    "objectID": "material/2425PresentacioCurs.html#evaluació-3",
+    "href": "material/2425PresentacioCurs.html#evaluació-3",
+    "title": "Presentació del curs",
+    "section": "Evaluació",
+    "text": "Evaluació\nExàmen Final\n\nS’evaluarà el dia 17/06/2025 a les 11:30 fins les 13:00\nS’evaluarà tota la materia (no serà excluient)\nNo es permetrà l’utilització d’apunts\nContindrà tant preguntes teòriques com preguntes de la part pràctica amb sortides que s’hauràn d’interpretar\nTindreu 1h30 minuts per la realització de la prova"
+  },
+  {
+    "objectID": "material/2425PresentacioCurs.html#informació-del-curs",
+    "href": "material/2425PresentacioCurs.html#informació-del-curs",
+    "title": "Presentació del curs",
+    "section": "Informació del curs",
+    "text": "Informació del curs\nProfessors\n\n\n\nDante Conti:\n\nIDEAI (Nexus II)\nC5 - 219\nemail: dante.conti@upc.edu\n\n\n\n\nSergi Ramirez\n\nIDEAI (Nexus II)\nC5 - 212b\nemail: sergi.ramirez@upc.edu"
+  },
+  {
+    "objectID": "material/2425PresentacioCurs.html#informació-del-curs-1",
+    "href": "material/2425PresentacioCurs.html#informació-del-curs-1",
+    "title": "Presentació del curs",
+    "section": "Informació del curs",
+    "text": "Informació del curs\nEstructura\n- Sessions Teòriques:\n\nMonday (10:00h to 12:00h) A6203 (D.Conti)\n\n\n- Sessions Pràctiques:\n\nTuesday (08:00h to 10:00h) A6203 (D.Conti)\n\n\n- Assistència dels estudiants:\n\nL’assistència és obligatoria tant a teoria com a la pràctica\nQualsevol falta s’haurà de justificar mitjançant el correu del professors"
+  },
+  {
+    "objectID": "material/2425PresentacioCurs.html#temari",
+    "href": "material/2425PresentacioCurs.html#temari",
+    "title": "Presentació del curs",
+    "section": "Temari",
+    "text": "Temari\n\n\n\nQuizes\n\n\nQuiz 1:\n\nAdvanced Preprocessing\nAdvanced Clustering\nAdvanced Profiling\n\nQuiz 2:\n\nCorrespondence Analysis\n\nQuiz 3:\n\nGeospatial Analysis\n\nQuiz 4:\n\nTextual Analysis\n\n\n\n\nEntregables\n\n\nEntregable 3:\n\nAdvanced Preprocessing\nAdvanced Clustering\nAdvanced Profiling\nCorrespondence Analysis\n\nEntregable 4:\n\nGeospatial Analysis\nTextual Analysis"
   }
 ]
