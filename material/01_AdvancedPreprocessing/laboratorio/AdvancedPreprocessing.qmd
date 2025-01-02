@@ -1,0 +1,270 @@
+---
+title: "Advanced Preprocessing"
+author: Dante Conti, Sergi Ramirez, (c) IDEAI
+date: "`r Sys.Date()`"
+date-modified: "`r Sys.Date()`"
+toc: true
+# language: es
+number-sections: true
+format: 
+  html: 
+    theme:
+      light: cerulean
+      dark: darkly
+editor: visual
+#execute: 
+#  freeze: auto
+---
+
+# Descripció del problema
+
+Aquest conjunt de dades sintètiques, està dissenyat per a simular dades de transaccions d'una plataforma de comerç electrònic amb el focus posat en la detecció de fraus. Conté una varietat de característiques que es troben comunament en les dades transaccionals, amb atributs addicionals dissenyats específicament.
+
+- ***"ID de transacció" :*** Un identificador únic per a cada transacció.
+
+- ***"ID del client" :*** Un identificador únic per a cada client.
+
+- ***"Quantitat de transacció" :*** La quantitat total de diners intercanviats en la transacció.
+
+- ***"Data de transacció" :*** La data i hora en què es va dur a terme la transacció.
+
+- ***"Mètode de pagament" :*** El mètode utilitzat per completar la transacció (p. ex., targeta de crèdit, PayPal, etc.).
+
+- ***" Categoria del producte" :*** La categoria del producte implicat en la transacció.
+
+- ***"Quantitat" :*** El nombre de productes involucrats en la transacció.
+
+- ***"Edat del client" :*** L'edat del client que realitza la transacció.
+
+- ***"Situació del client" :*** La ubicació geogràfica del client.
+
+- ***"Device Used" :*** El tipus de dispositiu utilitzat per a fer la transacció (p. ex., mòbil, escriptori).
+
+- ***"adreça IP" :*** L'adreça IP del dispositiu utilitzat per a la transacció.
+
+- ***"Adreça d'enviament" :*** L'adreça on s'ha enviat el producte.
+
+- ***"Adreça de liquidació" :*** L'adreça associada amb el mètode de pagament.
+
+- ***"Is Fraudulent" :*** Un indicador binari de si la transacció és fraudulenta (1 per fraudulent, 0 per legítim).
+
+- ***"Dies de l'edat del compte":*** L'edat del compte del client en dies en el moment de la transacció.
+
+- ***"Hora de transacció" :*** L'hora del dia en què es va produir la transacció.
+
+**Mètode de generació**
+
+Les dades són totalment sintètiques, generades utilitzant la biblioteca `Faker de Python` i la lògica personalitzada per simular patrons de transacció realistes i escenaris fraudulents. El conjunt de dades no es basa en individus o transaccions reals i es crea amb finalitats educatives i de recerca.
+
+**Font**: [Kaggle](https://www.kaggle.com/datasets/shriyashjagtap/fraudulent-e-commerce-transactions)
+
+```{r}
+#| label: carregar-dades
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+## Ruta ón es troba les nostres dades
+path <- "./"
+
+## Nom del fitxer de les dades
+fitxer <- ""
+
+## Carreguem la base de dades
+dades <- read.csv(paste0(path, "Fraudulent_E-Commerce_Transaction_Data.csv"))
+```
+
+# Selecció de variables 
+
+A continuació seleccionarem unes variables en concret per tal de poder seguir amb la pràctica. En altres apartats d'aquest script podràs veure diferents mètodes de selecció de variables multivariades. 
+
+::: panel-tabset
+## R
+```{r}
+#| label: selecció-variables
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+library(dplyr)
+library(tidyr)
+
+dades <- dades %>% 
+          select(-Transaction.ID, -Customer.ID, -IP.Address, -Shipping.Address, 
+                 -Billing.Address) %>% 
+          data.frame()
+```
+
+## Python
+```{python}
+#| echo: false
+#| warning: false
+#| message: false
+#| error: false
+```
+:::
+
+A continuació anem a realitzar un *preprocessing* bàsic per tal de poder iniciar la pràctica des d'una base de dades completament neta. 
+
+# *Data Preprocessing*
+
+Primer de tot, anem a processar el nom de les columnes, és per això que el que primer farem serà detectar si existeien caràcters especials en el nom de les columnes. Per realitzar aquesta operació utilitzarem el paquet `janitor`. 
+
+::: panel-tabset
+## R
+```{r}
+#| label: preprocessing-dates
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+library(janitor)
+
+dades <- dades %>% 
+          janitor::clean_names()
+
+# Visualitzem el nom de les columnes
+colnames(dades)
+```
+
+Cóm podem comprovar s'han substituit tots els punts que separaven els noms de les columnes per una `"_"`. En cas que hi haguessin accents els hagués substitut per la seva lletra sense accent corresponent.
+
+Seguidament, eliminem totes aquelles columnes y files que continguin tot NA's. Això es degut per problemes en la lectura més que problemes de les dades. 
+
+```{r}
+#| label: elimina-tot-NAs
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+library(janitor)
+
+# Visualitzem les dimensions de la nostra base de dades abans d'eliminar
+cat("Tenim ", nrow(dades), " files i ", ncol(dades), " columnes\n")
+
+dades <- dades %>% 
+          janitor::remove_empty(which = c("rows", "cols"))
+
+cat("Després de l'eliminació ens queda ", nrow(dades), " files i ", ncol(dades), 
+" columnes\n")
+```
+Com hem pogut comprovar, no hem tingut cap fila ni cap columna que contingui tot NA's. Per tant podem seguir amb el següent pas, detectar possibles errors d'escriptura de les variables categóriques. 
+
+```{r}
+#| label: recoding
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+clases <- sapply(dades, class)
+varCat <- names(clases)[which(clases %in% c("character", "factor"))]
+
+for (vC in varCat) {
+  dades %>% 
+    count(get(vC)) %>% print()
+}
+
+```
+
+Cóm podem veure, tenim 2 variables categóriques que tenen moltes modalitats, a la llarga ens podrien donar problemes. La decisió *educativa* que prenem per seguir endavant és eliminar aquestes variables. 
+
+```{r}
+#| label: eliminar-variables
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+dades <- dades %>% 
+          select(-transaction_date, -customer_location)
+```
+
+Anem a recodificar la variable `is_fraudulent` amb els valors corresponents.
+
+```{r}
+#| label: recodificar-variables
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+dades <- dades %>% 
+         mutate(is_fraudulent = case_when(
+                is_fraudulent == 0 ~ "no", 
+                is_fraudulent == 1 ~ "si"
+         ))
+```
+
+
+## Python
+
+```{python}
+#| echo: false
+#| warning: false
+#| message: false
+#| error: false
+```
+:::
+
+# Metadata files 
+
+Una de les parts més importants per tal d'iniciar un projecte és el de tenir un fitxer de metadata capaç d'explicar-nos quines són les variables a estudiar i com es comporten aquestes dades tant a nivell de distribució com en tractament de NA's en cada variable. 
+
+::: panel-tabset
+## R
+
+Primer de tot anem a incorporar les etiquetes (definicions de cada variable)
+
+```{r}
+#| label: definicions-variables
+#| echo: false
+#| eval: false
+#| warning: false
+#| message: false
+#| error: false
+
+dades <- dades %>% 
+        # assigna etiquetes a les noves variables derivades que no existien al 
+        # llibre de codis
+        labelled::set_variable_labels(
+           Transaction.Amount = "La quantitat total de diners intercanviats en 
+                                 la transacció",
+           Transaction.Date = "La data i hora en què es va dur a terme la 
+                              transacció.",
+           Payment.Method = "El mètode utilitzat per completar la transacció 
+                            (p. ex., targeta de crèdit, PayPal, etc.).",
+           Product.Category = "La categoria del producte implicat en la 
+                              transacció.", 
+           Quantity = "El nombre de productes involucrats en la transacció.",     
+           Customer.Age = "L'edat del client que realitza la transacció.",
+           Customer.Location = "La ubicació geogràfica del client.",
+           Device.Used = "El tipus de dispositiu utilitzat per a fer la 
+                          transacció (p. ex., mòbil, escriptori).",
+           Is.Fraudulent = "Un indicador binari de si la transacció és 
+                            fraudulenta (1 per fraudulent, 0 per legítim)",
+           Account.Age.Days = "L'edat del compte del client en dies en el moment 
+                              de la transacció",
+           Transaction.Hour = "L'hora del dia en què es va produir la 
+                              transacció")
+```
+
+## Python
+```{python}
+
+```
+:::
+
+
+

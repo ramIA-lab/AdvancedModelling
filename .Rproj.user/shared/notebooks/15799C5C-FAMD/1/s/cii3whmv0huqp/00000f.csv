@@ -1,0 +1,4 @@
+"0","fviz_ellipses(res.famd, c(""Churn"", ""Gender""), repel = TRUE)
+"
+"2","Aviso: `gather_()` was deprecated in tidyr 1.2.0.
+Please use `gather()` instead."

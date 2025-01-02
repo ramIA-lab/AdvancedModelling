@@ -1,0 +1,5 @@
+"0","fviz_ca_biplot(housetasks_CA,repel = T, arrow=c(F,T), col.col=""cos2"", gradient.cols=c(""red"", ""yellow"", ""green""), alpha.col=""contrib"")
+"
+"2","[38;5;232mScale for [32mcolour[38;5;232m is already present.
+Adding another scale for [32mcolour[38;5;232m, which will
+replace the existing scale.[39m"

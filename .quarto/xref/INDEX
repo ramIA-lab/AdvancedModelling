@@ -10,5 +10,20 @@
   },
   "material/2425PresentacioCurs.qmd": {
     "2425PresentacioCurs.html": "e91f9f57"
+  },
+  "material/01_AdvancedPreprocessing/laboratorio/DecisionsTree_RandomForest_XGBoost.qmd": {
+    "DecisionsTree_RandomForest_XGBoost.html": "455023f0"
+  },
+  "material/05_GeospatialAnalysis/laboratorio/geodescriptive.qmd": {
+    "geodescriptive.html": "31fd9463"
+  },
+  "material/01_AdvancedPreprocessing/laboratorio/AdvancedPreprocessing.qmd": {
+    "AdvancedPreprocessing.html": "2cf82ecc"
+  },
+  "material/04_CorrespondenceAnalysis/laboratorio/ACS.qmd": {
+    "ACS.html": "6d6cfdcd"
+  },
+  "material/04_CorrespondenceAnalysis/laboratorio/FAMD.qmd": {
+    "FAMD.html": "8db6daeb"
   }
 }
