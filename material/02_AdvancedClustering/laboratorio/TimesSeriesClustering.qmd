@@ -1,0 +1,175 @@
+---
+title: "Times Series Clustering"
+author: Dante Conti, Sergi Ramirez, (c) IDEAI
+date: "`r Sys.Date()`"
+date-modified: "`r Sys.Date()`"
+toc: true
+# language: es
+number-sections: true
+format: 
+  html: 
+    theme:
+      light: cerulean
+      dark: darkly
+editor: visual
+#execute: 
+#  freeze: auto
+---
+
+# Descripció del problema
+
+```{r}
+#| label: carregar-llibreries
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+# Carreguem les llibreries necessaries
+library(dtw)
+library(tidyverse)
+library(proxy)
+library(dendextend)
+```
+
+```{r}
+#| label: carregar-dades
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+url <- "https://www.ine.es/jaxiT3/files/t/es/csv_bdsc/2013.csv?nocab=1"
+
+# Carreguem la base de dades
+dad <- read.csv2(url)
+dad[, 2] <- NULL
+```
+
+```{r}
+#| label: transformacio-dades
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+# Transformem la bbdd a la taula necessaria
+dad[, "Total"] <- as.numeric(dad[, "Total"])
+dad[, "Zonas.Turísticas"] <- gsub(":", "_", dad[, "Zonas.Turísticas"])
+dad[, "Zonas.Turísticas"] <- gsub(" ", "", dad[, "Zonas.Turísticas"])
+datos <- reshape2::dcast(dad, Zonas.Turísticas ~ Periodo, fun.aggregate = sum, na.rm = TRUE)
+rownames(datos) <- datos[, "Zonas.Turísticas"]
+datos[, "Zonas.Turísticas"] <- NULL
+```
+
+```{r}
+#| label: calcul-distancies
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+# Calculamos la distancia DTW
+distMatrix <- proxy::dist(datos, method = "DTW")
+```
+
+```{r}
+#| label: crea-dendograma
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+# Generamos el clustering
+hcc <- hclust(distMatrix, method = "ward.D2")
+plot(hcc, hang = -1, cex = 0.6) # Put the labels at the same height: hang = -1
+```
+```{r}
+#| label: realizamos-cortes
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+# Realizamos el corte en 4 clases
+k <- 4
+clusters <- cutree(hcc, k = k)
+```
+
+```{r}
+#| label: visualizacion-colores
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+datos %>% 
+  proxy::dist(method = "DTW") %>% 
+  hclust(method = "ward.D2") %>% 
+  as.dendrogram() -> dend
+
+dend %>% set("branches_k_color", k = k) %>% plot(hang = -1)
+```
+## Otras formas de hacerlo más automático
+
+```{r}
+#| label: libreria-automatica
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+library(dtwclust)
+```
+
+```{r}
+#| label: particional-automatica
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+## Partitional
+pc <- tsclust(datos[, -1], type = "partitional", k = 20, 
+              distance = "dtw_basic", centroid = "pam", 
+              seed = 3247L, trace = TRUE,
+              args = tsclust_args(dist = list(window.size = 20)))
+plot(pc)
+```
+```{r}
+#| label: jerarquico-automatica
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+## Hierarchical
+hc <- tsclust(CharTraj, type = "hierarchical", k = 20L, 
+              distance = "dtw_basic", trace = TRUE,
+              control = hierarchical_control(method = "ward.D2"))
+plot(hc)
+```
+
+## Bibliografia
+
+- Beautiful dendrogram visualizations in r: 5+ must known methods - unsupervised machine learning - easy guides - wiki - sthda. (s. f.). Recuperado 11 de enero de 2025, de [https://www.sthda.com/english/wiki/beautiful-dendrogram-visualizations-in-r-5-must-known-methods-unsupervised-machine-learning?title=beautiful-dendrogram-visualizations-in-r-5-must-known-methods-unsupervised-machine-learning](https://www.sthda.com/english/wiki/beautiful-dendrogram-visualizations-in-r-5-must-known-methods-unsupervised-machine-learning?title=beautiful-dendrogram-visualizations-in-r-5-must-known-methods-unsupervised-machine-learning)
+
+- Dendrograms. (s. f.). Recuperado 11 de enero de 2025, de [https://plotly.com/ggplot2/dendrogram/](https://plotly.com/ggplot2/dendrogram/)
+
+- Introduction. (s. f.). [Software]. Recuperado 11 de enero de 2025, de [https://cran.r-project.org/web/packages/dendextend/vignettes/dendextend.html](https://cran.r-project.org/web/packages/dendextend/vignettes/dendextend.html)
+
+- RPubs—Clustering de series temporales a traves de metodos no parametricos. (s. f.). Recuperado 11 de enero de 2025, de [https://rpubs.com/Edison-D/615477](https://rpubs.com/Edison-D/615477)
+
+- RPubs—Dinamyc time warping. (s. f.). Recuperado 11 de enero de 2025, de [https://rpubs.com/sebas_Alf/684217](https://rpubs.com/sebas_Alf/684217)
+
+- Sardá, A. (2024). Asardaes/dtwclust [R]. [https://github.com/asardaes/dtwclust](https://github.com/asardaes/dtwclust) (Obra original publicada en 2015)

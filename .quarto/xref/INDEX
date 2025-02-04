@@ -25,5 +25,11 @@
   },
   "material/04_CorrespondenceAnalysis/laboratorio/FAMD.qmd": {
     "FAMD.html": "8db6daeb"
+  },
+  "material/02_AdvancedClustering/laboratorio/TimesSeriesClustering.qmd": {
+    "TimesSeriesClustering.html": "691762b3"
+  },
+  "material/02_AdvancedClustering/laboratorio/DBSCAN_OPTICS.qmd": {
+    "DBSCAN_OPTICS.html": "20c61df8"
   }
 }

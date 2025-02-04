@@ -1,0 +1,8 @@
+"0","#| label: libreria-automatica"
+"0","#| echo: true"
+"0","#| eval: true"
+"0","#| warning: false"
+"0","#| message: false"
+"0","#| error: false"
+"0",""
+"0","library(dtwclust)"

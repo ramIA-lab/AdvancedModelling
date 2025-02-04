@@ -1,0 +1,37 @@
+# https://www.youtube.com/watch?v=XnvF17FjOpQ
+
+install.packages("remotes")
+remotes::install_github("Pakillo/CityShadeMapper")
+library(CityShadeMapper)
+library(terra)
+library(lidR)
+
+url = "C:/Users/Sergi/OneDrive/Escritorio/PNOA_2008_Lote_CAT_430-4584_ORT-CLA-COL.laz"
+
+# Descargar datos de lidr (P...)
+lidr <- lidR::readLAS(url)
+lidr
+plot(lidr)
+
+alturas <- calc_heights_from_lidar(lidr)
+plot(alturas)
+
+# Calcular mapa de sombras
+sombra <- make_shademap(height.ras = alturas, date = "2025-01-16", hour = 15)
+sombra
+plot(sombra)
+plot_shademap(sombra)
+
+sombra <- make_shademap(height.ras = alturas, date = "2025-01-16", hour = 15)
+plot_shademap(sombra)
+plot_shademap(sombra, animate = TRUE, maxcell = 400000)
+
+## Sombras a nivel de suelo / calle
+
+## Primero estimar coberturas
+cover <- rasterize_lidar_cover_class(url)
+cover
+plot(cover)
+sombra.suelo <- make_shademap(alturas, date = "2024-12-24", hour = 15, 
+                              type = "ground", cover.ras = cover)
+plot(sombra.suelo)

@@ -48,7 +48,7 @@ Respecte als mètodes avançats d'anàlisi de dades, es veuran tècniques d'anà
 
 [Times Series Clustering](material/02_AdvancedClustering/teoria/)
 
-[Lab sesion 5 - Times Series Clustering](material/02_AdvancedClustering/laboratorio/)
+[Lab sesion 5 - Times Series Clustering](material/02_AdvancedClustering/laboratorio/TimesSeriesClustering.qmd)
 
 ## Advanced Profiling
 
@@ -72,7 +72,7 @@ Respecte als mètodes avançats d'anàlisi de dades, es veuran tècniques d'anà
 
 [Lab sesion 8 - ACM](material/04_CorrespondenceAnalysis/laboratorio/)
 
-[Lab sesion 8 - FAMD](material/04_CorrespondenceAnalysis/laboratorio/FAMD.qmd)
+[Lab sesion 8 - FAMD](material/04_CorrespondenceAnalysis/laboratorio/)
 
 ## Geospatial Analysis
 
