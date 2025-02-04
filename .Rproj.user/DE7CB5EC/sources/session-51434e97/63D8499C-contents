@@ -1,0 +1,218 @@
+---
+title: "Presentació del curs"
+subtitle: "2024 - 2025"
+title-slide-attributes:
+    data-background-image: ../imagenes/ideai_logo.png
+    data-background-size: contain
+    data-background-opacity: "0.25"
+    data-background-color: "white"
+author: "Dante Conti i Sergi Ramirez"
+format: 
+  revealjs:
+    incremental: true
+    
+    # theme: night
+    theme: [night, ../ideai.scss]
+    background-transition: slide
+    logo: ../imagenes/Logo_UPC.svg.png
+    css: ../logo.css
+    footer: "Preprocessing i Models Avançats d'Anàlisis de Dades (PMAAD)"
+    # slide-tone: true # Introduce sonido al cambio de transparencias para gente ciega
+    # embed-resources: true # Para generar un fichero html con todo completo sin necesidad de tener varios ficheros con los estilos
+    # multiplex: true # Para que puedan ver lo que se esta presentando
+    controls-tutorial: true
+    scale: 0.9
+    chalkboard: true
+    transition: slide # Estilo de transición
+    transitionSpeed: slow # Velocidad: 'fast', 'normal', 'slow'
+editor: visual
+---
+
+## Informació del curs
+
+### Professors
+
+::::: columns
+::: {.column width="50%"}
+-   **Dante Conti**:
+    -   IDEAI (Nexus II)
+    -   C5 - 219
+    -   **email**: [dante.conti\@upc.edu](dante.conti@upc.edu)
+:::
+
+::: {.column width="50%"}
+-   **Sergi Ramirez**
+    -   IDEAI (Nexus II)
+    -   C5 - 212b
+    -   **email**: [sergi.ramirez\@upc.edu](sergi.ramirez@upc.edu)
+:::
+:::::
+
+![](https://www.upc.edu/campusnord/ca/altres/PlnolCampusNord_2019.jpg/@@images/image-1600-948c7d4e4400864cba0965a6f8c3a7b0.jpeg){.fragment .nostretch fig-align="center" width="500px"}
+
+------------------------------------------------------------------------
+
+## Informació del curs
+
+### Estructura
+
+#### - Sessions Teòriques:
+
+-   Dilluns (10:00h a 12:00h) A6203 (D.Conti)
+
+#### - Sessions Pràctiques:
+
+-   Dimarts (08:00h a 10:00h) A6203 (D.Conti)
+
+-   Dimarts (12:00h a 14:00h) A6203 (S.Ramirez)
+
+#### - Assistència dels estudiants:
+
+-   L'assistència és **obligatoria** tant a teoria com a la pràctica
+
+-   Qualsevol falta s'haurà de justificar mitjançant el correu del professors
+
+------------------------------------------------------------------------
+
+## Avaluació
+
+::: fragment
+$$
+Qualificació = 0.2 · Q + 0.2 · E_3 + 0.2 · E_4 + 0.4 · EF
+$$
+:::
+
+:::::: {columns}
+:::: {.column width="50%"}
+::: fragment
+Ón:
+:::
+
+-   $Q$: 4 Quizes de preguntes curtes.
+-   $E_{3, 4}$: Entrega del treball en grup
+-   $EF$: Exàmen final de la asignatura
+::::
+
+::: {.column width="50%"}
+<iframe src="https://giphy.com/embed/9mmGD97xx2OAfb3AhM" width="480" height="269" style frameBorder="0" class="giphy-embed" allowFullScreen>
+
+</iframe>
+:::
+::::::
+
+::: fragment
+Les **matrícules d'honor** s'assignarán segons els criteri dels docents valorant les aportacions dels alumnes en les classes tant teòriques com pràctiques.
+:::
+
+------------------------------------------------------------------------
+
+## Avaluació
+
+### *Quizes*
+
+::::: {columns}
+::: {.column width="50%"}
+-   *Quizes* de preguntes curtes
+-   **Duració**: 20 minuts
+-   **Ponderació**: 5% (cada quiz) de la qualificació final.
+:::
+
+::: {.column width="50%"}
+<iframe src="https://giphy.com/embed/3ohuPiICXHlEpD2Kv6" width="400" height="300" style frameBorder="0" class="giphy-embed" allowFullScreen>
+
+</iframe>
+:::
+:::::
+
+::: fragment
+|   Quiz 1   |   Quiz 2   |   Quiz 3   |   Quiz 4   |
+|:----------:|:----------:|:----------:|:----------:|
+| 11/03/2025 | 31/03/2025 | 06/05/2025 | 26/05/2025 |
+
+<br></br>
+
+*Aquesta distribució temporal está subjectes a canvis per part dels docents*
+:::
+
+------------------------------------------------------------------------
+
+## Avaluació
+
+### Projectes
+
+-   Es formaran grups de *6 persones*
+
+-   S'ha de mantenir la paritat de gènere en el grup
+
+-   Es realitzarán dues presentacions en públic respecte les entregues 3 i 4.
+
+-   Les presentacions són en horari de classe de pràctiques
+
+::: fragment
+|   | E1 | E2 | E3 | E4 |
+|:-------------:|:-------------:|:-------------:|:-------------:|:-------------:|
+| Entregues | 18/02/2025 | 25/02/2025 | 31/03/2025 a les 23:59 | 26/05/2025 a les 23:59 |
+| Presentacions |  |  | 01/04/2025 | 27/05/2025 |
+
+<br></br>
+
+**Important**: No es permetrà cap entrega fora de plaç sense raons justificades
+:::
+
+------------------------------------------------------------------------
+
+## Avaluació
+
+### Exàmen Final
+
+-   S'evaluarà el dia **17/06/2025** a les **11:30**
+
+-   S'evaluarà tota la materia (no serà excluient)
+
+-   No es permetrà l'utilització d'apunts
+
+-   Contindrà tant preguntes teòriques com preguntes de la part pràctica amb sortides que s'hauràn d'interpretar
+
+::: center
+<iframe src="https://giphy.com/embed/3o6Mbf5FR63Gv2xbLW" width="480" height="271" style frameBorder="0" class="giphy-embed" allowFullScreen>
+
+</iframe>
+:::
+
+------------------------------------------------------------------------
+
+## Temari
+
+::::::: {columns}
+:::: {.column width="50%"}
+::: fragment
+### Quizes
+:::
+
+-   **Quiz 1**:
+    -   Advanced Preprocessing
+    -   Advanced Clustering
+    -   Advanced Profiling
+-   **Quiz 2**:
+    -   Correspondence Analysis
+-   **Quiz 3**:
+    -   Geospatial Analysis
+-   **Quiz 4**:
+    -   Textual Analysis
+::::
+
+:::: {.column width="50%"}
+::: fragment
+### Entregables
+:::
+
+-   **Entregable 3**:
+    -   Advanced Preprocessing
+    -   Advanced Clustering
+    -   Advanced Profiling
+    -   Correspondence Analysis
+-   **Entregable 4**:
+    -   Geospatial Analysis
+    -   Textual Analysis
+::::
+:::::::

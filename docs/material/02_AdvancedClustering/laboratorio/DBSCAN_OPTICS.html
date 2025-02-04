@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Dante Conti, Sergi Ramirez, (c) IDEAI">
-<meta name="dcterms.date" content="2025-01-11">
+<meta name="dcterms.date" content="2025-02-04">
 
 <title>DBSCAN i OPTICS – PMAAD</title>
 <style>
@@ -187,7 +187,9 @@ window.Quarto = {
   <li><a href="#cálculo-de-min_pts" id="toc-cálculo-de-min_pts" class="nav-link" data-scroll-target="#cálculo-de-min_pts"><span class="header-section-number">2</span> Cálculo de min_pts</a>
   <ul class="collapse">
   <li><a href="#normalización-de-los-datos" id="toc-normalización-de-los-datos" class="nav-link" data-scroll-target="#normalización-de-los-datos"><span class="header-section-number">2.1</span> Normalización de los datos</a></li>
-  <li><a href="#bibliografia" id="toc-bibliografia" class="nav-link" data-scroll-target="#bibliografia"><span class="header-section-number">2.2</span> Bibliografia</a></li>
+  <li><a href="#calculo-de-la-epsilon-eps" id="toc-calculo-de-la-epsilon-eps" class="nav-link" data-scroll-target="#calculo-de-la-epsilon-eps"><span class="header-section-number">2.2</span> Calculo de la Epsilon (<code>eps</code>)</a></li>
+  <li><a href="#graficamos-os-epsilon-ordenados" id="toc-graficamos-os-epsilon-ordenados" class="nav-link" data-scroll-target="#graficamos-os-epsilon-ordenados"><span class="header-section-number">2.3</span> Graficamos os epsilon ordenados</a></li>
+  <li><a href="#bibliografia" id="toc-bibliografia" class="nav-link" data-scroll-target="#bibliografia"><span class="header-section-number">2.4</span> Bibliografia</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -214,14 +216,14 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">January 11, 2025</p>
+      <p class="date">February 4, 2025</p>
     </div>
   </div>
   
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">January 11, 2025</p>
+      <p class="date-modified">February 4, 2025</p>
     </div>
   </div>
     
@@ -373,8 +375,54 @@ window.Quarto = {
 </div>
 <p>Como podemos ver, ahora tendremos los valores entre el intervalo [0, 1].</p>
 </section>
-<section id="bibliografia" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="bibliografia"><span class="header-section-number">2.2</span> Bibliografia</h2>
+<section id="calculo-de-la-epsilon-eps" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="calculo-de-la-epsilon-eps"><span class="header-section-number">2.2</span> Calculo de la Epsilon (<code>eps</code>)</h2>
+<p>Realizamos el cálculo de las distancias mas cercanas en una matriz de puntos</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>distanciasVecinas <span class="ot">&lt;-</span> dbscan<span class="sc">::</span><span class="fu">kNNdist</span>(datos, <span class="at">k =</span> min_pts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Ordenamos los puntos de menos a mayor y lo guardamos en un vector. Cuando realicemos el gráfico <em>elbow</em>, será nuestro eje de las Y</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">&lt;-</span> distanciasVecinas[<span class="fu">order</span>(distanciasVecinas)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Calculamos el índice del eje de la X</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span><span class="sc">:</span>(<span class="fu">length</span>(Y) <span class="sc">-</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>A continuación calculamos las pendientes</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>pendientes <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(X)) {</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  pendientes[i] <span class="ot">&lt;-</span> (Y[i <span class="sc">+</span> <span class="dv">1</span>] <span class="sc">-</span> Y[i])<span class="sc">/</span>(X[i<span class="sc">+</span><span class="dv">1</span>] <span class="sc">-</span> X[i])</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">which.max</span>(pendientes)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>primer <span class="ot">&lt;-</span> gdata<span class="sc">::</span><span class="fu">first</span>(<span class="fu">which</span>(pendientes <span class="sc">&gt;=</span> m))</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>epsilon <span class="ot">&lt;-</span> Y[primer]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Nota</strong>, ejecutar lineas 131 y 132 para decidir el corte en el máximo cambio de la pendiente, como podeís apreciar ocurre alrededor de 0.15. Esto se hace trazando una recta horizontal desde el mayor cambio y viendo su valor en el eje Y.</p>
+</section>
+<section id="graficamos-os-epsilon-ordenados" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="graficamos-os-epsilon-ordenados"><span class="header-section-number">2.3</span> Graficamos os epsilon ordenados</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>{<span class="fu">kNNdistplot</span>(datos, <span class="at">k =</span> <span class="dv">5</span>, <span class="at">minPts =</span> min_pts)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">abline</span>(<span class="at">h =</span> <span class="fl">0.15</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">"red"</span>)}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="DBSCAN_OPTICS_files/figure-html/graficar-epsilon-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Mirando el gráfico <em>elbow</em> vemos que el epsilon es 0.15.</p>
+<p>Volvemos a ejecutar el <strong>DBSCAN</strong> con los parámetros óptimos.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">dbscan</span>(datos, <span class="at">eps =</span> epsilon, <span class="at">minPts =</span> min_pts) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="bibliografia" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="bibliografia"><span class="header-section-number">2.4</span> Bibliografia</h2>
 <ul>
 <li><p>Beautiful dendrogram visualizations in r: 5+ must known methods - unsupervised machine learning - easy guides - wiki - sthda. (s.f.). Recuperado 11 de enero de 2025, de <a href="https://www.sthda.com/english/wiki/beautiful-dendrogram-visualizations-in-r-5-must-known-methods-unsupervised-machine-learning?title=beautiful-dendrogram-visualizations-in-r-5-must-known-methods-unsupervised-machine-learning" class="uri">https://www.sthda.com/english/wiki/beautiful-dendrogram-visualizations-in-r-5-must-known-methods-unsupervised-machine-learning?title=beautiful-dendrogram-visualizations-in-r-5-must-known-methods-unsupervised-machine-learning</a></p></li>
 <li><p>Dendrograms. (s.f.). Recuperado 11 de enero de 2025, de <a href="https://plotly.com/ggplot2/dendrogram/" class="uri">https://plotly.com/ggplot2/dendrogram/</a></p></li>
