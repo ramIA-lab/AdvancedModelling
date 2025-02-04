@@ -94,9 +94,9 @@ $$
 ::::
 
 ::: {.column width="50%"}
-<iframe src="https://giphy.com/embed/9mmGD97xx2OAfb3AhM" width="480" height="269" style frameBorder="0" class="giphy-embed" allowFullScreen>
-
-</iframe>
+::: fragment
+<iframe src="https://giphy.com/embed/9mmGD97xx2OAfb3AhM" width="480" height="269" style frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+:::
 :::
 ::::::
 
@@ -117,10 +117,10 @@ Les **matrícules d'honor** s'assignarán segons els criteri dels docents valora
 -   **Ponderació**: 5% (cada quiz) de la qualificació final.
 :::
 
-::: {.column width="50%"}
-<iframe src="https://giphy.com/embed/3ohuPiICXHlEpD2Kv6" width="400" height="300" style frameBorder="0" class="giphy-embed" allowFullScreen>
-
-</iframe>
+::: {.column width="40%"}
+::: fragment
+<iframe src="https://giphy.com/embed/3ohuPiICXHlEpD2Kv6" width="400" height="300" style frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+:::
 :::
 :::::
 
@@ -128,8 +128,6 @@ Les **matrícules d'honor** s'assignarán segons els criteri dels docents valora
 |   Quiz 1   |   Quiz 2   |   Quiz 3   |   Quiz 4   |
 |:----------:|:----------:|:----------:|:----------:|
 | 11/03/2025 | 31/03/2025 | 06/05/2025 | 26/05/2025 |
-
-<br></br>
 
 *Aquesta distribució temporal está subjectes a canvis per part dels docents*
 :::
@@ -173,10 +171,10 @@ Les **matrícules d'honor** s'assignarán segons els criteri dels docents valora
 
 -   Contindrà tant preguntes teòriques com preguntes de la part pràctica amb sortides que s'hauràn d'interpretar
 
+::: fragment
 ::: center
-<iframe src="https://giphy.com/embed/3o6Mbf5FR63Gv2xbLW" width="480" height="271" style frameBorder="0" class="giphy-embed" allowFullScreen>
-
-</iframe>
+<iframe src="https://giphy.com/embed/3o6Mbf5FR63Gv2xbLW" width="480" height="271" style frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+:::
 :::
 
 ------------------------------------------------------------------------
