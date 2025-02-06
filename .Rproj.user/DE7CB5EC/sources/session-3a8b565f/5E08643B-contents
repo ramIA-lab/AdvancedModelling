@@ -1,0 +1,460 @@
+---
+title: "Anàlisi Multivariant de dades (AMD)"
+subtitle: "Presentació del curs 2024 - 2025"
+title-slide-attributes:
+    data-background-image: imagenes/imagenes_multivariante.png
+    data-background-size: contain
+    data-background-opacity: "0.25"
+    data-background-color: "white"
+author: ""
+format: 
+  revealjs:
+    incremental: true
+    # theme: night
+    theme: [night, "../ideai.scss"]
+    background-transition: slide
+    logo: imagenes/Logo_UPC.svg.png
+    css: logo.css
+    footer: "AMD 2025"
+    # slide-tone: true # Introduce sonido al cambio de transparencias para gente ciega
+    embed-resources: false # Para generar un fichero html con todo completo sin necesidad de tener varios ficheros con los estilos
+    # multiplex: true # Para que puedan ver lo que se esta presentando
+    controls-tutorial: true
+    scale: 0.9
+    chalkboard: true
+    transition: slide # Estilo de transición
+    transitionSpeed: slow # Velocidad: 'fast', 'normal', 'slow'
+editor: visual
+---
+
+## Informació del curs
+
+### Professors
+
+::::: columns
+::: {.column width="50%"}
+**Teoria**
+
+-   **Dante Conti** (dante.conti\@upc.edu)
+
+    -   IDEAI (Nexus II)
+
+    -   C5 - 219
+
+![](https://www.upc.edu/campusnord/ca/altres/PlnolCampusNord_2019.jpg/@@images/image-1600-948c7d4e4400864cba0965a6f8c3a7b0.jpeg){.fragment .nostretch fig-align="center" width="375"}
+:::
+
+::: {.column width="50%"}
+**Laboratoris**
+
+-   **Grup 1**
+
+    -   **Jemie Arjona** (jemie.arjona\@upc.edu)
+
+        -   IDEAI (Nexus II)
+
+-   **Grup 2**
+
+    -   **Sergi Ramirez** (sergi.ramirez\@upc.edu)
+
+        -   IDEAI (Nexus II)
+
+        -   C5 - 212b
+
+    -   **Xavier Angerri** (xavier.angerri\@upc.edu)
+
+        -   IDEAI (Nexus II)
+:::
+:::::
+
+------------------------------------------------------------------------
+
+## Informació del curs
+
+### Estructura
+
+#### - Sessions Teòriques:
+
+-   Dimarts (17:00h a 19:00h) S02 (D.Conti) <br></br>
+
+#### - Sessions Pràctiques:
+
+::: fragment
+Aquestes sessions estaràn compostes per 1h de workshop per part del docent i 1h de treball en grup dedicat als seus projectes
+:::
+
+-   Dijous (15:00h a 17:00h) PC2 (J.Arjona)
+-   Dijous (17:00h a 19:00h) PC2 (X.Angerri i S.Ramirez) <br></br>
+
+#### - Assistència dels estudiants:
+
+-   L'assistència és **obligatoria** tant a teoria com a la pràctica
+-   Qualsevol falta s'haurà de justificar mitjançant el correu del professors <br></br>
+
+------------------------------------------------------------------------
+
+## Avaluació
+
+::: fragment
+$$
+Nota Final = 0.35 · Q + 0.325 · E_3 + 0.325 · E_4
+$$
+:::
+
+:::::: {columns}
+:::: {.column width="50%"}
+::: fragment
+Ón:
+:::
+
+-   $Q$: 3 Quizes de preguntes curtes.
+-   $E_{3, 4}$: Entrega del treball en grup
+::::
+
+::: {.column width="50%"}
+<iframe src="https://giphy.com/embed/9mmGD97xx2OAfb3AhM" width="360" height="150" style frameBorder="0" class="giphy-embed" allowFullScreen>
+
+</iframe>
+:::
+::::::
+
+::: fragment
+Les **matrícules d'honor** s'assignarán segons els criteri dels docents valorant les aportacions dels alumnes en les classes tant teòriques com pràctiques.
+:::
+
+------------------------------------------------------------------------
+
+## Avaluació
+
+### *Quizes*
+
+::::: {columns}
+::: {.column width="50%"}
+-   *Quizes* de preguntes curtes
+-   **Duració**: 20 minuts
+-   **Preguntes**: 10 - 15 preguntes **Sense apunts**
+-   **Ponderació**: 11.67% (cada quiz) de la qualificació final.
+:::
+
+::: {.column width="50%"}
+<iframe src="https://giphy.com/embed/3ohuPiICXHlEpD2Kv6" width="150" height="100" style frameBorder="0" class="giphy-embed" allowFullScreen>
+
+</iframe>
+:::
+:::::
+
+::: fragment
+|   Quiz 1   |   Quiz 2   |   Quiz 3   |
+|:----------:|:----------:|:----------:|
+| 20/03/2025 | 24/04/2025 | 15/05/2025 |
+
+<br></br>
+
+*Aquesta distribució temporal está subjectes a canvis per part dels docents*
+:::
+
+------------------------------------------------------------------------
+
+## Avaluació
+
+### Projectes
+
+-   Es formaran grups de *9 persones*
+
+-   S'ha de mantenir la paritat de gènere en el grup.
+
+-   És **obligatori** que cada grup contingui alumnes del doble grau o ERASMUS.
+
+-   Es realitzarán dues presentacions en públic respecte les entregues 3 i 4.
+
+-   Les presentacions són en horari de classe de pràctiques.
+
+::: fragment
+|   | E1 | E2 | E3 | E4 |
+|:-------------:|:-------------:|:-------------:|:-------------:|:-------------:|
+| Entregues | 20/02/2025 | 06/03/2025 | 26/03/2025 a les 23:59 | 21/05/2025 a les 23:59 |
+| Presentacions |  |  | 27/03/2025 | 22/05/2025 |
+
+<br></br>
+
+**Important**: No es permetrà cap entrega fora de plaç sense raons justificades
+:::
+
+------------------------------------------------------------------------
+
+## Avaluació
+
+### Exàmen Final
+
+-   Només estarà disponible per aquells alumnes que ho sol·licitin per correu electrònic
+
+-   S'evaluarà el dia **16/06/2025** a les **15:00**
+
+-   S'evaluarà tota la materia (no serà excluient)
+
+-   No es permetrà l'utilització d'apunts
+
+-   Contindrà tant preguntes teòriques com preguntes de la part pràctica amb sortides que s'hauràn d'interpretar
+
+-   Serà necessari demanar a partir del dia **01/06/2025** les dades necessaries per a la realització de la part pràctica.
+
+::: center
+<iframe src="https://giphy.com/embed/3o6Mbf5FR63Gv2xbLW" width="480" height="271" style frameBorder="0" class="giphy-embed" allowFullScreen>
+
+</iframe>
+:::
+
+------------------------------------------------------------------------
+
+## Temari
+
+:::::::: {columns}
+:::: {.column width="50%"}
+::: fragment
+### Quizes
+:::
+
+-   **Quiz 1**:
+    -   Preprocessing
+        -   Outliers
+        -   Mètodes d'imputació
+    -   Clustering
+    -   Profiling
+-   **Quiz 2**:
+    -   Anàlisis de Correspondències
+-   **Quiz 3**:
+    -   Anàlisis Discriminant
+    -   Anàlisis Textual
+::::
+
+::::: {.column width="50%"}
+::: fragment
+### Entregables
+:::
+
+-   **Entregable 3**:
+    -   Preprocessing
+        -   Outliers
+        -   Mètodes d'imputació
+    -   Clustering
+    -   Profiling
+-   **Entregable 4**:
+    -   Anàlisis de Correspondències
+    -   Anàlisis Discriminant
+    -   Anàlisis Textual
+
+::: fragment
+Visualitzar el document del campus on explica les pautes del treball
+:::
+:::::
+::::::::
+
+# Treball de Camp
+
+------------------------------------------------------------------------
+
+### Estructura de les dades
+
+::: fragment
+-   Es recomana buscar matrius de dades **NO AGREGADES**
+:::
+
+::: fragment
+-   Un mínim de 7 variables numèriques
+:::
+
+::: fragment
+-   Un mínim de 7 variables qualitatives
+
+    -   màxim 2 variables binàries o dummies
+
+    -   la resta variables multimodals
+:::
+
+::: fragment
+-   Una variable textual
+:::
+
+::: fragment
+-   Grandària de la base de dades:
+
+    -   Entre 2.000 i 5.000 observacions
+:::
+
+::: fragment
+-   Evitar BD massa grans que requereixin temps de processos massa llargs
+:::
+
+:::: fragment
+::: {.fragment .highlight-red}
+-   **Recordeu que queden excloses BD providents de pàgines acadèmiques o lligades a softwares**
+:::
+::::
+
+------------------------------------------------------------------------
+
+### Software
+
+El software que utilitzarem és el següent:
+
+::::::: {columns}
+::::: {.column width="50%"}
+::: fragment
+### R
+
+![](https://bookdown.org/andersson_vargas/aprendiendo_r_studio_-_avm/Imagenes/RStudio-Logo-Flat.png){width="300"}
+:::
+
+::: fragment
+### Python ![](https://websitearchive2020.nepa.gov.jm/new/images/gif/new-star.gif){width="68"}
+
+![](https://1000marcas.net/wp-content/uploads/2020/11/Python-logo.png){width="300"}
+:::
+:::::
+
+::: {.column width="50%"}
+![](https://www.redeweb.com/wp-content/uploads/2021/03/software-1.jpg)
+:::
+:::::::
+
+------------------------------------------------------------------------
+
+## Python
+
+### Instalació
+
+::: fragment
+-   No haureu d'instal·lar cap programa
+:::
+
+::: fragment
+-   Necessitareu una compte de gmail
+:::
+
+::::: fragment
+::: r-stack
+![](imagenes/imagen_googlecolab.png)
+:::
+
+::: r-stack
+<https://colab.research.google.com/>
+:::
+:::::
+
+------------------------------------------------------------------------
+
+## Distribució dels equips
+
+-   Es formaran grups de *9 persones*
+
+-   S'ha de mantenir la paritat de gènere en el grup.
+
+-   És **obligatori** que cada grup contingui alumnes del doble grau o ERASMUS.
+
+-   Serà necessari assignar a un *project leader*
+
+:::: fragment
+::: r-stack
+![](https://madridadschool.com/wp-content/uploads/2019/07/cualidades-project-brand-manager-900x600-1.jpg){width="60%"}
+:::
+::::
+
+------------------------------------------------------------------------
+
+## *Project Leader*
+
+::: fragment
+### Funcions:
+:::
+
+::: fragment
+📌 **Planificació del Projecte** – Defineix objectius, abast, cronograma i recursos necessaris.
+:::
+
+::: fragment
+📌 **Gestió d'Equip** – Coordina, motiva i resol conflictes dins de l'equip.
+:::
+
+::: fragment
+📌 **Comunicació** – Actua com a enllaç entre stakeholders, equip i direcció.
+:::
+
+::: fragment
+📌 **Supervisió del Progrés** – Fa seguiment de fites, terminis i qualitat del treball.
+:::
+
+::: fragment
+📌 **Gestió de Riscos** – Identifica i mitiga riscos per a evitar retards o problemes.
+:::
+
+::: fragment
+📌 **Optimització de Recursos** – Administra temps, pressupost i materials de manera eficient.
+:::
+
+::: fragment
+📌 **Resolució de Problemes** – Presa decisions ràpides i efectives davant imprevistos.
+:::
+
+::: fragment
+📌 **Control de Qualitat** – Assegura que els lliurables compleixen amb els estàndards requerits.
+:::
+
+::: fragment
+📌 **Reporti i Documentació** – Genera informes d'avanç i manté registres actualitzats.
+:::
+
+::: fragment
+📌 **Implementació de Metodologies** – Aplica frameworks com Agile, Scrum o PMI segons el projecte.
+:::
+
+------------------------------------------------------------------------
+
+## Presentacions
+
+::: fragment
+![](imagenes/presenter_filled_icon.ico){width="40"} Durada de 15 minuts
+:::
+
+::: fragment
+![](imagenes/presenter_filled_icon.ico){width="40"} El tribunal estarà compost per 3 membres docents de l'assignatura
+:::
+
+::: fragment
+![](imagenes/presenter_filled_icon.ico){width="40"} **Tots els integrants de cada apartat** s'hauràn de preparar la presentació
+:::
+
+::: fragment
+![](imagenes/presenter_filled_icon.ico){width="40"} El tribunal, al inici de cada presentació anunciarà les persones encarregades de presentar cada apartat.
+:::
+
+::: fragment
+![](imagenes/presenter_filled_icon.ico){width="40"} Al finalitzar la presentació hi haurà 15 minuts de preguntes-debat per part del tribunal.
+:::
+
+------------------------------------------------------------------------
+
+## Evaluació de les presentacions
+
+::: fragment
+$$
+D_{3,4} = 0.8 · NG + 0.1 · NP + 0.1 · NA
+$$
+:::
+
+::: fragment
+Ón:
+:::
+
+-   $NG$: Nota global del treball
+-   $NP$: Nota del treball de classe (laboratoris) otorgat per l'equip docent
+-   $NA$: Nota de la cross-validació dels companys del projecte
+
+<br></br>
+
+::: fragment
+#### Cross-validació
+
+Els companys del grup s'hauràn d'evaluar a si mateix i a la resta de companys i d'allà s'obtindrà una nota de l'aportació de l'alumne al treball.
+:::
+
+------------------------------------------------------------------------

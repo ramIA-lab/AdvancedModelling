@@ -214,3 +214,189 @@ Les **matrícules d'honor** s'assignarán segons els criteri dels docents valora
     -   Textual Analysis
 ::::
 :::::::
+
+# Treball de Camp
+
+------------------------------------------------------------------------
+
+### Estructura de les dades
+
+::: fragment
+-   Es recomana buscar matrius de dades **NO AGREGADES**
+:::
+
+::: fragment
+-   Un mínim de 7 variables numèriques
+:::
+
+::: fragment
+-   Un mínim de 7 variables qualitatives
+
+    -   màxim 2 variables binàries o dummies
+
+    -   la resta variables multimodals
+:::
+
+::: fragment
+-   Una variable textual
+:::
+
+::: fragment
+-   Una variable temporal
+:::
+
+::: fragment
+-   Grandària de la base de dades:
+
+    -   Entre 2.000 i 5.000 observacions
+:::
+
+::: fragment
+-   Evitar BD massa grans que requereixin temps de processos massa llargs
+:::
+
+:::: fragment
+::: {.fragment .highlight-red}
+-   **Recordeu que queden excloses BD providents de pàgines acadèmiques o lligades a softwares**
+:::
+::::
+
+------------------------------------------------------------------------
+
+### Software
+
+El software que utilitzarem és el següent:
+
+::::::: {columns}
+::::: {.column width="50%"}
+::: fragment
+### R
+
+![](https://bookdown.org/andersson_vargas/aprendiendo_r_studio_-_avm/Imagenes/RStudio-Logo-Flat.png){width="300"}
+:::
+
+::: fragment
+### Python ![](https://websitearchive2020.nepa.gov.jm/new/images/gif/new-star.gif){width="68"}
+
+![](https://1000marcas.net/wp-content/uploads/2020/11/Python-logo.png){width="300"}
+:::
+:::::
+
+::: {.column width="50%"}
+![](https://www.redeweb.com/wp-content/uploads/2021/03/software-1.jpg)
+:::
+:::::::
+
+------------------------------------------------------------------------
+
+## Python
+
+### Instalació
+
+::: fragment
+-   No haureu d'instal·lar cap programa
+:::
+
+::: fragment
+-   Necessitareu una compte de gmail
+:::
+
+::::: fragment
+::: r-stack
+![](../docs/imagenes/imagen_googlecolab.png)
+:::
+
+::: r-stack
+<https://colab.research.google.com/>
+:::
+:::::
+
+------------------------------------------------------------------------
+
+## Distribució dels equips
+
+-   Es formaran grups de *9 persones*
+
+-   S'ha de mantenir la paritat de gènere en el grup.
+
+-   És **obligatori** que cada grup contingui alumnes del doble grau o ERASMUS.
+
+-   Serà necessari assignar a un *project leader*
+
+:::: fragment
+::: r-stack
+![](https://madridadschool.com/wp-content/uploads/2019/07/cualidades-project-brand-manager-900x600-1.jpg){width="60%"}
+:::
+::::
+
+------------------------------------------------------------------------
+
+## *Project Leader*
+
+::: fragment
+### Funcions:
+:::
+
+::: fragment
+📌 **Planificació del Projecte** – Defineix objectius, abast, cronograma i recursos necessaris.
+:::
+
+::: fragment
+📌 **Gestió d'Equip** – Coordina, motiva i resol conflictes dins de l'equip.
+:::
+
+::: fragment
+📌 **Comunicació** – Actua com a enllaç entre stakeholders, equip i direcció.
+:::
+
+::: fragment
+📌 **Supervisió del Progrés** – Fa seguiment de fites, terminis i qualitat del treball.
+:::
+
+::: fragment
+📌 **Gestió de Riscos** – Identifica i mitiga riscos per a evitar retards o problemes.
+:::
+
+::: fragment
+📌 **Optimització de Recursos** – Administra temps, pressupost i materials de manera eficient.
+:::
+
+::: fragment
+📌 **Resolució de Problemes** – Presa decisions ràpides i efectives davant imprevistos.
+:::
+
+::: fragment
+📌 **Control de Qualitat** – Assegura que els lliurables compleixen amb els estàndards requerits.
+:::
+
+::: fragment
+📌 **Reporti i Documentació** – Genera informes d'avanç i manté registres actualitzats.
+:::
+
+::: fragment
+📌 **Implementació de Metodologies** – Aplica frameworks com Agile, Scrum o PMI segons el projecte.
+:::
+
+------------------------------------------------------------------------
+
+## Presentacions
+
+::: fragment
+![](../docs/imagenes/presenter_filled_icon.ico){width="40"} Durada de 15 minuts
+:::
+
+::: fragment
+![](../docs/imagenes/presenter_filled_icon.ico){width="40"} El tribunal estarà compost per 2 membres docents de l'assignatura
+:::
+
+::: fragment
+![](../docs/imagenes/presenter_filled_icon.ico){width="40"} **Tots els integrants de cada apartat** s'hauràn de preparar la presentació
+:::
+
+::: fragment
+![](../docs/imagenes/presenter_filled_icon.ico){width="40"} El tribunal, al inici de cada presentació anunciarà les persones encarregades de presentar cada apartat.
+:::
+
+::: fragment
+![](../docs/imagenes/presenter_filled_icon.ico){width="40"} Al finalitzar la presentació hi haurà 15 minuts de preguntes-debat per part del tribunal.
+:::

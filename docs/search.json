@@ -313,5 +313,33 @@
     "title": "Presentació del curs",
     "section": "Avaluació",
     "text": "Avaluació\nExàmen Final\n\nS’evaluarà el dia 17/06/2025 a les 11:30\nS’evaluarà tota la materia (no serà excluient)\nNo es permetrà l’utilització d’apunts\nContindrà tant preguntes teòriques com preguntes de la part pràctica amb sortides que s’hauràn d’interpretar"
+  },
+  {
+    "objectID": "material/2425PresentacioCurs.html#python-1",
+    "href": "material/2425PresentacioCurs.html#python-1",
+    "title": "Presentació del curs",
+    "section": "Python",
+    "text": "Python\nInstalació\n\n\nNo haureu d’instal·lar cap programa\n\n\n\n\nNecessitareu una compte de gmail\n\n\n\n\n\n\n\nhttps://colab.research.google.com/"
+  },
+  {
+    "objectID": "material/2425PresentacioCurs.html#distribució-dels-equips",
+    "href": "material/2425PresentacioCurs.html#distribució-dels-equips",
+    "title": "Presentació del curs",
+    "section": "Distribució dels equips",
+    "text": "Distribució dels equips\n\nEs formaran grups de 9 persones\nS’ha de mantenir la paritat de gènere en el grup.\nÉs obligatori que cada grup contingui alumnes del doble grau o ERASMUS.\nSerà necessari assignar a un project leader"
+  },
+  {
+    "objectID": "material/2425PresentacioCurs.html#project-leader",
+    "href": "material/2425PresentacioCurs.html#project-leader",
+    "title": "Presentació del curs",
+    "section": "Project Leader",
+    "text": "Project Leader\n\nFuncions:\n\n\n📌 Planificació del Projecte – Defineix objectius, abast, cronograma i recursos necessaris.\n\n\n📌 Gestió d’Equip – Coordina, motiva i resol conflictes dins de l’equip.\n\n\n📌 Comunicació – Actua com a enllaç entre stakeholders, equip i direcció.\n\n\n📌 Supervisió del Progrés – Fa seguiment de fites, terminis i qualitat del treball.\n\n\n📌 Gestió de Riscos – Identifica i mitiga riscos per a evitar retards o problemes.\n\n\n📌 Optimització de Recursos – Administra temps, pressupost i materials de manera eficient.\n\n\n📌 Resolució de Problemes – Presa decisions ràpides i efectives davant imprevistos.\n\n\n📌 Control de Qualitat – Assegura que els lliurables compleixen amb els estàndards requerits.\n\n\n📌 Reporti i Documentació – Genera informes d’avanç i manté registres actualitzats.\n\n\n📌 Implementació de Metodologies – Aplica frameworks com Agile, Scrum o PMI segons el projecte."
+  },
+  {
+    "objectID": "material/2425PresentacioCurs.html#presentacions",
+    "href": "material/2425PresentacioCurs.html#presentacions",
+    "title": "Presentació del curs",
+    "section": "Presentacions",
+    "text": "Presentacions\n\n Durada de 15 minuts\n\n\n El tribunal estarà compost per 2 membres docents de l’assignatura\n\n\n Tots els integrants de cada apartat s’hauràn de preparar la presentació\n\n\n El tribunal, al inici de cada presentació anunciarà les persones encarregades de presentar cada apartat.\n\n\n Al finalitzar la presentació hi haurà 15 minuts de preguntes-debat per part del tribunal."
   }
 ]
