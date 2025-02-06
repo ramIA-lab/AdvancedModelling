@@ -82,7 +82,7 @@ Qualificació = 0.2 · Q + 0.2 · E_3 + 0.2 · E_4 + 0.4 · EF
 $$
 :::
 
-:::::: {columns}
+::::::: {columns}
 :::: {.column width="50%"}
 ::: fragment
 Ón:
@@ -93,12 +93,14 @@ $$
 -   $EF$: Exàmen final de la asignatura
 ::::
 
-::: {.column width="50%"}
+:::: {.column width="50%"}
 ::: fragment
-<iframe src="https://giphy.com/embed/9mmGD97xx2OAfb3AhM" width="480" height="269" style frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+<iframe src="https://giphy.com/embed/9mmGD97xx2OAfb3AhM" width="480" height="269" style frameBorder="0" class="giphy-embed" allowFullScreen>
+
+</iframe>
 :::
-:::
-::::::
+::::
+:::::::
 
 ::: fragment
 Les **matrícules d'honor** s'assignarán segons els criteri dels docents valorant les aportacions dels alumnes en les classes tant teòriques com pràctiques.
@@ -110,19 +112,21 @@ Les **matrícules d'honor** s'assignarán segons els criteri dels docents valora
 
 ### *Quizes*
 
-::::: {columns}
+:::::: {columns}
 ::: {.column width="50%"}
 -   *Quizes* de preguntes curtes
 -   **Duració**: 20 minuts
 -   **Ponderació**: 5% (cada quiz) de la qualificació final.
 :::
 
-::: {.column width="40%"}
+:::: {.column width="40%"}
 ::: fragment
-<iframe src="https://giphy.com/embed/3ohuPiICXHlEpD2Kv6" width="400" height="300" style frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+<iframe src="https://giphy.com/embed/3ohuPiICXHlEpD2Kv6" width="400" height="300" style frameBorder="0" class="giphy-embed" allowFullScreen>
+
+</iframe>
 :::
-:::
-:::::
+::::
+::::::
 
 ::: fragment
 |   Quiz 1   |   Quiz 2   |   Quiz 3   |   Quiz 4   |
@@ -148,7 +152,7 @@ Les **matrícules d'honor** s'assignarán segons els criteri dels docents valora
 
 ::: fragment
 |   | E1 | E2 | E3 | E4 |
-|:-------------:|:-------------:|:-------------:|:-------------:|:-------------:|
+|:--:|:--:|:--:|:--:|:--:|
 | Entregues | 18/02/2025 | 25/02/2025 | 31/03/2025 a les 23:59 | 26/05/2025 a les 23:59 |
 | Presentacions |  |  | 01/04/2025 | 27/05/2025 |
 
@@ -171,11 +175,13 @@ Les **matrícules d'honor** s'assignarán segons els criteri dels docents valora
 
 -   Contindrà tant preguntes teòriques com preguntes de la part pràctica amb sortides que s'hauràn d'interpretar
 
-::: fragment
+:::: fragment
 ::: center
-<iframe src="https://giphy.com/embed/3o6Mbf5FR63Gv2xbLW" width="480" height="271" style frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+<iframe src="https://giphy.com/embed/3o6Mbf5FR63Gv2xbLW" width="480" height="271" style frameBorder="0" class="giphy-embed" allowFullScreen>
+
+</iframe>
 :::
-:::
+::::
 
 ------------------------------------------------------------------------
 
