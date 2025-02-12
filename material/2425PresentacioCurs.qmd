@@ -247,7 +247,11 @@ Les **matrícules d'honor** s'assignarán segons els criteri dels docents valora
 :::
 
 ::: fragment
--   Una variable temporal
+-   Una variable temporal (varies sèries temporals preferiblement)
+:::
+
+::: fragment
+-   Una o més variables de geolocalització (latitud, longitud) (ciutats, municipis, barris, localitats, códi postal o similars)
 :::
 
 ::: fragment
