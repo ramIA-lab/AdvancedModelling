@@ -16,7 +16,13 @@ Respecte als mètodes avançats d'anàlisi de dades, es veuran tècniques d'anà
 
 ## Advanced Preprocessing
 
-[Basic Imputation method](material/01_AdvancedPreprocessing/teoria/Clase1.pdf)
+[Introduction and Data Quality](material/01_AdvancedPreprocessing/teoria/Clase1.pdf)
+
+[Missing Data & Feature Engineering](material/01_AdvancedPreprocessing/teoria/Clase2.pdf)
+
+### Automatic Descriptions Analysis (EDA)
+
+[Lab sesion 1 - EDA](material/01_AdvancedPreprocessing/laboratorio/01_automaticEDA.R)
 
 ### Outliers Multivariates
 
@@ -26,39 +32,39 @@ Respecte als mètodes avançats d'anàlisi de dades, es veuran tècniques d'anà
 
 ### Basic Imputation methods and *MICE/MIMMI/Others*
 
-[Lab sesion 2 - Imputation Methods](material/01_AdvancedPreprocessing/laboratorio/)
+[Lab sesion 2 - Imputation Methods](material/01_AdvancedPreprocessing/laboratorio/03_01_ImputationMethods.R)
+
+[Lab sesion 2 - MIMMI](material/01_AdvancedPreprocessing/laboratorio/03_02_MIMMI.R)
 
 ### Preprocessing Geospacial
 
-[Lab sesion 3 - Preprocessing Geospacial](material/01_AdvancedPreprocessing/laboratorio/)
+[Lab sesion 2 - Preprocessing Geospacial](material/01_AdvancedPreprocessing/laboratorio/04_preproGeoreferencias.R)
 
 ## Advanced Clustering
 
-### DBSCAN/OPTICS
-
-[DBSCAN](material/02_AdvancedClustering/teoria/)
-
-[OPTICS](material/02_AdvancedClustering/teoria/)
-
-[Lab sesion 4 - DBSCAN/OPTICS](material/02_AdvancedClustering/laboratorio/)
-
 ### Times Series Clustering
 
-[Times Series Clustering](material/02_AdvancedClustering/teoria/)
+[Times Series Clustering](material/02_AdvancedClustering/teoria/Time-Series-Clustering.pdf)
 
-[Lab sesion 5 - Times Series Clustering](material/02_AdvancedClustering/laboratorio/TimesSeriesClustering.qmd)
+[Lab sesion 4 - Times Series Clustering](material/02_AdvancedClustering/laboratorio/05_TimesSeriesClustering.R)
+
+### DBSCAN/OPTICS
+
+[DBSCAN/OPTICS/CURE](material/02_AdvancedClustering/teoria/Clase4.pdf)
+
+[Lab sesion 5 - DBSCAN/OPTICS](material/02_AdvancedClustering/laboratorio/06_DBSCAN-OPTICS.R)
 
 ## Advanced Profiling
 
-[Advanced Profiling](material/03_AdvancedProfiling/teoria/)
+[Advanced Profiling](material/03_AdvancedProfiling/teoria/Clase5.pdf)
 
-[Lab sesion 6 - TLP, TERMOMETRO, aTLP](material/03_AdvancedProfiling/laboratorio/)
+[Lab sesion 6 - TLP, TERMOMETRO, aTLP](material/03_AdvancedProfiling/laboratorio/ProfilingTermometro.zip)
 
 ## Correspondence Analysis
 
 ### Simple Correspondence Analysis (ACS)
 
-[ACS](material/04_CorrespondenceAnalysis/teoria/)
+[ACS](material/04_CorrespondenceAnalysis/teoria/Clase6.pdf)
 
 [Lab sesion 7 - ACS](material/04_CorrespondenceAnalysis/laboratorio/ACS.qmd)
 

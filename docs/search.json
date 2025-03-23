@@ -11,14 +11,14 @@
     "href": "index.html#advanced-preprocessing",
     "title": "Preprocessament i Modelatge Avançat d’Anàlisi de Dades (PMAAD)",
     "section": "1 Advanced Preprocessing",
-    "text": "1 Advanced Preprocessing\nBasic Imputation method\n\n1.1 Outliers Multivariates\nLab sesion 1 - Outliers Multivariates\n\nDatabase sesion 1 - Sant Valentin Dates\n\n\n\n1.2 Basic Imputation methods and MICE/MIMMI/Others\nLab sesion 2 - Imputation Methods\n\n\n1.3 Preprocessing Geospacial\nLab sesion 3 - Preprocessing Geospacial"
+    "text": "1 Advanced Preprocessing\nIntroduction and Data Quality\nMissing Data & Feature Engineering\n\n1.1 Automatic Descriptions Analysis (EDA)\nLab sesion 1 - EDA\n\n\n1.2 Outliers Multivariates\nLab sesion 1 - Outliers Multivariates\n\nDatabase sesion 1 - Sant Valentin Dates\n\n\n\n1.3 Basic Imputation methods and MICE/MIMMI/Others\nLab sesion 2 - Imputation Methods\nLab sesion 2 - MIMMI\n\n\n1.4 Preprocessing Geospacial\nLab sesion 2 - Preprocessing Geospacial"
   },
   {
     "objectID": "index.html#advanced-clustering",
     "href": "index.html#advanced-clustering",
     "title": "Preprocessament i Modelatge Avançat d’Anàlisi de Dades (PMAAD)",
     "section": "2 Advanced Clustering",
-    "text": "2 Advanced Clustering\n\n2.1 DBSCAN/OPTICS\nDBSCAN\nOPTICS\nLab sesion 4 - DBSCAN/OPTICS\n\n\n2.2 Times Series Clustering\nTimes Series Clustering\nLab sesion 5 - Times Series Clustering"
+    "text": "2 Advanced Clustering\n\n2.1 Times Series Clustering\nTimes Series Clustering\nLab sesion 4 - Times Series Clustering\n\n\n2.2 DBSCAN/OPTICS\nDBSCAN/OPTICS/CURE\nLab sesion 5 - DBSCAN/OPTICS"
   },
   {
     "objectID": "index.html#advanced-profiling",

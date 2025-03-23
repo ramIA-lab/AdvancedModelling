@@ -1,8 +1,8 @@
 # ==============================================================================
-# PREPROCESSING: Detecció d'Outliers
+#                      PREPROCESSING: Detecció d'Outliers
 # Author(s):     Sergi Ramírez i Dante Conti
 #                        IDEAI (c)
-# Date:                 Febrer 2025
+# Date:               08 Febrer 2025
 # Description:   Aquest script permet la detecció de outliers de la nostra 
 #                base de dades
 #
@@ -137,7 +137,8 @@ library(scatterplot3d)
 library(readr)
 dades <- readr::read_csv("https://archive.ics.uci.edu/ml/machine-learning-databases/forest-fires/forestfires.csv")
 dades <- data.frame(dades[, c("DC", "temp", "RH")])
-scatterplot3d(dades[,"DC"], dades[, "temp"],dades[, "RH"])
+scatterplot3d(dades[,"DC"], dades[, "temp"], 
+              dades[, "RH"])
 
 # ..............................................................................
 # library
@@ -145,25 +146,19 @@ library(rgl)
 
 # Plot
 plot3d(x = dades[, "DC"], y = dades[, "temp"], z = dades[, "RH"], 
-col = "black", type = 'p', radius = .1)
+  col = "black", type = 'p', radius = .1)
 
 # ..............................................................................
 library(plotly)
 
 fig <- plotly::plot_ly(dades, x = ~DC, y = ~temp, z = ~RH, size = 1) %>% 
-       add_markers()
+          add_markers()
 fig
 
 ## 2.1 Cas general -------------------------------------------------------------
 library(mvoutlier)
 dades2 <- dades; Y <- as.matrix(dades2)
-distances <- dd.plot(Y,quan=1/2, alpha=0.025)
-distances$md.cla
-distances$md.rob
-res <- aq.plot(Y,delta=qchisq(0.975,df=ncol(Y)),quan=1/2,alpha=0.05)
-str(res)
-res$outliers
-table(res$outliers)
+res <- aq.plot(Y)
 #windows()
 par(mfrow=c(1, 1))
 library(MVN)
@@ -175,7 +170,7 @@ mvnoutliers$multivariateOutliers
 ## Visualitzem les variables originals quines han donat els que no son outliers
 mvnoutliers$newData
 
-## 2.1 PCA ---------------------------------------------------------------------
+## 2.1 ACP ---------------------------------------------------------------------
 ## Métodes basats en correlacions ens permeten detectar outliers
 ## 2.2 Distancia de Mahalanobis ------------------------------------------------
 ## Medeix la distancia de un punt respecte a la mitjana considerant la covariança
@@ -207,7 +202,7 @@ scatterplot3d(dades[, "DC"], dades[, "temp"], dades[, "RH"],
 
 fig <- plotly::plot_ly(dades, x = ~DC, y = ~temp, z = ~RH, 
                        color = ~color, colors = c('#0C4B8E', '#BF382A')) %>% 
-                        add_markers()
+add_markers()
 fig
 
 quienes <- which(dades[, "outlier"] == TRUE)
@@ -217,13 +212,13 @@ quienes
 
 library(chemometrics)
 
-dis <- chemometrics::Moutlier(dades[, c("DC", "temp", "RH")], quantile = 0.99, plot = TRUE)
+  dis <- chemometrics::Moutlier(dades[, c("DC", "temp", "RH")], quantile = 0.99, plot = TRUE)
 
 par(mfrow = c(1, 1))
 plot(dis$md, dis$rd, type = "n")
 text(dis$md, dis$rd, labels = rownames(dades))
 a <- which(dis$rd > 7)
-print(a)
+
 ## 2.3 Regresió Lineal i residus -----------------------------------------------
 ## Un punt amb un residu gran pot considerar-se un outlier
 ## 2.4 Distancia de Cook -------------------------------------------------------
@@ -243,10 +238,9 @@ library(dplyr)
 outlier.scores <- lofactor(dades[, c("DC", "temp", "RH")], k = 5)
 par(mfrow=c(1,1))
 plot(density(outlier.scores))
-outlier.scores
-outliers <- order(outlier.scores, decreasing=T)
-outliers <- order(outlier.scores, decreasing=T)[1:5]
 
+outliers <- order(outlier.scores, decreasing=T)[1:5]
+print(outliers)
 
 ### Aprofitarem el ACP per poder visualizar els outliers
 n <- nrow(dades[, c("DC", "temp", "RH")]); labels <- 1:n; labels[-outliers] <- "."
@@ -266,7 +260,7 @@ plot3d(dades[, "DC"], dades[, "temp"], dades[, "RH"], type = "s", col = col, siz
 library(Rlof)
 outliers.scores <- Rlof::lof(dades[, c("DC", "temp", "RH")], k = 5)
 plot(density(outliers.scores))
-#outlier.scores <- lof(dades[, c("DC", "temp", "RH")], k=c(5:10))
+
 ## 2.7 Isolation Forest --------------------------------------------------------
 ### Cargamos las librerias necesarias
 library(R.matlab)   # Lectura de archivos .mat
