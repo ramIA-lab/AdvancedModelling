@@ -70,13 +70,11 @@ Respecte als mètodes avançats d'anàlisi de dades, es veuran tècniques d'anà
 
 ### Multiple Correspondence Analysis (ACM) and Factor Analysis of mixed data (FAMD) 
 
-[ACM](material/04_CorrespondenceAnalysis/teoria/)
+[ACM - FAMD](material/04_CorrespondenceAnalysis/teoria/MCA-FAMD.pdf)
 
-[FAMD](material/04_CorrespondenceAnalysis/teoria/)
+[Lab sesion 8 - ACM/FAMD Script](material/04_CorrespondenceAnalysis/laboratorio/MCA-Example.R)
 
-[Lab sesion 8 - ACM](material/04_CorrespondenceAnalysis/laboratorio/)
-
-[Lab sesion 8 - FAMD](material/04_CorrespondenceAnalysis/laboratorio/)
+[Lab sesion 8 - ACM/FAMD Referencia](material/04_CorrespondenceAnalysis/laboratorio/MCA-Example-Ref.pdf)
 
 ## Geospatial Analysis
 
