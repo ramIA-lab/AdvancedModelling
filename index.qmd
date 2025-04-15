@@ -16,21 +16,17 @@ Respecte als mètodes avançats d'anàlisi de dades, es veuran tècniques d'anà
 
 ## Advanced Preprocessing
 
-### Basic Imputation methods
+[Introducció i Qualitat de les dades](material/01_AdvancedPreprocessing/teoria/Clase1.pdf)   
 
-[Basic Imputation method](material/01_AdvancedPreprocessing/teoria/basicImputation.qmd)
+### Basic Imputation methods
 
 [Lab sesion 1 - Basic Imputation method](material/01_AdvancedPreprocessing/laboratorio/)
 
 ### Outliers Multivariates
 
-[Outiliers Multivariates](material/01_AdvancedPreprocessing/teoria/)
-
 [Lab sesion 2 - Outliers Multivariates](material/01_AdvancedPreprocessing/laboratorio/)
 
 ### *MICE/MIMMI/Others*
-
-[Advanced Imputation Methods](material/01_AdvancedPreprocessing/teoria/)
 
 [Lab sesion 3 - MICE/MIMMI/Others](material/01_AdvancedPreprocessing/laboratorio/)
 

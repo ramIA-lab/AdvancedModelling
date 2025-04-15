@@ -58,13 +58,13 @@ editor: visual
 
 #### - Sessions Teòriques:
 
--   Dilluns (10:00h a 12:00h) A6203 (D.Conti)
+-   Dilluns (10:00h a 12:00h) A6102 (D.Conti)
 
 #### - Sessions Pràctiques:
 
--   Dimarts (08:00h a 10:00h) A6203 (D.Conti)
+-   Dimarts (08:00h a 10:00h) A6201 (D.Conti)
 
--   Dimarts (12:00h a 14:00h) A6203 (S.Ramirez)
+-   Dimarts (12:00h a 14:00h) A6205 (S.Ramirez)
 
 #### - Assistència dels estudiants:
 
@@ -152,7 +152,7 @@ Les **matrícules d'honor** s'assignarán segons els criteri dels docents valora
 
 ::: fragment
 |   | E1 | E2 | E3 | E4 |
-|:--:|:--:|:--:|:--:|:--:|
+|:-------------:|:-------------:|:-------------:|:-------------:|:-------------:|
 | Entregues | 18/02/2025 | 25/02/2025 | 31/03/2025 a les 23:59 | 26/05/2025 a les 23:59 |
 | Presentacions |  |  | 01/04/2025 | 27/05/2025 |
 

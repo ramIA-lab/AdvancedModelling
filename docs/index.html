@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.37">
+<meta name="generator" content="quarto-1.6.33">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -36,12 +36,12 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-29e2c20b02301cfff04dc8050bf30c7e.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-43df0d6f53b733b42d37fa7808e17715.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-07ba0ad10f5680c660e360ac31d2f3b6.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-8b864f0777c60eecff11d75b6b2e1175.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-274c3d255ff4b40ad85bc0e900837b3c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-1851c9bb8f3f4849af8ba858f06152b9.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-8bda806db8b623a4dafb352339cca83f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-1ca3e0674a0602a244ceba853400d2ef.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -108,7 +108,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar"><div class="quarto-margin-header"><div class="margin-header-item">
-<p><img src=".\imagenes/Logo_UPC.svg.png" class="img-fluid"></p>
+<p><img src="./imagenes/Logo_UPC.svg.png" class="img-fluid"></p>
 </div></div>
         <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">On this page</h2>
@@ -173,19 +173,17 @@ ul.task-list li input[type="checkbox"] {
 <p><a href="./material/2425PresentacioCurs.html">Introducció de l’assignatura</a></p>
 <section id="advanced-preprocessing" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="advanced-preprocessing"><span class="header-section-number">1</span> Advanced Preprocessing</h2>
+<p><a href="material/01_AdvancedPreprocessing/teoria/Clase1.pdf">Introducció i Qualitat de les dades</a></p>
 <section id="basic-imputation-methods" class="level3" data-number="1.1">
 <h3 data-number="1.1" class="anchored" data-anchor-id="basic-imputation-methods"><span class="header-section-number">1.1</span> Basic Imputation methods</h3>
-<p><a href="./material/01_AdvancedPreprocessing/teoria/basicImputation.html">Basic Imputation method</a></p>
 <p><a href="material/01_AdvancedPreprocessing/laboratorio/">Lab sesion 1 - Basic Imputation method</a></p>
 </section>
 <section id="outliers-multivariates" class="level3" data-number="1.2">
 <h3 data-number="1.2" class="anchored" data-anchor-id="outliers-multivariates"><span class="header-section-number">1.2</span> Outliers Multivariates</h3>
-<p><a href="material/01_AdvancedPreprocessing/teoria/">Outiliers Multivariates</a></p>
 <p><a href="material/01_AdvancedPreprocessing/laboratorio/">Lab sesion 2 - Outliers Multivariates</a></p>
 </section>
 <section id="micemimmiothers" class="level3" data-number="1.3">
 <h3 data-number="1.3" class="anchored" data-anchor-id="micemimmiothers"><span class="header-section-number">1.3</span> <em>MICE/MIMMI/Others</em></h3>
-<p><a href="material/01_AdvancedPreprocessing/teoria/">Advanced Imputation Methods</a></p>
 <p><a href="material/01_AdvancedPreprocessing/laboratorio/">Lab sesion 3 - MICE/MIMMI/Others</a></p>
 </section>
 </section>
@@ -481,6 +479,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -591,6 +591,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
+      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {
