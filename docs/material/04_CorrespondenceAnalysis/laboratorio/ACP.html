@@ -1,0 +1,2496 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Dante Conti, Sergi Ramirez, (c) IDEAI">
+<meta name="dcterms.date" content="2025-04-03">
+
+<title>Anàlisis de Componentes Principales (ACP) – PMAAD</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../../imagenes/ideai_logo.png" rel="icon" type="image/png">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-29e2c20b02301cfff04dc8050bf30c7e.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-43df0d6f53b733b42d37fa7808e17715.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap-83f5ffed4bb819e1a410337fb71ccdff.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark-1851c9bb8f3f4849af8ba858f06152b9.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">PMAAD</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../index.html"> 
+<span class="menu-text">Grau en Intel·ligència Artificial</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar"><div class="quarto-margin-header"><div class="margin-header-item">
+<p><img src="../../..\imagenes/Logo_UPC.svg.png" class="img-fluid"></p>
+</div></div>
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introducció" id="toc-introducció" class="nav-link active" data-scroll-target="#introducció"><span class="header-section-number">1</span> Introducció</a></li>
+  <li><a href="#definició-del-problema" id="toc-definició-del-problema" class="nav-link" data-scroll-target="#definició-del-problema"><span class="header-section-number">2</span> Definició del problema</a></li>
+  <li><a href="#descriptiva-eda" id="toc-descriptiva-eda" class="nav-link" data-scroll-target="#descriptiva-eda"><span class="header-section-number">3</span> Descriptiva (EDA)</a></li>
+  <li><a href="#extracció-de-les-components-principals-pca" id="toc-extracció-de-les-components-principals-pca" class="nav-link" data-scroll-target="#extracció-de-les-components-principals-pca"><span class="header-section-number">4</span> Extracció de les components principals (PCA)</a>
+  <ul class="collapse">
+  <li><a href="#funcions-clàssiques" id="toc-funcions-clàssiques" class="nav-link" data-scroll-target="#funcions-clàssiques"><span class="header-section-number">4.1</span> Funcions clàssiques</a></li>
+  <li><a href="#importància-de-les-components" id="toc-importància-de-les-components" class="nav-link" data-scroll-target="#importància-de-les-components"><span class="header-section-number">4.2</span> Importància de les components</a></li>
+  </ul></li>
+  <li><a href="#factominer-i-factoextra" id="toc-factominer-i-factoextra" class="nav-link" data-scroll-target="#factominer-i-factoextra"><span class="header-section-number">5</span> FactoMineR i FactoExtra</a>
+  <ul class="collapse">
+  <li><a href="#create-a-pca" id="toc-create-a-pca" class="nav-link" data-scroll-target="#create-a-pca"><span class="header-section-number">5.1</span> Create a PCA</a></li>
+  <li><a href="#determinate-the-components" id="toc-determinate-the-components" class="nav-link" data-scroll-target="#determinate-the-components"><span class="header-section-number">5.2</span> Determinate the components</a></li>
+  <li><a href="#quality-of-variables-into-pcas-cos2" id="toc-quality-of-variables-into-pcas-cos2" class="nav-link" data-scroll-target="#quality-of-variables-into-pcas-cos2"><span class="header-section-number">5.3</span> Quality of variables into PCAs (cos<span class="math inline">\(^2\)</span>)</a></li>
+  <li><a href="#calculation-of-contributions" id="toc-calculation-of-contributions" class="nav-link" data-scroll-target="#calculation-of-contributions"><span class="header-section-number">5.4</span> Calculation of contributions</a>
+  <ul class="collapse">
+  <li><a href="#contributions-of-variables-for-pcas" id="toc-contributions-of-variables-for-pcas" class="nav-link" data-scroll-target="#contributions-of-variables-for-pcas"><span class="header-section-number">5.4.1</span> Contributions of variables for PCAs</a></li>
+  </ul></li>
+  <li><a href="#coordinates-of-variables" id="toc-coordinates-of-variables" class="nav-link" data-scroll-target="#coordinates-of-variables"><span class="header-section-number">5.5</span> Coordinates of variables</a></li>
+  <li><a href="#cos2-quality-on-the-factore-map" id="toc-cos2-quality-on-the-factore-map" class="nav-link" data-scroll-target="#cos2-quality-on-the-factore-map"><span class="header-section-number">5.6</span> Cos2: quality on the factore map</a></li>
+  <li><a href="#contributions-to-the-principal-components" id="toc-contributions-to-the-principal-components" class="nav-link" data-scroll-target="#contributions-to-the-principal-components"><span class="header-section-number">5.7</span> Contributions to the principal components</a></li>
+  <li><a href="#correlation-circle" id="toc-correlation-circle" class="nav-link" data-scroll-target="#correlation-circle"><span class="header-section-number">5.8</span> Correlation circle</a></li>
+  <li><a href="#quality-of-representation" id="toc-quality-of-representation" class="nav-link" data-scroll-target="#quality-of-representation"><span class="header-section-number">5.9</span> Quality of representation</a></li>
+  <li><a href="#contributions-of-variables-to-pcs" id="toc-contributions-of-variables-to-pcs" class="nav-link" data-scroll-target="#contributions-of-variables-to-pcs"><span class="header-section-number">5.10</span> Contributions of variables to PCs</a>
+  <ul class="collapse">
+  <li><a href="#contributions-of-variables-to-pc1" id="toc-contributions-of-variables-to-pc1" class="nav-link" data-scroll-target="#contributions-of-variables-to-pc1"><span class="header-section-number">5.10.1</span> Contributions of variables to PC1</a></li>
+  <li><a href="#contributions-of-variables-to-pc2" id="toc-contributions-of-variables-to-pc2" class="nav-link" data-scroll-target="#contributions-of-variables-to-pc2"><span class="header-section-number">5.10.2</span> Contributions of variables to PC2</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#an-extra-clustering-approach" id="toc-an-extra-clustering-approach" class="nav-link" data-scroll-target="#an-extra-clustering-approach"><span class="header-section-number">6</span> AN EXTRA (Clustering approach)</a>
+  <ul class="collapse">
+  <li><a href="#create-a-grouping-variable-using-kmeans" id="toc-create-a-grouping-variable-using-kmeans" class="nav-link" data-scroll-target="#create-a-grouping-variable-using-kmeans"><span class="header-section-number">6.1</span> Create a grouping variable using kmeans</a></li>
+  <li><a href="#color-variables-by-groups" id="toc-color-variables-by-groups" class="nav-link" data-scroll-target="#color-variables-by-groups"><span class="header-section-number">6.2</span> Color variables by groups</a></li>
+  <li><a href="#dimension-description" id="toc-dimension-description" class="nav-link" data-scroll-target="#dimension-description"><span class="header-section-number">6.3</span> Dimension description</a>
+  <ul class="collapse">
+  <li><a href="#description-of-dimension-1" id="toc-description-of-dimension-1" class="nav-link" data-scroll-target="#description-of-dimension-1"><span class="header-section-number">6.3.1</span> Description of dimension 1</a></li>
+  <li><a href="#description-of-dimension-2" id="toc-description-of-dimension-2" class="nav-link" data-scroll-target="#description-of-dimension-2"><span class="header-section-number">6.3.2</span> Description of dimension 2</a></li>
+  <li><a href="#description-of-dimension-3" id="toc-description-of-dimension-3" class="nav-link" data-scroll-target="#description-of-dimension-3"><span class="header-section-number">6.3.3</span> Description of dimension 3</a></li>
+  </ul></li>
+  <li><a href="#individuals" id="toc-individuals" class="nav-link" data-scroll-target="#individuals"><span class="header-section-number">6.4</span> INDIVIDUALS</a>
+  <ul class="collapse">
+  <li><a href="#coordinates-of-individuals" id="toc-coordinates-of-individuals" class="nav-link" data-scroll-target="#coordinates-of-individuals"><span class="header-section-number">6.4.1</span> Coordinates of individuals</a></li>
+  <li><a href="#plots-from-quality" id="toc-plots-from-quality" class="nav-link" data-scroll-target="#plots-from-quality"><span class="header-section-number">6.4.2</span> Plots from QUALITY</a></li>
+  <li><a href="#plots-from-contribution" id="toc-plots-from-contribution" class="nav-link" data-scroll-target="#plots-from-contribution"><span class="header-section-number">6.4.3</span> Plots from CONTRIBUTION</a></li>
+  </ul></li>
+  <li><a href="#pca-suplementary-variables" id="toc-pca-suplementary-variables" class="nav-link" data-scroll-target="#pca-suplementary-variables"><span class="header-section-number">6.5</span> PCA suplementary variables</a></li>
+  </ul></li>
+  <li><a href="#bibliografia" id="toc-bibliografia" class="nav-link" data-scroll-target="#bibliografia"><span class="header-section-number">7</span> Bibliografia</a></li>
+  <li><a href="#to-go-further" id="toc-to-go-further" class="nav-link" data-scroll-target="#to-go-further"><span class="header-section-number">8</span> To go further:</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Anàlisis de Componentes Principales (ACP)</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Dante Conti, Sergi Ramirez, (c) IDEAI </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">April 3, 2025</p>
+    </div>
+  </div>
+  
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">April 3, 2025</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introducció" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Introducció</h1>
+<p>En moltes ocasions, per estudiar un fenomen, hi ha un gran nombre de variables disponibles, algunes de les quals estan correlacionades entre si, i l’anàlisi no és fàcil de realitzar. En aquestes situacions, és convenient aplicar un mètode, com el <strong>mètode de components principals</strong>, que permeti reduir el nombre de variables sense pèrdua substancial d’informació, i assegurar que aquestes noves variables no estiguin correlacionades, evitant així la informació redundant.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>list.of.packages <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"dplyr"</span>, <span class="st">"reshape2"</span>, <span class="st">"tidyr"</span>, <span class="st">"ggplot2"</span>, <span class="st">"stats"</span>, </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"cluster"</span>, <span class="st">"factoextra"</span>, <span class="st">"colorspace"</span>, <span class="st">"patchwork"</span>, <span class="st">"dendextend"</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"tidyverse"</span>, <span class="st">"ggpubr"</span>, <span class="st">"NbClust"</span>, <span class="st">"HDclassif"</span>, <span class="st">"clValid"</span>, </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"mclust"</span>) </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>new.packages <span class="ot">&lt;-</span> list.of.packages[<span class="sc">!</span>(list.of.packages <span class="sc">%in%</span> <span class="fu">installed.packages</span>()[,<span class="st">"Package"</span>])]</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="fu">length</span>(new.packages) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">install.packages</span>(new.packages)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>ll <span class="ot">&lt;-</span> <span class="fu">lapply</span>(list.of.packages, require, <span class="at">character.only =</span> T)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(list.of.packages, new.packages)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tratamiento de datos</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ==============================================================================</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráficos</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># ==============================================================================</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.font_manager</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> style</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>style.use(<span class="st">'ggplot'</span>) <span class="kw">or</span> plt.style.use(<span class="st">'ggplot'</span>)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Preprocesado y modelado</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co"># ==============================================================================</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.decomposition <span class="im">import</span> PCA</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> make_pipeline</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> scale</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Configuración warnings</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="co"># ==============================================================================</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">'ignore'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="definició-del-problema" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Definició del problema</h1>
+<p>En aquest cas d’estudi es reduirà el nombre de variables economicofinanceres que descriuen un grup d’empreses dedicades al transport per carretera, conservant la major quantitat d’informació possible. El punt de partida és la informació economicofinancera per a l’any 2016 de 459 empreses. Per a cada empresa, les dades estan disponibles dins de les següents variables:</p>
+<ul>
+<li><strong>Palanca financiera</strong>: palanca (%)</li>
+<li><strong>Capital</strong>: capital social (milers d’euros)</li>
+<li><strong>Guanys abans de l’impost d’interès Depreciació i amortització</strong>: ebitda.sales (%)</li>
+<li><strong>Empleats</strong>: mà d’obra de l’empresa (persones)</li>
+<li><strong>fons</strong>: fons propis (milers d’euros)</li>
+<li><strong>Renda</strong>: renda operativa (milers d’euros)</li>
+<li><strong>Reco</strong>: rendibilitat econòmica (%)</li>
+<li><strong>Rfin</strong>: retorn financer (%)</li>
+<li><strong>Reventes</strong>: resultat de l’any en vendes (%)</li>
+</ul>
+</section>
+<section id="descriptiva-eda" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Descriptiva (EDA)</h1>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(<span class="at">X =</span> db, <span class="at">MARGIN =</span> <span class="dv">2</span>, <span class="at">FUN =</span> var)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    leverage      capital ebitda.sales    employees        funds       income 
+4.102338e+06 5.105017e+05 1.595078e+02 2.864593e+03 1.897116e+07 3.302072e+08 
+        reco         rfin    res.sales 
+1.661846e+02 1.638810e+05 7.444749e+01 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(<span class="at">X =</span> db, <span class="at">MARGIN =</span> <span class="dv">2</span>, <span class="at">FUN =</span> sd)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    leverage      capital ebitda.sales    employees        funds       income 
+ 2025.422983   714.494043    12.629640    53.521893  4355.589136 18171.602987 
+        reco         rfin    res.sales 
+   12.891262   404.822214     8.628296 </code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'----------------------'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>----------------------</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Media de cada variable'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Media de cada variable</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'----------------------'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>----------------------</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>pydb.mean(axis<span class="op">=</span><span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>leverage         194.964486
+capital          142.250468
+ebitda.sales      10.339530
+employees         17.135076
+funds            792.147930
+income          3512.869621
+reco               4.464370
+rfin              33.925980
+res.sales          2.417563
+dtype: float64</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'-------------------------'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>-------------------------</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Varianza de cada variable'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Varianza de cada variable</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'-------------------------'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>-------------------------</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>pydb.var(axis<span class="op">=</span><span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>leverage        4.102338e+06
+capital         5.105017e+05
+ebitda.sales    1.595078e+02
+employees       2.864593e+03
+funds           1.897116e+07
+income          3.302072e+08
+reco            1.661846e+02
+rfin            1.638810e+05
+res.sales       7.444749e+01
+dtype: float64</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Fixeu-vos en l’alta variància entre les característiques, de manera que a mesura que es va estudiar, hem d’escalar les nostres dades per a PCA.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>(Correlations <span class="ot">&lt;-</span> <span class="fu">cor</span>(db))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                 leverage      capital ebitda.sales    employees        funds
+leverage      1.000000000 -0.004810751  0.039056257  0.005823987 -0.008740051
+capital      -0.004810751  1.000000000 -0.020858314  0.555979779  0.664155850
+ebitda.sales  0.039056257 -0.020858314  1.000000000 -0.017033459  0.009833573
+employees     0.005823987  0.555979779 -0.017033459  1.000000000  0.470561410
+funds        -0.008740051  0.664155850  0.009833573  0.470561410  1.000000000
+income       -0.001557898  0.708616985 -0.017765649  0.590286822  0.968580877
+reco          0.042578483  0.026927060  0.607137189  0.031277344  0.088665116
+rfin         -0.883229777 -0.005619264 -0.024083476 -0.005369538 -0.005177150
+res.sales     0.011504424  0.003212377  0.833051303  0.012390814  0.045899956
+                   income        reco         rfin    res.sales
+leverage     -0.001557898  0.04257848 -0.883229777  0.011504424
+capital       0.708616985  0.02692706 -0.005619264  0.003212377
+ebitda.sales -0.017765649  0.60713719 -0.024083476  0.833051303
+employees     0.590286822  0.03127734 -0.005369538  0.012390814
+funds         0.968580877  0.08866512 -0.005177150  0.045899956
+income        1.000000000  0.08213367 -0.002498589  0.032885285
+reco          0.082133672  1.00000000 -0.054264271  0.778311589
+rfin         -0.002498589 -0.05426427  1.000000000 -0.010521216
+res.sales     0.032885285  0.77831159 -0.010521216  1.000000000</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>corrplot<span class="sc">::</span><span class="fu">corrplot</span>(Correlations) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ACP_files/figure-html/grafic-correlacions-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>corrplot<span class="sc">::</span><span class="fu">corrplot</span>(Correlations, <span class="at">method =</span> <span class="st">"number"</span>, <span class="at">number.cex =</span> <span class="fl">0.75</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ACP_files/figure-html/grafic-correlacions-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="extracció-de-les-components-principals-pca" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Extracció de les components principals (PCA)</h1>
+<section id="funcions-clàssiques" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="funcions-clàssiques"><span class="header-section-number">4.1</span> Funcions clàssiques</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>(pca1 <span class="ot">&lt;-</span> <span class="fu">princomp</span>(db, <span class="at">cor =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call:
+princomp(x = db, cor = TRUE)
+
+Standard deviations:
+   Comp.1    Comp.2    Comp.3    Comp.4    Comp.5    Comp.6    Comp.7    Comp.8 
+1.7377611 1.5748797 1.3695262 0.7767213 0.6328808 0.6031328 0.3478603 0.3400504 
+   Comp.9 
+0.1417537 
+
+ 9  variables and  459 observations.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(pca1) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "sdev"     "loadings" "center"   "scale"    "n.obs"    "scores"   "call"    </code></pre>
+</div>
+</div>
+<p>Posant <code>cor = TRUE</code> estem escalant la db.</p>
+<p>En el següent codi podem veure una altra forma de fer-ho:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>(pca2 <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(db, <span class="at">scale =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Standard deviations (1, .., p=9):
+[1] 1.7377611 1.5748797 1.3695262 0.7767213 0.6328808 0.6031328 0.3478603
+[8] 0.3400504 0.1417537
+
+Rotation (n x k) = (9 x 9):
+                     PC1         PC2          PC3         PC4         PC5
+leverage      0.00655167 -0.08475443 -0.701693265 -0.00451166 -0.03212559
+capital       0.47912293  0.09232221 -0.004862422 -0.08111504 -0.43770776
+ebitda.sales  0.06207123 -0.56245352  0.067324955 -0.05288579 -0.56734582
+employees     0.41532340  0.07629194 -0.009402874 -0.83986630  0.19109492
+funds         0.52358761  0.06373829  0.003191079  0.45460454  0.07067235
+income        0.54613349  0.07992855 -0.001052963  0.27499508  0.11261109
+reco          0.11310163 -0.53804853  0.047726376  0.04542996  0.65266209
+rfin         -0.01158476  0.08269831  0.702002522 -0.01260367 -0.01361748
+res.sales     0.09338080 -0.59609773  0.088798740 -0.02678373 -0.07177909
+                     PC6          PC7         PC8          PC9
+leverage      0.02978363 -0.236982842  0.66401824  0.037145102
+capital      -0.75043525 -0.004197640  0.01119148  0.020748907
+ebitda.sales  0.30502552 -0.462248076 -0.20543903 -0.040783841
+employees     0.25683680 -0.007966801 -0.02155086  0.114942925
+funds         0.26946841 -0.008540688 -0.03921824  0.660226599
+income        0.24330824  0.011707222  0.04560329 -0.738667287
+reco         -0.37919389 -0.339318757 -0.09188864  0.005792861
+rfin          0.01975233 -0.262989264  0.65503345  0.035392438
+res.sales     0.03104641  0.738629937  0.27414379  0.022356680</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(pca2) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "sdev"     "rotation" "center"   "scale"    "x"       </code></pre>
+</div>
+</div>
+<p>Aquí, heu de posar <code>scale = TRUE</code> per tal d’estandarditzar la vostra base de dades.</p>
+<p>Com podreu comprovar, els dos cosos son iguals.</p>
+</div>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<p>La clase <code>sklearn.decomposition.PCA</code> incorpora las principales funcionalidades que se necesitan a la hora de trabajar con modelos PCA. El argumento <code>n_components</code> determina el número de componentes calculados. Si se indica <code>None</code>, se calculan todas las posibles (min(filas, columnas) - 1).</p>
+<p>Por defecto, <code>PCA()</code> centra los valores pero no los escala. Esto es importante ya que, si las variables tienen distinta dispersión, como en este caso, es necesario escalarlas. Una forma de hacerlo es combinar un <code>StandardScaler()</code> y un <code>PCA()</code> dentro de un pipeline. Para más información sobre el uso de <em>pipelines</em> consultar <strong>Pipeline</strong> y <strong>ColumnTransformer</strong>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Entrenamiento modelo PCA con escalado de los datos</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ==============================================================================</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>pca_pipe <span class="op">=</span> make_pipeline(StandardScaler(), PCA())</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>pca_pipe.fit(pydb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<style>#sk-container-id-1 {
+  /* Definition of color scheme common for light and dark mode */
+  --sklearn-color-text: black;
+  --sklearn-color-line: gray;
+  /* Definition of color scheme for unfitted estimators */
+  --sklearn-color-unfitted-level-0: #fff5e6;
+  --sklearn-color-unfitted-level-1: #f6e4d2;
+  --sklearn-color-unfitted-level-2: #ffe0b3;
+  --sklearn-color-unfitted-level-3: chocolate;
+  /* Definition of color scheme for fitted estimators */
+  --sklearn-color-fitted-level-0: #f0f8ff;
+  --sklearn-color-fitted-level-1: #d4ebff;
+  --sklearn-color-fitted-level-2: #b3dbfd;
+  --sklearn-color-fitted-level-3: cornflowerblue;
+
+  /* Specific color for light theme */
+  --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, white)));
+  --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-icon: #696969;
+
+  @media (prefers-color-scheme: dark) {
+    /* Redefinition of color scheme for dark theme */
+    --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, #111)));
+    --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-icon: #878787;
+  }
+}
+
+#sk-container-id-1 {
+  color: var(--sklearn-color-text);
+}
+
+#sk-container-id-1 pre {
+  padding: 0;
+}
+
+#sk-container-id-1 input.sk-hidden--visually {
+  border: 0;
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+#sk-container-id-1 div.sk-dashed-wrapped {
+  border: 1px dashed var(--sklearn-color-line);
+  margin: 0 0.4em 0.5em 0.4em;
+  box-sizing: border-box;
+  padding-bottom: 0.4em;
+  background-color: var(--sklearn-color-background);
+}
+
+#sk-container-id-1 div.sk-container {
+  /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
+     but bootstrap.min.css set `[hidden] { display: none !important; }`
+     so we also need the `!important` here to be able to override the
+     default hidden behavior on the sphinx rendered scikit-learn.org.
+     See: https://github.com/scikit-learn/scikit-learn/issues/21755 */
+  display: inline-block !important;
+  position: relative;
+}
+
+#sk-container-id-1 div.sk-text-repr-fallback {
+  display: none;
+}
+
+div.sk-parallel-item,
+div.sk-serial,
+div.sk-item {
+  /* draw centered vertical line to link estimators */
+  background-image: linear-gradient(var(--sklearn-color-text-on-default-background), var(--sklearn-color-text-on-default-background));
+  background-size: 2px 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+/* Parallel-specific style estimator block */
+
+#sk-container-id-1 div.sk-parallel-item::after {
+  content: "";
+  width: 100%;
+  border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
+  flex-grow: 1;
+}
+
+#sk-container-id-1 div.sk-parallel {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  background-color: var(--sklearn-color-background);
+  position: relative;
+}
+
+#sk-container-id-1 div.sk-parallel-item {
+  display: flex;
+  flex-direction: column;
+}
+
+#sk-container-id-1 div.sk-parallel-item:first-child::after {
+  align-self: flex-end;
+  width: 50%;
+}
+
+#sk-container-id-1 div.sk-parallel-item:last-child::after {
+  align-self: flex-start;
+  width: 50%;
+}
+
+#sk-container-id-1 div.sk-parallel-item:only-child::after {
+  width: 0;
+}
+
+/* Serial-specific style estimator block */
+
+#sk-container-id-1 div.sk-serial {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--sklearn-color-background);
+  padding-right: 1em;
+  padding-left: 1em;
+}
+
+
+/* Toggleable style: style used for estimator/Pipeline/ColumnTransformer box that is
+clickable and can be expanded/collapsed.
+- Pipeline and ColumnTransformer use this feature and define the default style
+- Estimators will overwrite some part of the style using the `sk-estimator` class
+*/
+
+/* Pipeline and ColumnTransformer style (default) */
+
+#sk-container-id-1 div.sk-toggleable {
+  /* Default theme specific background. It is overwritten whether we have a
+  specific estimator or a Pipeline/ColumnTransformer */
+  background-color: var(--sklearn-color-background);
+}
+
+/* Toggleable label */
+#sk-container-id-1 label.sk-toggleable__label {
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  margin-bottom: 0;
+  padding: 0.5em;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+#sk-container-id-1 label.sk-toggleable__label-arrow:before {
+  /* Arrow on the left of the label */
+  content: "▸";
+  float: left;
+  margin-right: 0.25em;
+  color: var(--sklearn-color-icon);
+}
+
+#sk-container-id-1 label.sk-toggleable__label-arrow:hover:before {
+  color: var(--sklearn-color-text);
+}
+
+/* Toggleable content - dropdown */
+
+#sk-container-id-1 div.sk-toggleable__content {
+  max-height: 0;
+  max-width: 0;
+  overflow: hidden;
+  text-align: left;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-1 div.sk-toggleable__content.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-1 div.sk-toggleable__content pre {
+  margin: 0.2em;
+  border-radius: 0.25em;
+  color: var(--sklearn-color-text);
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-1 div.sk-toggleable__content.fitted pre {
+  /* unfitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-1 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  /* Expand drop-down */
+  max-height: 200px;
+  max-width: 100%;
+  overflow: auto;
+}
+
+#sk-container-id-1 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  content: "▾";
+}
+
+/* Pipeline/ColumnTransformer-specific style */
+
+#sk-container-id-1 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-1 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator-specific style */
+
+/* Colorize estimator box */
+#sk-container-id-1 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-1 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+#sk-container-id-1 div.sk-label label.sk-toggleable__label,
+#sk-container-id-1 div.sk-label label {
+  /* The background is the default theme color */
+  color: var(--sklearn-color-text-on-default-background);
+}
+
+/* On hover, darken the color of the background */
+#sk-container-id-1 div.sk-label:hover label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+/* Label box, darken color on hover, fitted */
+#sk-container-id-1 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator label */
+
+#sk-container-id-1 div.sk-label label {
+  font-family: monospace;
+  font-weight: bold;
+  display: inline-block;
+  line-height: 1.2em;
+}
+
+#sk-container-id-1 div.sk-label-container {
+  text-align: center;
+}
+
+/* Estimator-specific */
+#sk-container-id-1 div.sk-estimator {
+  font-family: monospace;
+  border: 1px dotted var(--sklearn-color-border-box);
+  border-radius: 0.25em;
+  box-sizing: border-box;
+  margin-bottom: 0.5em;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-1 div.sk-estimator.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+/* on hover */
+#sk-container-id-1 div.sk-estimator:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-1 div.sk-estimator.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Specification for estimator info (e.g. "i" and "?") */
+
+/* Common style for "i" and "?" */
+
+.sk-estimator-doc-link,
+a:link.sk-estimator-doc-link,
+a:visited.sk-estimator-doc-link {
+  float: right;
+  font-size: smaller;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1em;
+  height: 1em;
+  width: 1em;
+  text-decoration: none !important;
+  margin-left: 1ex;
+  /* unfitted */
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+  color: var(--sklearn-color-unfitted-level-1);
+}
+
+.sk-estimator-doc-link.fitted,
+a:link.sk-estimator-doc-link.fitted,
+a:visited.sk-estimator-doc-link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+div.sk-estimator:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover,
+div.sk-label-container:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+div.sk-estimator.fitted:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover,
+div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+/* Span, style for the box shown on hovering the info icon */
+.sk-estimator-doc-link span {
+  display: none;
+  z-index: 9999;
+  position: relative;
+  font-weight: normal;
+  right: .2ex;
+  padding: .5ex;
+  margin: .5ex;
+  width: min-content;
+  min-width: 20ex;
+  max-width: 50ex;
+  color: var(--sklearn-color-text);
+  box-shadow: 2pt 2pt 4pt #999;
+  /* unfitted */
+  background: var(--sklearn-color-unfitted-level-0);
+  border: .5pt solid var(--sklearn-color-unfitted-level-3);
+}
+
+.sk-estimator-doc-link.fitted span {
+  /* fitted */
+  background: var(--sklearn-color-fitted-level-0);
+  border: var(--sklearn-color-fitted-level-3);
+}
+
+.sk-estimator-doc-link:hover span {
+  display: block;
+}
+
+/* "?"-specific style due to the `<a>` HTML tag */
+
+#sk-container-id-1 a.estimator_doc_link {
+  float: right;
+  font-size: 1rem;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1rem;
+  height: 1rem;
+  width: 1rem;
+  text-decoration: none;
+  /* unfitted */
+  color: var(--sklearn-color-unfitted-level-1);
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+}
+
+#sk-container-id-1 a.estimator_doc_link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+#sk-container-id-1 a.estimator_doc_link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+#sk-container-id-1 a.estimator_doc_link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+}
+</style><div id="sk-container-id-1" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>Pipeline(steps=[('standardscaler', StandardScaler()), ('pca', PCA())])</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br>On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-1" type="checkbox"><label for="sk-estimator-id-1" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;&nbsp;Pipeline<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.5/modules/generated/sklearn.pipeline.Pipeline.html">?<span>Documentation for Pipeline</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></label><div class="sk-toggleable__content fitted"><pre>Pipeline(steps=[('standardscaler', StandardScaler()), ('pca', PCA())])</pre></div> </div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-2" type="checkbox"><label for="sk-estimator-id-2" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;StandardScaler<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.5/modules/generated/sklearn.preprocessing.StandardScaler.html">?<span>Documentation for StandardScaler</span></a></label><div class="sk-toggleable__content fitted"><pre>StandardScaler()</pre></div> </div></div><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-3" type="checkbox"><label for="sk-estimator-id-3" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;PCA<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.5/modules/generated/sklearn.decomposition.PCA.html">?<span>Documentation for PCA</span></a></label><div class="sk-toggleable__content fitted"><pre>PCA()</pre></div> </div></div></div></div></div></div>
+</div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Se extrae el modelo entrenado del pipeline</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>modelo_pca <span class="op">=</span> pca_pipe.named_steps[<span class="st">'pca'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="importància-de-les-components" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="importància-de-les-components"><span class="header-section-number">4.2</span> Importància de les components</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(pca1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Importance of components:
+                          Comp.1    Comp.2    Comp.3     Comp.4     Comp.5
+Standard deviation     1.7377611 1.5748797 1.3695262 0.77672134 0.63288079
+Proportion of Variance 0.3355348 0.2755829 0.2084002 0.06703289 0.04450423
+Cumulative Proportion  0.3355348 0.6111177 0.8195179 0.88655083 0.93105506
+                          Comp.6    Comp.7     Comp.8      Comp.9
+Standard deviation     0.6031328 0.3478603 0.34005041 0.141753692
+Proportion of Variance 0.0404188 0.0134452 0.01284825 0.002232679
+Cumulative Proportion  0.9714739 0.9849191 0.99776732 1.000000000</code></pre>
+</div>
+</div>
+<p>Components as a linear combination of the variables</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>pca1<span class="sc">$</span>loadings[,<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                  Comp.1      Comp.2       Comp.3      Comp.4      Comp.5
+leverage      0.00655167  0.08475443  0.701693265  0.00451166  0.03212559
+capital       0.47912293 -0.09232221  0.004862422  0.08111504  0.43770776
+ebitda.sales  0.06207123  0.56245352 -0.067324955  0.05288579  0.56734582
+employees     0.41532340 -0.07629194  0.009402874  0.83986630 -0.19109492
+funds         0.52358761 -0.06373829 -0.003191079 -0.45460454 -0.07067235
+income        0.54613349 -0.07992855  0.001052963 -0.27499508 -0.11261109
+reco          0.11310163  0.53804853 -0.047726376 -0.04542996 -0.65266209
+rfin         -0.01158476 -0.08269831 -0.702002522  0.01260367  0.01361748
+res.sales     0.09338080  0.59609773 -0.088798740  0.02678373  0.07177909
+                  Comp.6       Comp.7      Comp.8       Comp.9
+leverage      0.02978363  0.236982842  0.66401824  0.037145102
+capital      -0.75043525  0.004197640  0.01119148  0.020748907
+ebitda.sales  0.30502552  0.462248076 -0.20543903 -0.040783841
+employees     0.25683680  0.007966801 -0.02155086  0.114942925
+funds         0.26946841  0.008540688 -0.03921824  0.660226599
+income        0.24330824 -0.011707222  0.04560329 -0.738667287
+reco         -0.37919389  0.339318757 -0.09188864  0.005792861
+rfin          0.01975233  0.262989264  0.65503345  0.035392438
+res.sales     0.03104641 -0.738629937  0.27414379  0.022356680</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Se combierte el array a dataframe para añadir nombres a los ejes.</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(data <span class="op">=</span> modelo_pca.components_, columns <span class="op">=</span> pydb.columns, index <span class="op">=</span> [<span class="st">'PC1'</span>, <span class="st">'PC2'</span>, <span class="st">'PC3'</span>, <span class="st">'PC4'</span>, <span class="st">'PC5'</span>, <span class="st">'PC6'</span>, <span class="st">'PC7'</span>, <span class="st">'PC8'</span>, <span class="st">'PC9'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     leverage   capital  ebitda.sales  ...      reco      rfin  res.sales
+PC1  0.006552  0.479123      0.062071  ...  0.113102 -0.011585   0.093381
+PC2  0.084754 -0.092322      0.562454  ...  0.538049 -0.082698   0.596098
+PC3 -0.701693 -0.004862      0.067325  ...  0.047726  0.702003   0.088799
+PC4  0.004512  0.081115      0.052886  ... -0.045430  0.012604   0.026784
+PC5 -0.032126 -0.437708     -0.567346  ...  0.652662 -0.013617  -0.071779
+PC6 -0.029784  0.750435     -0.305026  ...  0.379194 -0.019752  -0.031046
+PC7 -0.236983 -0.004198     -0.462248  ... -0.339319 -0.262989   0.738630
+PC8  0.664018  0.011191     -0.205439  ... -0.091889  0.655033   0.274144
+PC9 -0.037145 -0.020749      0.040784  ... -0.005793 -0.035392  -0.022357
+
+[9 rows x 9 columns]</code></pre>
+</div>
+</div>
+<p>La influencia de las variables en cada componente analizarse visualmente con un gráfico de tipo <em>heatmap.</em></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Heatmap componentes</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ==============================================================================</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(nrows<span class="op">=</span><span class="dv">1</span>, ncols<span class="op">=</span><span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">4</span>, <span class="dv">2</span>))</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>componentes <span class="op">=</span> modelo_pca.components_</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>plt.imshow(componentes.T, cmap<span class="op">=</span><span class="st">'viridis'</span>, aspect<span class="op">=</span><span class="st">'auto'</span>)</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>plt.yticks(<span class="bu">range</span>(<span class="bu">len</span>(pydb.columns)), pydb.columns)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>([&lt;matplotlib.axis.YTick object at 0x000002C8115EEA50&gt;, &lt;matplotlib.axis.YTick object at 0x000002C8115EDEE0&gt;, &lt;matplotlib.axis.YTick object at 0x000002C8114B3F80&gt;, &lt;matplotlib.axis.YTick object at 0x000002C8115EE5D0&gt;, &lt;matplotlib.axis.YTick object at 0x000002C811643320&gt;, &lt;matplotlib.axis.YTick object at 0x000002C811642540&gt;, &lt;matplotlib.axis.YTick object at 0x000002C8116419A0&gt;, &lt;matplotlib.axis.YTick object at 0x000002C811643E60&gt;, &lt;matplotlib.axis.YTick object at 0x000002C811642F60&gt;], [Text(0, 0, 'leverage'), Text(0, 1, 'capital'), Text(0, 2, 'ebitda.sales'), Text(0, 3, 'employees'), Text(0, 4, 'funds'), Text(0, 5, 'income'), Text(0, 6, 'reco'), Text(0, 7, 'rfin'), Text(0, 8, 'res.sales')])</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>plt.xticks(<span class="bu">range</span>(<span class="bu">len</span>(pydb.columns)), np.arange(modelo_pca.n_components_) <span class="op">+</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>([&lt;matplotlib.axis.XTick object at 0x000002C8111B8950&gt;, &lt;matplotlib.axis.XTick object at 0x000002C8115EE8A0&gt;, &lt;matplotlib.axis.XTick object at 0x000002C8114B0740&gt;, &lt;matplotlib.axis.XTick object at 0x000002C81169DE80&gt;, &lt;matplotlib.axis.XTick object at 0x000002C81169EA20&gt;, &lt;matplotlib.axis.XTick object at 0x000002C81169DDC0&gt;, &lt;matplotlib.axis.XTick object at 0x000002C81169CBC0&gt;, &lt;matplotlib.axis.XTick object at 0x000002C81169F230&gt;, &lt;matplotlib.axis.XTick object at 0x000002C81169FB30&gt;], [Text(0, 0, '1'), Text(1, 0, '2'), Text(2, 0, '3'), Text(3, 0, '4'), Text(4, 0, '5'), Text(5, 0, '6'), Text(6, 0, '7'), Text(7, 0, '8'), Text(8, 0, '9')])</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>plt.grid(<span class="va">False</span>)</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>plt.colorbar()<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ACP_files/figure-html/heatmap-loading-1.png" class="img-fluid figure-img" width="384"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><span class="math inline">\(Pc1 = Comp.1 = 0.0066 * leverage + 0.4791 * capital + 0.0621 * ebitda.sales + ... −0.0116 * rfin + 0.0934 * res.ventas\)</span></p>
+<p>Analizar con detalle el vector de loadings que forma cada componente puede ayudar a interpretar qué tipo de información recoge cada una de ellas. Por ejemplo, la primera componente es el resultado de la siguiente combinación lineal de las variables originales.</p>
+<p><strong>STOP</strong> and analyze the linear combinations (PCi). Get information from loadings to see how important the variables are to define the PCs</p>
+<p>Let’s move to FACTOMINER and FACTOEXTRA packages.</p>
+</section>
+</section>
+<section id="factominer-i-factoextra" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> FactoMineR i FactoExtra</h1>
+<p>These packages use function PCA, PCA is the same as prcomp() function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(FactoMineR)</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(factoextra)</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(corrplot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>These functions include:</p>
+<ul>
+<li><p><code>get_eigenvalue(res.pca)</code>: Extract the eigenvalues/variances of principal components</p></li>
+<li><p><code>fviz_eig(res.pca)</code>: Visualize the eigenvalues</p></li>
+<li><p><code>get_pca_ind(res.pca)</code>, <code>get_pca_var(res.pca)</code>: Extract the results for individuals and variables, respectively.</p></li>
+<li><p><code>fviz_pca_ind(res.pca),</code>fviz_pca_var(res.pca)`: Visualize the results for individuals and variables, respectively.</p></li>
+<li><p><code>fviz_pca_biplot(res.pca)</code>: Make a biplot of individuals and variables.</p></li>
+</ul>
+<p>Apliquem el PCA amb la base de dades.</p>
+<section id="create-a-pca" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="create-a-pca"><span class="header-section-number">5.1</span> Create a PCA</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>(dec.pca <span class="ot">&lt;-</span> <span class="fu">PCA</span>(db, <span class="at">scale.unit =</span> <span class="cn">TRUE</span>, <span class="at">ncp =</span> <span class="cn">Inf</span>, <span class="at">graph =</span> F))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>**Results for the Principal Component Analysis (PCA)**
+The analysis was performed on 459 individuals, described by 9 variables
+*The results are available in the following objects:
+
+   name               description                          
+1  "$eig"             "eigenvalues"                        
+2  "$var"             "results for the variables"          
+3  "$var$coord"       "coord. for the variables"           
+4  "$var$cor"         "correlations variables - dimensions"
+5  "$var$cos2"        "cos2 for the variables"             
+6  "$var$contrib"     "contributions of the variables"     
+7  "$ind"             "results for the individuals"        
+8  "$ind$coord"       "coord. for the individuals"         
+9  "$ind$cos2"        "cos2 for the individuals"           
+10 "$ind$contrib"     "contributions of the individuals"   
+11 "$call"            "summary statistics"                 
+12 "$call$centre"     "mean of the variables"              
+13 "$call$ecart.type" "standard error of the variables"    
+14 "$call$row.w"      "weights for the individuals"        
+15 "$call$col.w"      "weights for the variables"          </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(dec.pca)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+PCA(X = db, scale.unit = TRUE, ncp = Inf, graph = F) 
+
+
+Eigenvalues
+                       Dim.1   Dim.2   Dim.3   Dim.4   Dim.5   Dim.6   Dim.7
+Variance               3.020   2.480   1.876   0.603   0.401   0.364   0.121
+% of var.             33.553  27.558  20.840   6.703   4.450   4.042   1.345
+Cumulative % of var.  33.553  61.112  81.952  88.655  93.106  97.147  98.492
+                       Dim.8   Dim.9
+Variance               0.116   0.020
+% of var.              1.285   0.223
+Cumulative % of var.  99.777 100.000
+
+Individuals (the 10 first)
+                 Dist    Dim.1    ctr   cos2    Dim.2    ctr   cos2    Dim.3
+1            | 28.527 | 26.561 50.897  0.867 | -2.605  0.596  0.008 |  0.170
+2            | 22.945 | 20.037 28.966  0.763 | -3.187  0.892  0.019 | -0.173
+3            |  7.625 |  6.558  3.103  0.740 | -0.687  0.041  0.008 |  0.044
+4            |  4.198 |  3.777  1.029  0.810 | -0.869  0.066  0.043 | -0.030
+5            | 13.359 |  7.269  3.812  0.296 | -1.596  0.224  0.014 | -0.309
+6            |  8.371 |  6.242  2.811  0.556 | -1.608  0.227  0.037 | -0.178
+7            |  2.270 |  2.026  0.296  0.797 | -0.268  0.006  0.014 | -0.050
+8            |  3.733 |  2.836  0.580  0.577 | -0.178  0.003  0.002 | -0.026
+9            |  2.520 |  2.020  0.294  0.642 |  0.249  0.005  0.010 |  0.102
+10           |  1.641 |  0.770  0.043  0.220 | -0.691  0.042  0.177 | -0.582
+                ctr   cos2  
+1             0.003  0.000 |
+2             0.003  0.000 |
+3             0.000  0.000 |
+4             0.000  0.000 |
+5             0.011  0.001 |
+6             0.004  0.000 |
+7             0.000  0.000 |
+8             0.000  0.000 |
+9             0.001  0.002 |
+10            0.039  0.126 |
+
+Variables
+                Dim.1    ctr   cos2    Dim.2    ctr   cos2    Dim.3    ctr
+leverage     |  0.011  0.004  0.000 |  0.133  0.718  0.018 | -0.961 49.237
+capital      |  0.833 22.956  0.693 | -0.145  0.852  0.021 | -0.007  0.002
+ebitda.sales |  0.108  0.385  0.012 |  0.886 31.635  0.785 |  0.092  0.453
+employees    |  0.722 17.249  0.521 | -0.120  0.582  0.014 | -0.013  0.009
+funds        |  0.910 27.414  0.828 | -0.100  0.406  0.010 |  0.004  0.001
+income       |  0.949 29.826  0.901 | -0.126  0.639  0.016 | -0.001  0.000
+reco         |  0.197  1.279  0.039 |  0.847 28.950  0.718 |  0.065  0.228
+rfin         | -0.020  0.013  0.000 | -0.130  0.684  0.017 |  0.961 49.281
+res.sales    |  0.162  0.872  0.026 |  0.939 35.533  0.881 |  0.122  0.789
+               cos2  
+leverage      0.923 |
+capital       0.000 |
+ebitda.sales  0.009 |
+employees     0.000 |
+funds         0.000 |
+income        0.000 |
+reco          0.004 |
+rfin          0.924 |
+res.sales     0.015 |</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get_pca</span>(dec.pca)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Principal Component Analysis Results for variables
+ ===================================================
+  Name       Description                                    
+1 "$coord"   "Coordinates for the variables"                
+2 "$cor"     "Correlations between variables and dimensions"
+3 "$cos2"    "Cos2 for the variables"                       
+4 "$contrib" "contributions of the variables"               </code></pre>
+</div>
+</div>
+</section>
+<section id="determinate-the-components" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="determinate-the-components"><span class="header-section-number">5.2</span> Determinate the components</h2>
+<p>Determination of the number of components to retain:</p>
+<ul>
+<li>Choose components with eigenvalue &gt;&gt; 1 (only is data was scaled)</li>
+<li>use the Elbow method</li>
+<li>by confirming % o acc.variance &gt;&gt;70-80%</li>
+</ul>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>(eigenvalues <span class="ot">&lt;-</span> <span class="fu">get_eigenvalue</span>(dec.pca))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      eigenvalue variance.percent cumulative.variance.percent
+Dim.1 3.01981357       33.5534841                    33.55348
+Dim.2 2.48024591       27.5582879                    61.11177
+Dim.3 1.87560196       20.8400217                    81.95179
+Dim.4 0.60329604        6.7032894                    88.65508
+Dim.5 0.40053809        4.4504232                    93.10551
+Dim.6 0.36376923        4.0418803                    97.14739
+Dim.7 0.12100680        1.3445200                    98.49191
+Dim.8 0.11563428        1.2848254                    99.77673
+Dim.9 0.02009411        0.2232679                   100.00000</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_eig</span>(dec.pca, <span class="at">addlabels =</span> <span class="cn">TRUE</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">50</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ACP_files/figure-html/grafico-egeinvalues-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>**<span class="citation" data-cites="SR">@SR</span> FALTA EL ACUMULADO*</p>
+<p><strong>NOTE</strong>: * <code>var$coord</code>: coordinates of variables in the factorial space . * <code>var$cos2</code>: represents the quality of representation for variables on the factor map. It’s calculated as the squared <em>coordinates</em>: <code>var$cos2</code> = <code>var$coord</code> * <code>var$coord</code>.</p>
+<ul>
+<li><code>var$contrib</code>: contains the contributions (in percentage) of the variables to the principal components. The contribution of a variable (var) to a given principal component is (in percentage) : (<code>var$cos2</code>* 100) / (total cos2 of the component).</li>
+</ul>
+<p><strong>Note</strong> thas <code>var$coord</code> is the same as</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>(Correl <span class="ot">&lt;-</span> <span class="fu">cor</span>(db, pca1<span class="sc">$</span>scores))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                  Comp.1     Comp.2       Comp.3       Comp.4       Comp.5
+leverage      0.01138524  0.1334780  0.960987296  0.003504303  0.020331669
+capital       0.83260118 -0.1453964  0.006659214  0.063003785  0.277016832
+ebitda.sales  0.10786497  0.8857966 -0.092203289  0.041077524  0.359062267
+employees     0.72173284 -0.1201506  0.012877483  0.652342082 -0.120940300
+funds         0.90987017 -0.1003801 -0.004370266 -0.353101047 -0.044727171
+income        0.94904952 -0.1258779  0.001442060 -0.213594547 -0.071269397
+reco          0.19654360  0.8473617 -0.065362521 -0.035286423 -0.413057299
+rfin         -0.02013154 -0.1302399 -0.961410832  0.009789537  0.008618243
+res.sales     0.16227352  0.9387822 -0.121612199  0.020803494  0.045427607
+                  Comp.6       Comp.7       Comp.8        Comp.9
+leverage      0.01796349  0.082436928  0.225799676  0.0052654554
+capital      -0.45261215  0.001460192  0.003805667  0.0029412341
+ebitda.sales  0.18397091  0.160797765 -0.069859627 -0.0057812600
+employees     0.15490671  0.002771334 -0.007328379  0.0162935840
+funds         0.16252525  0.002970967 -0.013336180  0.0935895577
+income        0.14674719 -0.004072478  0.015507418 -0.1047088149
+reco         -0.22870429  0.118035532 -0.031246770  0.0008211594
+rfin          0.01191328  0.091483530  0.222744395  0.0050170087
+res.sales     0.01872511 -0.256940048  0.093222707  0.0031691419</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>dec.pca<span class="sc">$</span>var<span class="sc">$</span>coord</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                   Dim.1      Dim.2        Dim.3        Dim.4        Dim.5
+leverage      0.01138524  0.1334780 -0.960987296  0.003504303  0.020331669
+capital       0.83260118 -0.1453964 -0.006659214  0.063003785  0.277016832
+ebitda.sales  0.10786497  0.8857966  0.092203289  0.041077524  0.359062267
+employees     0.72173284 -0.1201506 -0.012877483  0.652342082 -0.120940300
+funds         0.90987017 -0.1003801  0.004370266 -0.353101047 -0.044727171
+income        0.94904952 -0.1258779 -0.001442060 -0.213594547 -0.071269397
+reco          0.19654360  0.8473617  0.065362521 -0.035286423 -0.413057299
+rfin         -0.02013154 -0.1302399  0.961410832  0.009789537  0.008618243
+res.sales     0.16227352  0.9387822  0.121612199  0.020803494  0.045427607
+                   Dim.6        Dim.7        Dim.8         Dim.9
+leverage      0.01796349  0.082436928  0.225799676  0.0052654554
+capital      -0.45261215  0.001460192  0.003805667  0.0029412341
+ebitda.sales  0.18397091  0.160797765 -0.069859627 -0.0057812600
+employees     0.15490671  0.002771334 -0.007328379  0.0162935840
+funds         0.16252525  0.002970967 -0.013336180  0.0935895577
+income        0.14674719 -0.004072478  0.015507418 -0.1047088149
+reco         -0.22870429  0.118035532 -0.031246770  0.0008211594
+rfin          0.01191328  0.091483530  0.222744395  0.0050170087
+res.sales     0.01872511 -0.256940048  0.093222707  0.0031691419</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
+
+</div>
+</div>
+</div>
+</section>
+<section id="quality-of-variables-into-pcas-cos2" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="quality-of-variables-into-pcas-cos2"><span class="header-section-number">5.3</span> Quality of variables into PCAs (cos<span class="math inline">\(^2\)</span>)</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>(Quality <span class="ot">&lt;-</span> Correl<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                   Comp.1     Comp.2       Comp.3       Comp.4       Comp.5
+leverage     0.0001296236 0.01781638 9.234966e-01 1.228014e-05 4.133768e-04
+capital      0.6932247272 0.02114010 4.434514e-05 3.969477e-03 7.673833e-02
+ebitda.sales 0.0116348519 0.78463562 8.501446e-03 1.687363e-03 1.289257e-01
+employees    0.5208982951 0.01443617 1.658296e-04 4.255502e-01 1.462656e-02
+funds        0.8278637188 0.01007617 1.909922e-05 1.246803e-01 2.000520e-03
+income       0.9006949905 0.01584523 2.079538e-06 4.562263e-02 5.079327e-03
+reco         0.0386293887 0.71802181 4.272259e-03 1.245132e-03 1.706163e-01
+rfin         0.0004052788 0.01696243 9.243108e-01 9.583504e-05 7.427411e-05
+res.sales    0.0263326955 0.88131199 1.478953e-02 4.327854e-04 2.063667e-03
+                   Comp.6       Comp.7       Comp.8       Comp.9
+leverage     0.0003226868 6.795847e-03 5.098549e-02 2.772502e-05
+capital      0.2048577565 2.132162e-06 1.448310e-05 8.650858e-06
+ebitda.sales 0.0338452958 2.585592e-02 4.880367e-03 3.342297e-05
+employees    0.0239960882 7.680292e-06 5.370513e-05 2.654809e-04
+funds        0.0264144560 8.826642e-06 1.778537e-04 8.759005e-03
+income       0.0215347377 1.658508e-05 2.404800e-04 1.096394e-02
+reco         0.0523056530 1.393239e-02 9.763606e-04 6.743027e-07
+rfin         0.0001419262 8.369236e-03 4.961507e-02 2.517038e-05
+res.sales    0.0003506298 6.601819e-02 8.690473e-03 1.004346e-05</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>dec.pca<span class="sc">$</span>var<span class="sc">$</span>cos2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                    Dim.1      Dim.2        Dim.3        Dim.4        Dim.5
+leverage     0.0001296236 0.01781638 9.234966e-01 1.228014e-05 4.133768e-04
+capital      0.6932247272 0.02114010 4.434514e-05 3.969477e-03 7.673833e-02
+ebitda.sales 0.0116348519 0.78463562 8.501446e-03 1.687363e-03 1.289257e-01
+employees    0.5208982951 0.01443617 1.658296e-04 4.255502e-01 1.462656e-02
+funds        0.8278637188 0.01007617 1.909922e-05 1.246803e-01 2.000520e-03
+income       0.9006949905 0.01584523 2.079538e-06 4.562263e-02 5.079327e-03
+reco         0.0386293887 0.71802181 4.272259e-03 1.245132e-03 1.706163e-01
+rfin         0.0004052788 0.01696243 9.243108e-01 9.583504e-05 7.427411e-05
+res.sales    0.0263326955 0.88131199 1.478953e-02 4.327854e-04 2.063667e-03
+                    Dim.6        Dim.7        Dim.8        Dim.9
+leverage     0.0003226868 6.795847e-03 5.098549e-02 2.772502e-05
+capital      0.2048577565 2.132162e-06 1.448310e-05 8.650858e-06
+ebitda.sales 0.0338452958 2.585592e-02 4.880367e-03 3.342297e-05
+employees    0.0239960882 7.680292e-06 5.370513e-05 2.654809e-04
+funds        0.0264144560 8.826642e-06 1.778537e-04 8.759005e-03
+income       0.0215347377 1.658508e-05 2.404800e-04 1.096394e-02
+reco         0.0523056530 1.393239e-02 9.763606e-04 6.743027e-07
+rfin         0.0001419262 8.369236e-03 4.961507e-02 2.517038e-05
+res.sales    0.0003506298 6.601819e-02 8.690473e-03 1.004346e-05</code></pre>
+</div>
+</div>
+</section>
+<section id="calculation-of-contributions" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="calculation-of-contributions"><span class="header-section-number">5.4</span> Calculation of contributions</h2>
+<section id="contributions-of-variables-for-pcas" class="level3" data-number="5.4.1">
+<h3 data-number="5.4.1" class="anchored" data-anchor-id="contributions-of-variables-for-pcas"><span class="header-section-number">5.4.1</span> Contributions of variables for PCAs</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>(Contrib <span class="ot">&lt;-</span> Quality[, <span class="dv">1</span>]<span class="sc">/</span>eigenvalues[<span class="dv">1</span>]) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    leverage      capital ebitda.sales    employees        funds       income 
+4.292438e-05 2.295588e-01 3.852838e-03 1.724935e-01 2.741440e-01 2.982618e-01 
+        reco         rfin    res.sales 
+1.279198e-02 1.342066e-04 8.719974e-03 </code></pre>
+</div>
+</div>
+<p>Here, contribution of variables in PC1, for another PCi,put the appropriate value (for instance, for PC2, change 1 for 2)</p>
+</section>
+</section>
+<section id="coordinates-of-variables" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="coordinates-of-variables"><span class="header-section-number">5.5</span> Coordinates of variables</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dec.pca<span class="sc">$</span>var<span class="sc">$</span>coord)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                  Dim.1      Dim.2        Dim.3        Dim.4       Dim.5
+leverage     0.01138524  0.1334780 -0.960987296  0.003504303  0.02033167
+capital      0.83260118 -0.1453964 -0.006659214  0.063003785  0.27701683
+ebitda.sales 0.10786497  0.8857966  0.092203289  0.041077524  0.35906227
+employees    0.72173284 -0.1201506 -0.012877483  0.652342082 -0.12094030
+funds        0.90987017 -0.1003801  0.004370266 -0.353101047 -0.04472717
+income       0.94904952 -0.1258779 -0.001442060 -0.213594547 -0.07126940
+                   Dim.6        Dim.7        Dim.8        Dim.9
+leverage      0.01796349  0.082436928  0.225799676  0.005265455
+capital      -0.45261215  0.001460192  0.003805667  0.002941234
+ebitda.sales  0.18397091  0.160797765 -0.069859627 -0.005781260
+employees     0.15490671  0.002771334 -0.007328379  0.016293584
+funds         0.16252525  0.002970967 -0.013336180  0.093589558
+income        0.14674719 -0.004072478  0.015507418 -0.104708815</code></pre>
+</div>
+</div>
+</section>
+<section id="cos2-quality-on-the-factore-map" class="level2" data-number="5.6">
+<h2 data-number="5.6" class="anchored" data-anchor-id="cos2-quality-on-the-factore-map"><span class="header-section-number">5.6</span> Cos2: quality on the factore map</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dec.pca<span class="sc">$</span>var<span class="sc">$</span>cos2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                    Dim.1      Dim.2        Dim.3        Dim.4        Dim.5
+leverage     0.0001296236 0.01781638 9.234966e-01 1.228014e-05 0.0004133768
+capital      0.6932247272 0.02114010 4.434514e-05 3.969477e-03 0.0767383251
+ebitda.sales 0.0116348519 0.78463562 8.501446e-03 1.687363e-03 0.1289257114
+employees    0.5208982951 0.01443617 1.658296e-04 4.255502e-01 0.0146265563
+funds        0.8278637188 0.01007617 1.909922e-05 1.246803e-01 0.0020005198
+income       0.9006949905 0.01584523 2.079538e-06 4.562263e-02 0.0050793269
+                    Dim.6        Dim.7        Dim.8        Dim.9
+leverage     0.0003226868 6.795847e-03 5.098549e-02 2.772502e-05
+capital      0.2048577565 2.132162e-06 1.448310e-05 8.650858e-06
+ebitda.sales 0.0338452958 2.585592e-02 4.880367e-03 3.342297e-05
+employees    0.0239960882 7.680292e-06 5.370513e-05 2.654809e-04
+funds        0.0264144560 8.826642e-06 1.778537e-04 8.759005e-03
+income       0.0215347377 1.658508e-05 2.404800e-04 1.096394e-02</code></pre>
+</div>
+</div>
+</section>
+<section id="contributions-to-the-principal-components" class="level2" data-number="5.7">
+<h2 data-number="5.7" class="anchored" data-anchor-id="contributions-to-the-principal-components"><span class="header-section-number">5.7</span> Contributions to the principal components</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dec.pca<span class="sc">$</span>var<span class="sc">$</span>contrib)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                    Dim.1      Dim.2        Dim.3        Dim.4      Dim.5
+leverage      0.004292438  0.7183313 4.923734e+01  0.002035508  0.1032054
+capital      22.955878272  0.8523390 2.364315e-03  0.657965014 19.1588084
+ebitda.sales  0.385283782 31.6353961 4.532650e-01  0.279690703 32.1881276
+employees    17.249352750  0.5820460 8.841405e-03 70.537540588  3.6517267
+funds        27.414398261  0.4062569 1.018298e-03 20.666528605  0.4994581
+income       29.826178656  0.6388574 1.108731e-04  7.562229359  1.2681258
+                   Dim.6        Dim.7       Dim.8       Dim.9
+leverage      0.08870647  5.616086758 44.09202250  0.13797586
+capital      56.31530640  0.001762018  0.01252492  0.04305171
+ebitda.sales  9.30405679 21.367328399  4.22051950  0.16633217
+employees     6.59651401  0.006346992  0.04644396  1.32118761
+funds         7.26132225  0.007294335  0.15380706 43.58991619
+income        5.91988984  0.013705906  0.20796602 54.56293616</code></pre>
+</div>
+</div>
+</section>
+<section id="correlation-circle" class="level2" data-number="5.8">
+<h2 data-number="5.8" class="anchored" data-anchor-id="correlation-circle"><span class="header-section-number">5.8</span> Correlation circle</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_pca_var</span>(dec.pca, <span class="at">col.var =</span> <span class="st">"black"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ACP_files/figure-html/circulo-correlaciones-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Here the top 5 by contribution</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dec.pca, <span class="at">choix =</span> <span class="st">"var"</span>, <span class="at">select =</span> <span class="st">"contrib 5"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ACP_files/figure-html/circulo-correlaciones2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Here it is possible to obtain the latency for the dimensions</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="fu">corrplot</span>(dec.pca<span class="sc">$</span>var<span class="sc">$</span>contrib, <span class="at">is.corr =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ACP_files/figure-html/circulo-correlaciones3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Contributions in both 1 and 2 dimensions</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_contrib</span>(dec.pca, <span class="at">choice =</span> <span class="st">"var"</span>, <span class="at">axes =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ACP_files/figure-html/circulo-correlaciones4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Contributions in Dim 1</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_contrib</span>(dec.pca, <span class="at">choice =</span> <span class="st">"var"</span>, <span class="at">axes =</span> <span class="dv">1</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ACP_files/figure-html/circulo-correlaciones5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>NOTES</strong>: * Positively correlated variables are grouped together. * Negatively correlated variables are positioned on opposite sides of the plot origin (opposed quadrants). * The distance between variables and the origin measures the quality of the variables on the factor map. * Variables that are away from the origin are well represented on the factor map.</p>
+</section>
+<section id="quality-of-representation" class="level2" data-number="5.9">
+<h2 data-number="5.9" class="anchored" data-anchor-id="quality-of-representation"><span class="header-section-number">5.9</span> Quality of representation</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="fu">corrplot</span>(dec.pca<span class="sc">$</span>var<span class="sc">$</span>cos2, <span class="at">is.corr =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ACP_files/figure-html/Calidad - representacion-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_cos2</span>(dec.pca, <span class="at">choice =</span> <span class="st">"var"</span>, <span class="at">axes =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ACP_files/figure-html/Calidad - representacion-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>NOTES</strong>:</p>
+<ul>
+<li>A high cos2 indicates a good representation of the variable on the principal component. In this case the variable is positioned close to the circumference of the correlation circle.</li>
+<li>A low cos2 indicates that the variable is not perfectly represented by the PCs.</li>
+<li>In this case the variable is close to the center of the circle.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_pca_var</span>(dec.pca, <span class="at">col.var =</span> <span class="st">"cos2"</span>, <span class="at">gradient.cols =</span> <span class="fu">c</span>(<span class="st">"#00AFBB"</span>, <span class="st">"#E7B800"</span>, <span class="st">"#FC4E07"</span>),</span>
+<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">repel =</span> <span class="cn">TRUE</span>) <span class="co"># Avoid text overlapping</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ACP_files/figure-html/Calidad-representacion-coseno-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_pca_var</span>(dec.pca, <span class="at">alpha.var =</span> <span class="st">"cos2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ACP_files/figure-html/Calidad-representacion-coseno-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="contributions-of-variables-to-pcs" class="level2" data-number="5.10">
+<h2 data-number="5.10" class="anchored" data-anchor-id="contributions-of-variables-to-pcs"><span class="header-section-number">5.10</span> Contributions of variables to PCs</h2>
+<p><strong>NOTES</strong>: * Variables that are correlated with <em>PC1</em> (i.e., <code>Dim.1</code>) and <em>PC2</em> (i.e., <code>Dim.2</code>) are the most important in explaining the variability in the data set. * Variables that do not correlated with any PC or correlated with the last dimensions are variables with low contribution and might be removed to simplify the overall analysis. * The larger the value of the contribution, the more the variable contributes to the component.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dec.pca<span class="sc">$</span>var<span class="sc">$</span>contrib, <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                    Dim.1      Dim.2        Dim.3        Dim.4      Dim.5
+leverage      0.004292438  0.7183313 49.237343756  0.002035508  0.1032054
+capital      22.955878272  0.8523390  0.002364315  0.657965014 19.1588084
+ebitda.sales  0.385283782 31.6353961  0.453264962  0.279690703 32.1881276
+employees    17.249352750  0.5820460  0.008841405 70.537540588  3.6517267
+                   Dim.6        Dim.7       Dim.8      Dim.9
+leverage      0.08870647  5.616086758 44.09202250 0.13797586
+capital      56.31530640  0.001762018  0.01252492 0.04305171
+ebitda.sales  9.30405679 21.367328399  4.22051950 0.16633217
+employees     6.59651401  0.006346992  0.04644396 1.32118761</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="fu">corrplot</span>(dec.pca<span class="sc">$</span>var<span class="sc">$</span>contrib, <span class="at">is.corr =</span> <span class="cn">FALSE</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ACP_files/figure-html/Calidad-representacion-contribucion-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="contributions-of-variables-to-pc1" class="level3" data-number="5.10.1">
+<h3 data-number="5.10.1" class="anchored" data-anchor-id="contributions-of-variables-to-pc1"><span class="header-section-number">5.10.1</span> Contributions of variables to PC1</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_contrib</span>(dec.pca, <span class="at">choice =</span> <span class="st">"var"</span>, <span class="at">axes =</span> <span class="dv">1</span>, <span class="at">top =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ACP_files/figure-html/contribucionPC1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="contributions-of-variables-to-pc2" class="level3" data-number="5.10.2">
+<h3 data-number="5.10.2" class="anchored" data-anchor-id="contributions-of-variables-to-pc2"><span class="header-section-number">5.10.2</span> Contributions of variables to PC2</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_contrib</span>(dec.pca, <span class="at">choice =</span> <span class="st">"var"</span>, <span class="at">axes =</span> <span class="dv">2</span>, <span class="at">top =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ACP_files/figure-html/contribucionPC2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>IMPORTANT</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_pca_var</span>(dec.pca, <span class="at">col.var =</span> <span class="st">"contrib"</span>, <span class="at">gradient.cols =</span> <span class="fu">c</span>(<span class="st">"#00AFBB"</span>, <span class="st">"#E7B800"</span>, <span class="st">"#FC4E07"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ACP_files/figure-html/contribucion con gradientes-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="an-extra-clustering-approach" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> AN EXTRA (Clustering approach)</h1>
+<section id="create-a-grouping-variable-using-kmeans" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="create-a-grouping-variable-using-kmeans"><span class="header-section-number">6.1</span> Create a grouping variable using kmeans</h2>
+<p>Create 3 groups of variables (centers = 3)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a>res.km <span class="ot">&lt;-</span> <span class="fu">kmeans</span>(dec.pca<span class="sc">$</span> var<span class="sc">$</span>coord, <span class="at">centers =</span> <span class="dv">3</span>, <span class="at">nstart =</span> <span class="dv">25</span>)</span>
+<span id="cb89-3"><a href="#cb89-3" aria-hidden="true" tabindex="-1"></a>grp <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(res.km<span class="sc">$</span>cluster)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="color-variables-by-groups" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="color-variables-by-groups"><span class="header-section-number">6.2</span> Color variables by groups</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_pca_var</span>(dec.pca, <span class="at">col.var =</span> grp, <span class="at">palette =</span> <span class="fu">c</span>(<span class="st">"#0073C2FF"</span>, <span class="st">"#EFC000FF"</span>, <span class="st">"#868686FF"</span>),</span>
+<span id="cb90-2"><a href="#cb90-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">legend.title =</span> <span class="st">"Cluster"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ACP_files/figure-html/visualizar grupos-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="dimension-description" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="dimension-description"><span class="header-section-number">6.3</span> Dimension description</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a>res.desc <span class="ot">&lt;-</span> <span class="fu">dimdesc</span>(dec.pca, <span class="at">axes =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>), <span class="at">proba =</span> <span class="fl">0.05</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="description-of-dimension-1" class="level3" data-number="6.3.1">
+<h3 data-number="6.3.1" class="anchored" data-anchor-id="description-of-dimension-1"><span class="header-section-number">6.3.1</span> Description of dimension 1</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a>res.desc<span class="sc">$</span>Dim<span class="fl">.1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Link between the variable and the continuous variables (R-square)
+=================================================================================
+             correlation       p.value
+income         0.9490495 2.524996e-231
+funds          0.9098702 1.021917e-176
+capital        0.8326012 2.450980e-119
+employees      0.7217328  4.900441e-75
+reco           0.1965436  2.227664e-05
+res.sales      0.1622735  4.825241e-04
+ebitda.sales   0.1078650  2.081210e-02</code></pre>
+</div>
+</div>
+</section>
+<section id="description-of-dimension-2" class="level3" data-number="6.3.2">
+<h3 data-number="6.3.2" class="anchored" data-anchor-id="description-of-dimension-2"><span class="header-section-number">6.3.2</span> Description of dimension 2</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a>res.desc<span class="sc">$</span>Dim<span class="fl">.2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Link between the variable and the continuous variables (R-square)
+=================================================================================
+             correlation       p.value
+res.sales      0.9387822 1.261877e-213
+ebitda.sales   0.8857966 1.796311e-154
+reco           0.8473617 1.041237e-127
+leverage       0.1334780  4.174009e-03
+funds         -0.1003801  3.154400e-02
+employees     -0.1201506  9.981717e-03
+income        -0.1258779  6.928994e-03
+rfin          -0.1302399  5.196395e-03
+capital       -0.1453964  1.789380e-03</code></pre>
+</div>
+</div>
+</section>
+<section id="description-of-dimension-3" class="level3" data-number="6.3.3">
+<h3 data-number="6.3.3" class="anchored" data-anchor-id="description-of-dimension-3"><span class="header-section-number">6.3.3</span> Description of dimension 3</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a>res.desc<span class="sc">$</span>Dim<span class="fl">.3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Link between the variable and the continuous variables (R-square)
+=================================================================================
+             correlation       p.value
+rfin          0.96141083 2.805589e-258
+res.sales     0.12161220  9.106320e-03
+ebitda.sales  0.09220329  4.835783e-02
+leverage     -0.96098730 3.236079e-257</code></pre>
+</div>
+</div>
+<p>The <code>dimdesc()</code> function calculates the correlation coefficient between a variable and a dimension and performs a significance test. This function is very useful in settings where there are many variables and allows to make the interpretation easier.</p>
+<p><strong>SUMMARY</strong>: Latency of the <em>PCi</em></p>
+<p><strong>Component 1:</strong> The variables capital, employees, funds and income show correlations with component 1 greater than 0.7, indicating that they are highly correlated with it. That is, the higher the value of these four variables in a company, the higher its score in this component. Given the nature of these variables, this component represents the size of the company.</p>
+<p><strong>Component 2:</strong> The variables <code>ebitda.sales</code>, reco and res.sales show correlations greater than 0.85 with component 2. This component could therefore represent the profitability of the company. The more profitable the company, the higher the score for the second component.</p>
+<p><strong>Component 3:</strong> Finally, the variables leverage and rfin define component 3, which is related, in this way, to the company’s indebtedness. The higher the leverage of a company and the lower the financial profitability, the higher the score it will achieve in the component, which will normally indicate a greater indebtedness of the company.</p>
+</section>
+</section>
+<section id="individuals" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="individuals"><span class="header-section-number">6.4</span> INDIVIDUALS</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a>ind <span class="ot">&lt;-</span> <span class="fu">get_pca_ind</span>(dec.pca)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="coordinates-of-individuals" class="level3" data-number="6.4.1">
+<h3 data-number="6.4.1" class="anchored" data-anchor-id="coordinates-of-individuals"><span class="header-section-number">6.4.1</span> Coordinates of individuals</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ind<span class="sc">$</span>coord)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Dim.1      Dim.2       Dim.3      Dim.4      Dim.5     Dim.6       Dim.7
+1 26.560899 -2.6048220  0.16950893 -9.7219520 -0.7899918  2.517655  0.07645591
+2 20.037224 -3.1866039 -0.17313469  6.3329265  4.4472656 -7.407665  0.02300838
+3  6.557825 -0.6872858  0.04424650  0.2543293 -2.0934164  3.096068 -0.03341952
+4  3.777499 -0.8692112 -0.02985954 -0.6072561 -0.7457002  1.015876 -0.22054131
+5  7.269370 -1.5958065 -0.30924872  9.8007803 -2.9888914  4.228950  0.06718604
+6  6.242442 -1.6076261 -0.17795085  3.9481944 -1.8129481  3.017294 -0.11178882
+        Dim.8       Dim.9
+1  0.07477900  0.08113574
+2  0.14102601 -0.19460154
+3 -0.03913375 -0.79448010
+4  0.04841555 -0.76882545
+5 -0.04797579 -0.32223302
+6 -0.14869290  0.69102193</code></pre>
+</div>
+</div>
+</section>
+<section id="plots-from-quality" class="level3" data-number="6.4.2">
+<h3 data-number="6.4.2" class="anchored" data-anchor-id="plots-from-quality"><span class="header-section-number">6.4.2</span> Plots from QUALITY</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb101"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_pca_ind</span>(dec.pca)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ACP_files/figure-html/plots1q-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb102"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_pca_ind</span>(dec.pca, <span class="at">col.ind =</span> <span class="st">"cos2"</span>, <span class="at">gradient.cols =</span> <span class="fu">c</span>(<span class="st">"#00AFBB"</span>, <span class="st">"#E7B800"</span>, <span class="st">"#FC4E07"</span>),</span>
+<span id="cb102-2"><a href="#cb102-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">repel =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ACP_files/figure-html/plots1q-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb103"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_pca_ind</span>(dec.pca, <span class="at">pointsize =</span> <span class="st">"cos2"</span>, <span class="at">pointshape =</span> <span class="dv">21</span>, <span class="at">fill =</span> <span class="st">"#E7B800"</span>, </span>
+<span id="cb103-2"><a href="#cb103-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">repel =</span> <span class="cn">TRUE</span>) <span class="co"># Avoid text overlapping (slow if many points))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ACP_files/figure-html/plots1q-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb104"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_pca_ind</span>(dec.pca, <span class="at">col.ind =</span> <span class="st">"cos2"</span>, <span class="at">pointsize =</span> <span class="st">"cos2"</span>, <span class="at">gradient.cols =</span> <span class="fu">c</span>(<span class="st">"#00AFBB"</span>, <span class="st">"#E7B800"</span>, <span class="st">"#FC4E07"</span>),</span>
+<span id="cb104-2"><a href="#cb104-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">repel =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ACP_files/figure-html/plots1q-4.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb105"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_pca_ind</span>(dec.pca, <span class="at">col.ind =</span> <span class="st">"contrib"</span>, <span class="at">gradient.cols =</span> <span class="fu">c</span>(<span class="st">"#00AFBB"</span>, <span class="st">"#E7B800"</span>, <span class="st">"#FC4E07"</span>), </span>
+<span id="cb105-2"><a href="#cb105-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">repel =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ACP_files/figure-html/plots1q-5.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb106"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb106-1"><a href="#cb106-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_pca_ind</span>(dec.pca, <span class="at">pointsize =</span> <span class="st">"contrib"</span>, <span class="at">pointshape =</span> <span class="dv">21</span>, <span class="at">fill =</span> <span class="st">"#E7B800"</span>, </span>
+<span id="cb106-2"><a href="#cb106-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">repel =</span> <span class="cn">TRUE</span>) <span class="co"># Avoid text overlapping (slow if many points))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ACP_files/figure-html/plots1q-6.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb107"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_pca_ind</span>(dec.pca, <span class="at">col.ind =</span> <span class="st">"contrib"</span>, <span class="at">pointsize =</span><span class="st">"contrib"</span>, </span>
+<span id="cb107-2"><a href="#cb107-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">gradient.cols =</span> <span class="fu">c</span>(<span class="st">"#00AFBB"</span>, <span class="st">"#E7B800"</span>, <span class="st">"#FC4E07"</span>), <span class="at">repel =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ACP_files/figure-html/plots1q-7.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="plots-from-contribution" class="level3" data-number="6.4.3">
+<h3 data-number="6.4.3" class="anchored" data-anchor-id="plots-from-contribution"><span class="header-section-number">6.4.3</span> Plots from CONTRIBUTION</h3>
+<section id="total-contribution-on-pc1-and-pc2" class="level4" data-number="6.4.3.1">
+<h4 data-number="6.4.3.1" class="anchored" data-anchor-id="total-contribution-on-pc1-and-pc2"><span class="header-section-number">6.4.3.1</span> Total contribution on PC1 and PC2</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb108"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb108-1"><a href="#cb108-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_contrib</span>(dec.pca, <span class="at">choice =</span> <span class="st">"ind"</span>, <span class="at">axes =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ACP_files/figure-html/plotsc1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb109"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb109-1"><a href="#cb109-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_contrib</span>(dec.pca, <span class="at">choice =</span> <span class="st">"ind"</span>, <span class="at">axes =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">top =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ACP_files/figure-html/plotsc1-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="individuals-on-dimensions-2-and-3" class="level4" data-number="6.4.3.2">
+<h4 data-number="6.4.3.2" class="anchored" data-anchor-id="individuals-on-dimensions-2-and-3"><span class="header-section-number">6.4.3.2</span> Individuals on dimensions 2 and 3</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb110"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb110-1"><a href="#cb110-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_pca_ind</span>(dec.pca, <span class="at">axes =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ACP_files/figure-html/plotsc2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb111"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb111-1"><a href="#cb111-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_contrib</span>(dec.pca, <span class="at">choice =</span> <span class="st">"ind"</span>, <span class="at">axes =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">top=</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ACP_files/figure-html/plotsc2-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="plot-contributions-complet" class="level4" data-number="6.4.3.3">
+<h4 data-number="6.4.3.3" class="anchored" data-anchor-id="plot-contributions-complet"><span class="header-section-number">6.4.3.3</span> Plot contributions complet</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb112"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb112-1"><a href="#cb112-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_pca_biplot</span>(dec.pca, <span class="at">repel =</span> <span class="cn">TRUE</span>,<span class="at">axes=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>), <span class="at">col.var =</span> <span class="st">"#2E9FDF"</span>, <span class="at">col.ind =</span> <span class="st">"#696969"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ACP_files/figure-html/plotscombinated-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>NOTES:</strong></p>
+<p>Roughly speaking a biplot (looking at Individuals) can be interpreted as follow: * an individual that is on the same side of a given variable has a high value for this variable * an individual that is on the opposite side of a given variable has a low value for this variable.</p>
+</section>
+</section>
+</section>
+<section id="pca-suplementary-variables" class="level2" data-number="6.5">
+<h2 data-number="6.5" class="anchored" data-anchor-id="pca-suplementary-variables"><span class="header-section-number">6.5</span> PCA suplementary variables</h2>
+<p>Supplementary variables have no influence on the principal components of the analysis. They are going to help to interpret the dimensions of variability. Add also supplementary categorical variable, <em>Competition</em>. The categories’ centres of gravity of this new variable appear on the graph of the individuals.They are located at the barycentre of the individuals who took them and they represent an average individual.</p>
+<p><strong>CHECK Help (PCA) and this example</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb113"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb113-1"><a href="#cb113-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"decathlon"</span>)</span>
+<span id="cb113-2"><a href="#cb113-2" aria-hidden="true" tabindex="-1"></a>res.pca <span class="ot">&lt;-</span> <span class="fu">PCA</span>(decathlon, <span class="at">quanti.sup =</span> <span class="dv">11</span><span class="sc">:</span><span class="dv">12</span>, <span class="at">quali.sup =</span> <span class="dv">13</span>, <span class="at">graph =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb113-3"><a href="#cb113-3" aria-hidden="true" tabindex="-1"></a>res.pca<span class="sc">$</span>quanti.sup</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$coord
+            Dim.1       Dim.2       Dim.3      Dim.4      Dim.5
+Rank   -0.6705104  0.05139812 -0.05834304 -0.1614077 -0.3500257
+Points  0.9561543 -0.01651613 -0.06635212  0.2360079  0.1136256
+
+$cor
+            Dim.1       Dim.2       Dim.3      Dim.4      Dim.5
+Rank   -0.6705104  0.05139812 -0.05834304 -0.1614077 -0.3500257
+Points  0.9561543 -0.01651613 -0.06635212  0.2360079  0.1136256
+
+$cos2
+           Dim.1        Dim.2       Dim.3      Dim.4      Dim.5
+Rank   0.4495841 0.0026417671 0.003403910 0.02605246 0.12251798
+Points 0.9142310 0.0002727826 0.004402604 0.05569973 0.01291077</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb115"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_pca_var</span>(res.pca)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ACP_files/figure-html/unnamed-chunk-47-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb116"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb116-1"><a href="#cb116-1" aria-hidden="true" tabindex="-1"></a>res.pca<span class="sc">$</span>quali</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$coord
+              Dim.1       Dim.2      Dim.3       Dim.4      Dim.5
+Decastar -0.6001211 -0.03765491  0.2889044 -0.13955756  0.4013710
+OlympicG  0.2786276  0.01748264 -0.1341342  0.06479458 -0.1863508
+
+$cos2
+             Dim.1       Dim.2      Dim.3      Dim.4     Dim.5
+Decastar 0.4027688 0.001585701 0.09334399 0.02178135 0.1801648
+OlympicG 0.4027688 0.001585701 0.09334399 0.02178135 0.1801648
+
+$v.test
+             Dim.1      Dim.2     Dim.3      Dim.4     Dim.5
+Decastar -1.429753 -0.1231198  1.050392 -0.5850181  2.090235
+OlympicG  1.429753  0.1231198 -1.050392  0.5850181 -2.090235
+
+$dist
+ Decastar  OlympicG 
+0.9456076 0.4390321 
+
+$eta2
+                 Dim.1        Dim.2     Dim.3       Dim.4     Dim.5
+Competition 0.05110487 0.0003789623 0.0275831 0.008556153 0.1092271</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb118"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb118-1"><a href="#cb118-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_pca_ind</span>(res.pca, <span class="at">habillage =</span> <span class="dv">13</span>, <span class="at">addEllipses =</span><span class="cn">TRUE</span>, <span class="at">ellipse.type =</span> <span class="st">"confidence"</span>, </span>
+<span id="cb118-2"><a href="#cb118-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">palette =</span> <span class="st">"jco"</span>, <span class="at">repel =</span> <span class="cn">TRUE</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ACP_files/figure-html/unnamed-chunk-47-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb119"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb119-1"><a href="#cb119-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_pca_biplot</span>(res.pca, </span>
+<span id="cb119-2"><a href="#cb119-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">col.ind =</span> decathlon<span class="sc">$</span>Competition, <span class="at">palette =</span> <span class="st">"jco"</span>, </span>
+<span id="cb119-3"><a href="#cb119-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">addEllipses =</span> <span class="cn">TRUE</span>, <span class="at">label =</span> <span class="st">"var"</span>,</span>
+<span id="cb119-4"><a href="#cb119-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">col.var =</span> <span class="st">"black"</span>, <span class="at">repel =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb119-5"><a href="#cb119-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">legend.title =</span> <span class="st">"Competition"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ACP_files/figure-html/unnamed-chunk-47-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb120"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb120-1"><a href="#cb120-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(res.pca, <span class="at">cex =</span> <span class="fl">0.8</span>, <span class="at">habillage =</span> <span class="st">"Competition"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ACP_files/figure-html/unnamed-chunk-47-4.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb121"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb121-1"><a href="#cb121-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotellipses</span>(res.pca, <span class="at">level =</span> <span class="fl">0.95</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: ggrepel: 3 unlabeled data points (too many overlaps). Consider
+increasing max.overlaps</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ACP_files/figure-html/unnamed-chunk-47-5.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="bibliografia" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Bibliografia</h1>
+<ul>
+<li>More elegant graphs and options. Check at: <a href="http://www.sthda.com/english/articles/31-principal-component-methods-in-r-practical-guide/112-pca-principal-component-analysis-essentials/">http://www.sthda.com/english/articles/31-principal-component-methods-in-r-practical-guide/112-pca-principal-component-analysis-essentials/</a></li>
+</ul>
+</section>
+<section id="to-go-further" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> To go further:</h1>
+<p>To add supplementary individuals, use the following argument of the PCA function: <code>ind.sup</code>. In most PCAs, the weight of the individuals is equal to 1/(number of individuals). However, it is sometimes necessary to give a specific weight to some individuals. To do so, the user will have to use the argument: <code>row.w</code>.</p>
+<p>It can also be interesting to give a specific weight to some variables. Here, the user will have to use the argument: <code>col.w</code></p>
+
+
+</section>
+
+<p>Aquesta web està creada por Dante Conti y Sergi Ramírez, (c) 2024</p></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

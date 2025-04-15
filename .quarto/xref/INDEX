@@ -31,5 +31,11 @@
   },
   "material/02_AdvancedClustering/laboratorio/DBSCAN_OPTICS.qmd": {
     "DBSCAN_OPTICS.html": "20c61df8"
+  },
+  "material/04_CorrespondenceAnalysis/laboratorio/ACP.qmd": {
+    "ACP.html": "60b8268e"
+  },
+  "material/05_GeospatialAnalysis/teoria/geodescriptiva.qmd": {
+    "geodescriptiva.html": "3c7b9046"
   }
 }
