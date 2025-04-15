@@ -1,0 +1,1386 @@
+---
+title: "Árboles de Decisión, Random Forest y XGBoost"
+author: Dante Conti, Sergi Ramirez, (c) IDEAI
+date: "`r Sys.Date()`"
+date-modified: "`r Sys.Date()`"
+toc: true
+# language: es
+number-sections: true
+format: 
+  html: 
+    theme: cerulean
+editor: visual
+#execute: 
+#  freeze: auto
+---
+
+# Descripción del problema
+
+En este ejemplo se entrena un árbol de regresión para predecir el precio unitario de la vivienda en Madrid. Para ello se utilizan los datos de viviendas a la venta en Madrid publicados en Idealista durante el año 2018. Estos datos están incluidos en el paquete `idealista18`. Las variables que contienen nuestra base de datos son las siguientes:
+
+-   ***"ASSETID" :*** Identificador único del activo
+
+-   ***"PERIOD" :*** Fecha AAAAMM, indica el trimestre en el que se extrajo el anuncio, utilizamos AAAA03 para el 1.er trimestre, AAAA06 para el 2.º, AAAA09 para el 3.er y AAAA12 para el 4.º
+
+-   ***"PRICE" :*** Precio de venta del anuncio en idealista expresado en euros
+
+-   ***"UNITPRICE" :*** Precio en euros por metro cuadrado
+
+-   ***"CONSTRUCTEDAREA" :*** Superficie construida de la casa en metros cuadrados
+
+-   ***"ROOMNUMBER" :*** Número de habitaciones
+
+-   ***"BATHNUMBER" :*** Número de baños
+
+-   ***"HASTERRACE" :*** Variable ficticia para terraza (toma 1 si hay una terraza, 0 en caso contrario)
+
+-   ***"HASLIFT" :*** Variable ficticia para ascensor (toma 1 si hay ascensor en el edificio, 0 en caso contrario)
+
+-   ***"HASAIRCONDITIONING" :*** Variable ficticia para Aire Acondicionado (toma 1 si hay una Aire Acondicionado, 0 en caso contrario)
+
+-   ***"AMENITYID" :*** Indica las comodidades incluidas (1 - sin muebles, sin comodidades de cocina, 2 - comodidades de cocina, sin muebles, 3 - comodidades de cocina, muebles)
+
+-   ***"HASPARKINGSPACE" :*** Variable ficticia para estacionamiento (toma 1 si el estacionamiento está incluido en el anuncio, 0 en caso contrario)
+
+-   ***"ISPARKINGSPACEINCLUDEDINPRICE" :*** Variable ficticia para estacionamiento (toma 1 si el estacionamiento está incluido en el anuncio, 0 en caso contrario)
+
+-   ***"PARKINGSPACEPRICE" :*** Precio de plaza de parking en euros
+
+-   ***"HASNORTHORIENTATION" :*** Variable ficticia para orientación (toma 1 si la orientación es Norte en el anuncio, 0 en caso contrario) - *Nota importante: las características de orientación no son características ortogonales, una casa orientada al norte también puede estar orientada al este*
+
+-   ***"HASSOUTHORIENTATION" :*** Variable ficticia para orientación (toma 1 si la orientación es Sur en el anuncio, 0 en caso contrario) - *Nota importante: las características de orientación no son características ortogonales, una casa orientada al norte también puede estar orientada al este*
+
+-   ***"HASEASTORIENTATION" :*** Variable ficticia para orientación (toma 1 si la orientación es Este en el anuncio, 0 en caso contrario) - *Nota importante: las características de orientación no son características ortogonales, una casa orientada al norte también puede estar orientada al este*
+
+-   ***"HASWESTORIENTATION" :*** Variable ficticia para orientación (toma 1 si la orientación es Oeste en el anuncio, 0 en caso contrario) - *Nota importante: las características de orientación no son características ortogonales, una casa orientada al norte también puede estar orientada al este*
+
+-   ***"HASBOXROOM" :*** Variable ficticia para boxroom (toma 1 si boxroom está incluido en el anuncio, 0 en caso contrario)
+
+-   ***"HASWARDROBE" :*** Variable ficticia para vestuario (toma 1 si el vestuario está incluido en el anuncio, 0 en caso contrario)
+
+-   ***"HASSWIMMINGPOOL" :*** Variable ficticia para piscina (toma 1 si la piscina está incluida en el anuncio, 0 en caso contrario)
+
+-   ***"HASDOORMAN" :*** Variable ficticia para portero (toma 1 si hay un portero en el edificio, 0 en caso contrario)
+
+-   ***"HASGARDEN" :*** Variable ficticia para jardín (toma 1 si hay un jardín en el edificio, 0 en caso contrario)
+
+-   ***"ISDUPLEX" :*** Variable ficticia para dúplex (toma 1 si es un dúplex, 0 en caso contrario)
+
+-   ***"ISSTUDIO" :*** Variable ficticia para piso de soltero (estudio en español) (toma 1 si es un piso para una sola persona, 0 en caso contrario)
+
+-   ***"ISINTOPFLOOR" :*** Variable ficticia que indica si el apartamento está ubicado en el piso superior (toma 1 en el piso superior, 0 en caso contrario)
+
+-   ***"CONSTRUCTIONYEAR" :*** Año de construcción (fuente: anunciante)
+
+-   ***"FLOORCLEAN" :*** Indica el número de piso del apartamento comenzando desde el valor 0 para la planta baja (fuente: anunciante)
+
+-   ***"FLATLOCATIONID" :*** Indica el tipo de vistas que tiene el piso (1 - exterior, 2 - interior)
+
+-   ***"CADCONSTRUCTIONYEAR" :*** Año de construcción según fuente catastral (fuente: catastro), tenga en cuenta que esta cifra puede diferir de la proporcionada por el anunciante
+
+-   ***"CADMAXBUILDINGFLOOR" :*** Superficie máxima del edificio (fuente: catastro)
+
+-   ***"CADDWELLINGCOUNT" :*** Recuento de viviendas en el edificio (fuente: catastro)
+
+-   ***"CADASTRALQUALITYID" :*** Calidad catastral (fuente: catastro)
+
+-   ***"BUILTTYPEID_1" :*** Valor ficticio para estado del piso: 1 obra nueva 0 en caso contrario (fuente: anunciante)
+
+-   ***"BUILTTYPEID_2" :*** Valor ficticio para condición plana: 1 segundero a restaurar 0 en caso contrario (fuente: anunciante)
+
+-   ***"BUILTTYPEID_3" :*** Valor ficticio para estado plano: 1 de segunda mano en buen estado 0 en caso contrario (fuente: anunciante)
+
+-   ***"DISTANCE_TO_CITY_CENTER" :*** Distancia al centro de la ciudad en km
+
+-   ***"DISTANCE_TO_METRO" :*** Distancia istancia a una parada de metro en km.
+
+-   ***"DISTANCE_TO_DIAGONAL" :*** Distancia a la Avenida Diagonal en km; Diagonal es una calle principal que corta la ciudad en diagonal a la cuadrícula de calles.
+
+-   ***"LONGITUDE" :*** Longitud del activo
+
+-   ***"LATITUDE" :*** Latitud del activo
+
+-   ***"geometry" :*** Geometría de características simples en latitud y longitud.
+
+**Fuente**: [Idealista](https://www.idealista.com/)
+
+```{r}
+#| label: cargar-datos
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| error: false
+
+library("idealista18")
+BCN <- get(data("Barcelona_Sale"))
+```
+
+```{r}
+#| label: geo-BCN
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| error: false
+
+# Filtramos la epoca a Navidad
+BCN <- BCN[which(BCN$PERIOD == "201812"), ]
+
+pisos_sf_BCN <- st_as_sf(BCN, coords = c("LONGITUDE", "LATITUDE"), crs = 4326)
+
+# Leer shapefile de secciones censales
+secciones <- st_read("C:/Users/sergi/Downloads/Shapefile/seccionado_2024/SECC_CE_20240101.shp")
+
+# Transformar pisos al sistema de referencia de las secciones censales
+pisos_sf_BCN <- st_transform(pisos_sf_BCN, crs = st_crs(secciones))
+
+# Hacer el match entre pisos y secciones censales
+pisos_con_seccion <- st_join(pisos_sf_BCN, secciones, join = st_within)
+
+# Convertir a dataframe para exportar
+BCN <- as.data.frame(pisos_con_seccion)
+
+rm(Barcelona_Sale, Barcelona_Polygons, Barcelona_POIS, pisos_con_seccion, pisos_sf_BCN, secciones); gc()
+```
+
+```{r}
+#| label: cargar-renta-media
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| error: false
+
+rentaMedia <- read.csv("https://raw.githubusercontent.com/miguel-angel-monjas/spain-datasets/refs/heads/master/data/Renta%20media%20en%20Espa%C3%B1a.csv")
+# NOs quedamos con los datos que nos interesa de Barcelona
+rentaMedia <- rentaMedia[which(rentaMedia$Provincia == "Barcelona" & rentaMedia$Tipo.de.elemento == "sección"), ]
+rentaMedia$Código.de.territorio <- paste0("0", rentaMedia$Código.de.territorio)
+```
+
+```{r}
+#| label: unir-informacion
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| error: false
+
+cols <- c("Renta.media.por.persona", "Renta.media.por.hogar")
+
+m <- match(BCN$CUSEC, rentaMedia$Código.de.territorio)
+BCN[, cols] <- rentaMedia[m, cols]
+```
+
+```{r}
+#| label: cargar-datos-final
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+path <- 'https://raw.githubusercontent.com/ramIA-lab/MLforEducation/refs/heads/main/material/trees_ensambleMethods/idealista18_BCN_conRenta.csv'
+BCN <- read.csv2(path)
+```
+
+```{r}
+#| label: cargar-paquetes-r
+#| echo: false
+#| warning: false
+#| message: false
+#| error: false
+
+library(dplyr)
+library(tidyr)
+```
+
+# Preprocessing de los datos
+
+```{r}
+#| label: preprocessing-R
+#| echo: true
+#| warning: false
+#| message: false
+#| error: false
+
+BCN <- BCN %>%
+  select(-X, -PRICE, -LONGITUDE, -LATITUDE, -geometry, -CONSTRUCTIONYEAR, 
+         -ASSETID, -PERIOD, -CUSEC, -CSEC, -CMUN, -CPRO, -CCA, -CUDIS, -CLAU2, 
+         -NPRO, -NCA, -CNUT0, -CNUT1, -CNUT2, -CNUT3, -NMUN, -Shape_Leng,
+         -Shape_Area, -geometry, -CUMUN, -CADASTRALQUALITYID) %>%
+  mutate(
+    across(
+      .cols = starts_with(c("HAS", "IS")),
+      .fns = ~ case_when(. == 0 ~ "No", . == 1 ~ "Si"),
+      .names = "{.col}"), 
+    AMENITYID = case_when(
+      AMENITYID == 1 ~ "SinMuebleSinCocina", AMENITYID == 2 ~ "CocinaSinMuebles", 
+      AMENITYID == 3 ~ "CocinaMuebles"), 
+    FLATLOCATIONID = case_when(
+      FLATLOCATIONID == 1 ~ "exterior", FLATLOCATIONID == 2 ~ "interior", 
+      .default = "noInfo"),
+    BUILTTYPEID_1 = case_when(
+      BUILTTYPEID_1 == 0 ~ "noObraNueva", BUILTTYPEID_1 == 1 ~ "obraNueva"),
+    BUILTTYPEID_2 = case_when(
+      BUILTTYPEID_2 == 0 ~ "noRestaurar", BUILTTYPEID_2 == 1 ~ "Restaurar"),
+    BUILTTYPEID_3 = case_when(
+      BUILTTYPEID_3 == 0 ~ "noSegundaMano", BUILTTYPEID_3 == 1 ~ "SegundaMano"),
+    FLOORCLEAN = replace_na(FLOORCLEAN, 0),
+    CDIS = case_when(
+      CDIS == 1 ~ "Ciutat-Vella", CDIS == 2 ~ "Eixample", CDIS == 3 ~ "Sants-Montjuic", 
+      CDIS == 4 ~ "Les Corts", CDIS == 5 ~ "Sarrià-Sant Gervasi", 
+      CDIS == 6 ~ "Gràcia", CDIS == 7 ~ "Horta-Guinardó", CDIS == 8 ~ "Nou Barris",
+      CDIS == 9 ~ "Sant Andreu", CDIS == 10 ~ "Sant Martí"),
+    RENTA = case_when(
+     Renta.media.por.hogar < 30000 ~ "Baja",
+     Renta.media.por.hogar >= 30000 & Renta.media.por.hogar <= 50000 ~ "Media",
+     Renta.media.por.hogar > 50000 ~ "Alta"
+    )
+  ) %>%
+  select(-Renta.media.por.hogar, -Renta.media.por.persona)
+```
+
+## Análisi descriptivo de los datos
+
+```{r}
+#| label: descriptiva-R
+#| echo: true
+#| warning: false
+#| message: false
+#| error: false
+
+## Descriptiva de los datos
+library(DataExplorer)
+library(lubridate)
+library(dplyr)
+
+## Data Manipulation
+library(reshape2)
+
+## Plotting
+library(ggplot2)
+
+## Descripción completa
+DataExplorer::introduce(BCN)
+
+## Descripción de la bbdd
+plot_intro(BCN)
+
+## Descripción de los missings
+plot_missing(BCN)
+
+## Descripción de las varaibles categoricas
+plot_bar(BCN)
+
+## Descripción variables numéricas
+plot_histogram(BCN)
+plot_density(BCN)
+plot_qq(BCN)
+plot_correlation(BCN)
+```
+
+# Data Manipulation
+
+::: panel-tabset
+## R
+
+```{r}
+#| label: gestion-datos-R
+#| echo: true
+#| warning: false
+#| message: false
+#| error: false
+
+library(caret)
+
+set.seed(1994)
+
+index <- caret::createDataPartition(BCN$UNITPRICE, p = 0.8, list = FALSE)
+rtrain <- BCN %>% slice(index) %>% na.omit()
+rtest <- BCN %>% slice(-index) %>% na.omit()
+```
+
+## Python
+
+```{python}
+#| label: conversor-r_py
+#| echo: false
+#| warning: false
+#| message: false
+#| error: false
+
+pyBCN = r.BCN
+```
+
+```{python}
+#| label: preprocessing-py
+#| echo: true
+#| warning: false
+#| message: false
+#| error: false
+
+from sklearn.preprocessing import LabelEncoder
+
+# Crear un LabelEncoder
+le = LabelEncoder()
+
+# Lista de variables a transformar
+columns_to_encode = ['HASTERRACE', 'HASLIFT', 'HASAIRCONDITIONING', 'AMENITYID',
+    'HASPARKINGSPACE', 'ISPARKINGSPACEINCLUDEDINPRICE', 'HASNORTHORIENTATION',
+    'HASSOUTHORIENTATION', 'HASEASTORIENTATION', 'HASWESTORIENTATION',
+    'HASBOXROOM', 'HASWARDROBE', 'HASSWIMMINGPOOL', 'HASDOORMAN', 'HASGARDEN',
+    'ISDUPLEX', 'ISSTUDIO', 'ISINTOPFLOOR', 'FLOORCLEAN', 'FLATLOCATIONID',
+    'CADMAXBUILDINGFLOOR', 'CADDWELLINGCOUNT','BUILTTYPEID_1', 'BUILTTYPEID_2', 
+    'BUILTTYPEID_3', 'CDIS', 'RENTA']
+
+# Aplicar LabelEncoder a cada columna de la lista
+for col in columns_to_encode:
+    if col in pyBCN.columns:  # Verificar que la columna existe en el DataFrame
+        pyBCN[col] = le.fit_transform(pyBCN[col].astype(str))  # Convertir a string si no es categórica
+
+```
+
+```{python}
+#| label: gestion-datos-Python
+#| echo: true
+#| warning: false
+#| message: false
+#| error: false
+
+from sklearn.model_selection import train_test_split
+
+# dividimos la base de datos 
+X = pyBCN.drop(columns=["RENTA"])
+
+pyX_train, pyX_test, pyy_train, pyy_test = train_test_split(
+    X, pyBCN['RENTA'], test_size = 0.2, random_state = 1994)
+```
+
+```{python}
+#| label: normalizacion-python
+#| echo: true
+#| warning: false
+#| message: false
+#| error: false
+
+from sklearn.preprocessing import StandardScaler
+
+# Scale dataset
+sc = StandardScaler()
+pyX_train = sc.fit_transform(pyX_train)
+pyX_test = sc.fit_transform(pyX_test)
+```
+:::
+
+# Árboles de decisión
+
+## Creación del árbol
+
+::: panel-tabset
+## R
+
+```{r}
+#| label: arbol-training-r
+#| echo: true
+#| warning: false
+#| message: false
+#| error: false
+
+library(rpart)
+library(rpart.plot)
+
+set.seed(1994)
+
+arbol <- rpart(RENTA ~ ., data = rtrain)
+summary(arbol)
+```
+
+```{r}
+#| label: plot-arbol-r
+#| echo: true
+#| warning: false
+#| message: false
+#| error: false
+
+rpart.plot(arbol)
+```
+
+## Python
+
+```{python}
+#| label: arbol-training-python
+#| echo: true
+#| warning: false
+#| message: false
+#| error: false
+
+# Decision Tree Classification
+from sklearn.tree import DecisionTreeClassifier
+
+classifier = DecisionTreeClassifier(criterion = 'entropy', random_state = 1994)
+clf = classifier.fit(pyX_train, pyy_train)
+```
+
+```{python}
+#| label: plot-arbol-python
+#| echo: true
+#| warning: false
+#| message: false
+#| error: false
+
+from sklearn import tree
+
+tree.plot_tree(clf)
+```
+:::
+
+## Creamos las predicciones
+
+::: panel-tabset
+## R
+
+Aplicamos el modelo a nuestros valores de test.
+
+```{r}
+#| label: decisionsTree-predict-r
+#| echo: true
+#| warning: false
+#| message: false
+#| error: false
+
+predict(arbol, rtest[1:10, ])
+```
+
+```{r}
+#| label: decisionsTree-confMatrix-r
+#| echo: true
+#| warning: false
+#| message: false
+#| error: false
+
+predicciones <- predict(arbol, rtrain, type = "class")
+caret::confusionMatrix(predicciones, as.factor(rtrain$RENTA))
+
+predicciones <- predict(arbol, rtest, type = "class")
+caret::confusionMatrix(predicciones, as.factor(rtest$RENTA))
+```
+
+```{r}
+#| label: plot-confusionMatrix-decisionTree-r
+#| echo: true
+#| warning: false
+#| message: false
+#| error: false
+
+CM <- caret::confusionMatrix(predicciones, as.factor(rtest$RENTA)); CM <- data.frame(CM$table)
+
+grafico <- ggplot(CM, aes(Prediction,Reference, fill= Freq)) +
+        geom_tile() + geom_text(aes(label=Freq)) +
+        scale_fill_gradient(low="white", high="#009194") +
+        labs(x = "Reference",y = "Prediction")
+
+plot(grafico)
+```
+
+## Python
+
+```{python}
+#| label: decisionsTree-predict-python
+#| echo: true
+#| warning: false
+#| message: false
+#| error: false
+
+import pandas as pd
+
+# Prediction
+y_pred = classifier.predict(pyX_test)
+
+results = pd.DataFrame({
+    'Real': pyy_test,  # Valores reales
+    'Predicho': y_pred  # Valores predichos
+})
+
+# Muestra los primeros 5 registros
+print(results.head())  
+```
+
+```{python}
+#| label: decisionsTree-confMatrix-python
+#| echo: true
+#| warning: false
+#| message: false
+#| error: false
+#| 
+from sklearn.metrics import classification_report
+
+print(f'Classification Report: \n{classification_report(pyy_test, y_pred)}')
+```
+
+```{python}
+#| label: plot-confMatrix-python
+#| echo: true
+#| warning: false
+#| message: false
+#| error: false
+
+from sklearn.metrics import confusion_matrix
+import seaborn as sns
+
+# Confusion matrix
+cf_matrix = confusion_matrix(pyy_test, y_pred)
+sns.heatmap(cf_matrix, annot=True, fmt='d', cmap='Blues', cbar=False)
+```
+:::
+
+## Modelo de classificación con cross-evaluación
+
+::: panel-tabset
+## R
+
+```{r}
+#| label: decisionsTree-crossvalidation-r
+#| echo: true
+#| warning: false
+#| message: false
+#| error: false
+#| 
+## Generamos los parámetros de control
+trControl <- trainControl(method = "cv", number = 10, classProbs = TRUE,
+  summaryFunction = multiClassSummary)
+## En este caso, se realiza una cros-validación de 10 etapas
+
+# se fija una semilla aleatoria
+set.seed(1994)
+
+# se entrena el modelo
+model <- train(RENTA ~ .,  # . equivale a incluir todas las variables
+               data = rtrain,
+               method = "rpart",
+               metric = "Accuracy",
+               trControl = trControl)
+
+# Obtenemos los valores del árbol óptimo
+model$finalModel
+
+# Generamos el gráfico del árbol
+rpart.plot(model$finalModel)
+```
+
+```{r}
+#| label: plot-resultados-crossvalidation-r
+#| echo: true
+#| warning: false
+#| message: false
+#| error: false
+
+library(reshape2)
+
+# A continuación generamos un gráfico que nos permite ver la variabilidad de los estadísticos
+# calculados
+ggplot(melt(model$resample[,c(2:5, 7:9, 12:13)]), aes(x = variable, y = value, fill=variable)) +
+  geom_boxplot(show.legend=FALSE) +
+  xlab(NULL) + ylab(NULL)
+```
+
+## Python
+
+```{python}
+#| label: decisionsTree-crossvalidation-python
+#| echo: true
+#| warning: false
+#| message: false
+#| error: false
+
+from sklearn.tree import DecisionTreeClassifier
+
+# Modelo de árbol de decisión
+model = DecisionTreeClassifier(random_state=1994)
+
+from sklearn.model_selection import cross_val_score
+
+# Realizar validación cruzada con 5 folds
+scores = cross_val_score(model, pyX_train, pyy_train, cv=10, scoring = 'accuracy')  # Métrica: accuracy
+
+# Mostrar resultados
+print(f"Accuracy por fold: {scores}")
+print(f"Accuracy promedio: {scores.mean():.4f}")
+```
+:::
+
+## Realizando hiperparámetro tunning
+
+::: panel-tabset
+## R
+
+```{r}
+#| label: parametros-decisionTree-r
+#| echo: true
+#| warning: false
+#| message: false
+#| error: false
+
+# Detectamos cuales son los parámetros del modelo que podemos realizar hiperparámeter tunning
+modelLookup("rpart")
+```
+
+```{r}
+#| label: parametros-decisionTree-grid-r
+#| echo: true
+#| warning: false
+#| message: false
+#| error: false
+
+# Se especifica un rango de valores típicos para el hiperparámetro
+tuneGrid <- expand.grid(cp = seq(0.01,0.05,0.01))
+```
+
+```{r}
+#| label: hyperparam-decisionTree-r
+#| echo: true
+#| warning: false
+#| message: false
+#| error: false
+
+# se entrena el modelo
+set.seed(1994)
+
+model <- train(RENTA ~ .,
+               data = rtrain,
+               method = "rpart",
+               metric = "Accuracy",
+               trControl = trControl,
+               tuneGrid = tuneGrid)
+
+# Obtenemos la información del mejor modelo
+model$bestTune
+
+# Gráfico del árbol obtenido
+rpart.plot(model$finalModel)
+```
+
+## Python
+
+```{python}
+#| label: hyperparam-decisionTree-python
+#| echo: true
+#| warning: false
+#| message: false
+#| error: false
+
+from sklearn.model_selection import GridSearchCV
+
+# Definir rejilla de hiperparámetros
+param_grid = {
+    'max_depth': [None, 5, 10],
+    'min_samples_split': [2, 5, 10],
+    'min_samples_leaf': [1, 2, 4]
+}
+
+# Declaramos el modelo
+model = DecisionTreeClassifier(random_state=1994)
+
+# Configurar GridSearch con validación cruzada
+grid_search = GridSearchCV(estimator=model, param_grid=param_grid, cv=10, scoring='accuracy', n_jobs=-1)
+
+# Ajustar modelo
+grid_search.fit(pyX_train, pyy_train)
+
+# Mostrar mejores parámetros
+print(f"Mejores parámetros: {grid_search.best_params_}")
+print(f"Mejor accuracy: {grid_search.best_score_:.4f}")
+
+
+from sklearn import tree
+tree.plot_tree(grid_search.best_estimator_)
+```
+:::
+
+## Como realizar poda de nuestro árbol
+
+::: panel-tabset
+## R
+
+```{r}
+#| label: poda-decisionTree-r
+#| echo: true
+#| warning: false
+#| message: false
+#| error: false
+
+# Con el objetivo de aumentar la generalidad del árbol y facilitar su interpretación, 
+# se procede a reducir su tamaño podándolo. Para ello se establece el criterio de 
+# que un nodo terminal tiene que tener, como mínimo, 50 observaciones.
+set.seed(1994)
+prunedtree <- rpart(RENTA ~ ., data = rtrain,
+                    cp= 0.01, control = rpart.control(minbucket = 50))
+
+rpart.plot(prunedtree)
+```
+
+## Python
+
+En Python, la poda de un árbol de decisión se puede realizar ajustando los hiperparámetros del árbol durante su creación. Estos hiperparámetros controlan el crecimiento del árbol y, por lo tanto, actúan como técnicas de poda preventiva o postpoda.
+
+`scikit-learn` no implementa poda dinámica directa (como ocurre en algunos otros frameworks), pero puedes limitar el tamaño del árbol y evitar sobreajuste mediante los siguientes métodos.
+
+### Poda Preventiva (Pre-pruning)
+
+**Poda preventiva** consiste en detener el crecimiento del árbol antes de que se haga demasiado grande. Esto se logra ajustando hiperparámetros como:
+
+-   `max_depth`: Profundidad máxima del árbol
+-   `min_samples_split`: Número mínimo de muestras necesarias para dividir un nodo.
+-   `min_samples_leaf`: Número mínimo de muestras necesarias en una hoja.
+-   `max_leaf_nodes`: Número máximo de nodos hoja en el árbol.
+
+```{python}
+#| label: podaPreventiva-decisionTree-python
+#| echo: true
+#| warning: false
+#| message: false
+#| error: false
+
+# Crear un árbol con poda preventiva
+model = DecisionTreeClassifier(
+    max_depth=3,              # Limitar la profundidad
+    min_samples_split=10,     # Mínimo 10 muestras para dividir un nodo
+    min_samples_leaf=5,       # Mínimo 5 muestras por hoja
+    random_state=42
+)
+
+# Entrenar el modelo
+model.fit(pyX_train, pyy_train)
+
+# Evaluar
+print(f"Accuracy en entrenamiento: {model.score(pyX_train, pyy_train):.4f}")
+print(f"Accuracy en prueba: {model.score(pyX_test, pyy_test):.4f}")
+
+# Graficamos el árbol podado
+tree.plot_tree(model)
+```
+
+### Poda Posterior (Post-Pruning) con `ccp_alpha`
+
+Se puedes realizar poda posterior usando cost **complexity pruning**. Esto implica ajustar el parámetro `ccp_alpha` (el parámetro de complejidad de coste).
+
+El árbol generará múltiples subárboles podados para diferentes valores de `ccp_alpha`, y tú puedes elegir el más adecuado evaluando su desempeño.
+
+```{python}
+#| label: PostPruning-decisionTree-python
+#| echo: true
+#| warning: false
+#| message: false
+#| error: false
+
+import matplotlib.pyplot as plt
+
+# Crear un árbol sin poda
+model = DecisionTreeClassifier(random_state=1994)
+model.fit(pyX_train, pyy_train)
+
+# Obtener valores de ccp_alpha
+path = model.cost_complexity_pruning_path(pyX_train, pyy_train)
+ccp_alphas = path.ccp_alphas
+impurities = path.impurities
+
+# Entrenar árboles para cada valor de ccp_alpha
+models = []
+for ccp_alpha in ccp_alphas:
+    clf = DecisionTreeClassifier(random_state=42, ccp_alpha=ccp_alpha)
+    clf.fit(pyX_train, pyy_train)
+    models.append(clf)
+
+# Evaluar desempeño
+train_scores = [clf.score(pyX_train, pyy_train) for clf in models]
+test_scores = [clf.score(pyX_test, pyy_test) for clf in models]
+
+# Graficar resultados
+plt.figure(figsize=(8, 6))
+plt.plot(ccp_alphas, train_scores, marker='o', label="Train Accuracy", drawstyle="steps-post")
+plt.plot(ccp_alphas, test_scores, marker='o', label="Test Accuracy", drawstyle="steps-post")
+plt.xlabel("ccp_alpha")
+plt.ylabel("Accuracy")
+plt.title("Accuracy vs ccp_alpha")
+plt.legend()
+plt.grid()
+plt.show()
+```
+:::
+
+# Random Forest
+
+## Aplicación del modelo
+
+::: panel-tabset
+## R
+
+```{r}
+#| label: randomForest-r
+#| echo: true
+#| warning: false
+#| message: false
+#| error: false
+#| 
+# Random Forest 
+library(randomForest)
+## devtools::install_github('araastat/reprtree') # Se instala 1 vez para poder printar graficos
+library(reprtree)
+
+set.seed(1994)
+arbol_rf <- randomForest(as.factor(RENTA) ~ .,  data = rtrain, ntree = 25)
+```
+
+```{r}
+#| label: observar-arbol-r
+#| echo: true
+#| warning: false
+#| message: false
+#| error: false
+
+# se observa el árbol número 20
+tree20 <- getTree(arbol_rf, 20, labelVar = TRUE)
+head(tree20)
+
+## Sin embargo, el método por el que se representa gráficamente no es muy claro y
+## puede llevar a confusión o dificultar la interpretación del árbol. 
+## Si se desea estudiar el árbol, hasta un cierto nivel, se puede incluir el argumento depth.
+## El árbol, ahora con una profundidad de 5 ramas.
+plot.getTree(arbol_rf, k = 20, depth = 5)
+```
+
+```{r}
+#| label: importance-matrix-r
+#| echo: true
+#| warning: false
+#| message: false
+#| error: false
+
+library(vip)
+vip(arbol_rf)
+```
+
+## Python
+
+```{python}
+#| label: randomForest-python
+#| echo: true
+#| warning: false
+#| message: false
+#| error: false
+
+from sklearn.ensemble import RandomForestClassifier
+
+clf = RandomForestClassifier()
+clf.fit(pyX_train, pyy_train)
+```
+
+```{python}
+#| label: importance-matrix-python
+#| echo: true
+#| warning: false
+#| message: false
+#| error: false
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+results = pd.DataFrame(clf.feature_importances_, index=pyBCN.columns[:-1]).sort_values(by=0, ascending=False)
+
+# Crear gráfico de barras horizontales
+plt.figure(figsize=(10, 8))
+plt.barh(results.index, results[0], color='skyblue')
+
+# Añadir etiquetas y título
+plt.xlabel('Importancia')
+plt.ylabel('Características')
+plt.title('Importancia de las Características')
+plt.grid(axis='x', linestyle='--', alpha=0.7)
+plt.show()
+```
+:::
+
+## Hiperparameter tunning de Random Forest
+
+::: panel-tabset
+## R
+
+```{r}
+#| label: parametros-RF-r
+#| echo: true
+#| warning: false
+#| message: false
+#| error: false
+
+# Identificamos los parámetros que podemos tunnerar
+modelLookup("rf")
+```
+
+```{r}
+#| label: gridtunning-RF-r
+#| echo: true
+#| warning: false
+#| message: false
+#| error: false
+
+# Se especifica un rango de valores posibles de mtry
+tuneGrid <- expand.grid(mtry = c(1, 2, 5, 10))
+tuneGrid
+```
+
+```{r}
+#| label: tunning-RF-r
+#| echo: true
+#| warning: false
+#| message: false
+#| error: false
+
+# se fija la semilla aleatoria
+set.seed(1994)
+
+# se entrena el modelo
+model <- train(RENTA ~ ., data = rtrain, 
+               ntree = 20,
+               method = "rf", metric = "Accuracy",
+               tuneGrid = tuneGrid,
+               trControl = trainControl(classProbs = TRUE))
+
+# Visualizamos los hiperparámetros obtenidos 
+model$results
+```
+
+## Python
+
+### Ajuste de hiperparámetros con `GridSearchCV`
+
+El `GridSearchCV` realiza una búsqueda exhaustiva sobre un conjunto de parámetros especificados. Probará todas las combinaciones posibles de hiperparámetros.
+
+```{python}
+#| label: GridSearchCV-RF-python
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| error: false
+
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
+
+# Definir los parámetros para la búsqueda
+param_dist = {
+    'n_estimators': [150, 200],        # Número de árboles en el bosque
+    'max_depth': [None, 10, 20],            # Profundidad máxima del árbol
+    'min_samples_split': [2, 5, 10],            # Número mínimo de muestras para dividir un nodo
+    'min_samples_leaf': [1, 2, 4],               # Número mínimo de muestras en una hoja
+    'max_features': ['auto'],      # Número de características a considerar para dividir un nodo
+    'bootstrap': [True]                      # Si usar bootstrap para los árboles
+}
+
+# Crear el modelo RandomForest
+rf = RandomForestClassifier(random_state = 1994)
+
+# Usar GridSearchCV para encontrar el mejor conjunto de parámetros
+grid_search = GridSearchCV(estimator = rf, param_grid = param_grid, cv = 10, n_jobs = -1, verbose = 0)
+
+# Ajustar el modelo con los datos de entrenamiento
+grid_search.fit(pyX_train, pyy_train)
+
+# Mostrar los mejores parámetros encontrados
+print("Mejores parámetros encontrados:", grid_search.best_params_)
+
+tree.plot_tree(grid_search.best_estimator_)
+```
+
+### Ajuste de Hiperparámetros con `RandomizedSearchCV`
+
+`RandomizedSearchCV` es una técnica más eficiente que `GridSearchCV`, ya que no prueba todas las combinaciones posibles, sino un número limitado de combinaciones aleatorias dentro de un rango definido. Esto es útil si el espacio de búsqueda es grande y quieres evitar un tiempo de cómputo muy largo.
+
+```{python}
+#| label: RandomizedSearchCV-RF-python
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| error: false
+
+# Definir los parámetros para la búsqueda aleatoria
+param_dist = {
+    'n_estimators': [150, 200],        # Número de árboles en el bosque
+    'max_depth': [None, 10, 20],            # Profundidad máxima del árbol
+    'min_samples_split': [2, 5, 10],            # Número mínimo de muestras para dividir un nodo
+    'min_samples_leaf': [1, 2, 4],               # Número mínimo de muestras en una hoja
+    'max_features': ['auto'],      # Número de características a considerar para dividir un nodo
+    'bootstrap': [True]                      # Si usar bootstrap para los árboles
+}
+
+# Usar RandomizedSearchCV para búsqueda aleatoria
+random_search = RandomizedSearchCV(estimator=rf, param_distributions=param_dist, 
+                                   n_iter=50, cv=10, n_jobs=-1, random_state=1994)
+
+# Ajustar el modelo con los datos de entrenamiento
+random_search.fit(X_train, y_train)
+
+# Mostrar los mejores parámetros encontrados
+print("Mejores parámetros encontrados:", random_search.best_params_)
+
+tree.plot_tree(random_search.best_estimator_)
+```
+:::
+
+## Predicciones del algoritmo
+
+::: panel-tabset
+## R
+
+```{r}
+#| label: predict-RF-r
+#| echo: true
+#| warning: false
+#| message: false
+#| error: false
+
+prediccion <- predict(arbol_rf, rtrain, type = "class")
+caret::confusionMatrix(prediccion, as.factor(rtrain$RENTA))
+
+# Realizamos las predicciones de este ultimo arbol para la predicción de test
+## Si no decimos nada en type (type = prob), nos devolvera la probabilidad de 
+## pertenecer a cada clase. 
+prediccion <- predict(arbol_rf, rtest, type = "class")
+## Para ver la performance, realizaremos la matriz de confusión 
+caret::confusionMatrix(prediccion, as.factor(rtest$RENTA))
+```
+
+```{r}
+#| label: plot-confusionMatrix-RF-r
+#| echo: true
+#| warning: false
+#| message: false
+#| error: false
+
+CM <- caret::confusionMatrix(prediccion, as.factor(rtest$RENTA)); CM <- data.frame(CM$table)
+
+grafico <- ggplot(CM, aes(Prediction,Reference, fill= Freq)) +
+        geom_tile() + geom_text(aes(label=Freq)) +
+        scale_fill_gradient(low="white", high="#009194") +
+        labs(x = "Reference",y = "Prediction")
+
+plot(grafico)
+```
+
+## Python
+
+```{python}
+#| label: predict-RF-python
+#| echo: true
+#| warning: false
+#| message: false
+#| error: false
+
+preds = clf.predict(pyX_test)
+print(f'Classification Report: \n{classification_report(pyy_test, preds)}')
+```
+
+```{python}
+#| label: plot-confusionMatrix-RF-python
+#| echo: true
+#| warning: false
+#| message: false
+#| error: false
+
+# Confusion matrix
+cf_matrix = confusion_matrix(pyy_test, preds)
+sns.heatmap(cf_matrix, annot=True, fmt='d', cmap='Blues', cbar=False)
+```
+:::
+
+# eXtrem Gradient Boosting (XGBoost)
+
+## Aplicamos el algoritmo con cross-validation e hiperparameter tunning
+
+::: panel-tabset
+## R
+
+Para aplicar los modelos de XGBoost es necesario pasar los datos categoricos en dummies. Una variable *dummy* (también conocida como cualitativa o binaria) es aquella que toma el valor 1 o 0 para indicar la presencia o ausencia de una cierta característica o condición.
+
+```{r}
+#| label: creacionDummies-Xgboost-r
+#| echo: false
+#| eval: false
+#| warning: false
+#| message: false
+#| error: false
+
+library(xgboost)
+library(Matrix)
+library(fastDummies)
+
+
+# Creamos las dummies de cada base de datos 
+dtrain <- sparse.model.matrix(RENTA ~ ., data = rtrain)[,-1]
+dtest <- sparse.model.matrix(RENTA ~ ., data = rtest)[,-1]
+
+library(dplyr)
+library(fastDummies)
+
+# Definir el nombre de la variable respuesta
+respuesta_var <- "RENTA"
+
+# Identificar las columnas categóricas (factor o character)
+categorical_vars <- rtrain %>%
+  select(-all_of(respuesta_var)) %>%
+  select(where(~ is.factor(.) || is.character(.))) %>%
+  names()
+
+# Generar dummies y procesar el dataframe
+dtrain <- rtrain %>%
+  select(-all_of(categorical_vars)) %>% # Eliminar las columnas categóricas originales
+  bind_cols(dummy_cols(df, select_columns = categorical_vars, remove_selected_columns = TRUE)) %>%
+  bind_cols(select(df, all_of(respuesta_var))) # Volver a añadir la variable respuesta
+
+# https://rpubs.com/mharris/multiclass_xgboost
+# https://cran.r-project.org/web/packages/xgboost/vignettes/discoverYourData.html
+```
+
+```{r}
+#| label: parametros-Xgboost-r
+#| echo: false
+#| eval: false
+#| warning: false
+#| message: false
+#| error: false
+
+# Miramos cuales son los parámetros de este algoritmo 
+head(modelLookup("xgbTree"),4)
+
+# se determina la semilla aleatoria
+set.seed(1994)
+
+# Todas las variables excepto eta són por defecto
+tuneGrid <- expand.grid(nrounds = c(5),                   # Menor cantidad de rondas 
+                        max_depth = c(6),                 # Profundidad más baja para los árboles
+                        eta = c(0.01, 0.1, 0.3, 0.5),     # Tasa de aprendizaje más alta
+                        gamma = c(1),                     # Regularización
+                        colsample_bytree = c(1),          # Submuestreo de características
+                        min_child_weight = c(1),          # Regularización adicional
+                        subsample = c(1))                 # Submuestreo de datos
+                                         
+```
+
+```{r}
+#| label: algoritmo-Xgboost-r
+#| echo: false
+#| eval: false
+#| warning: false
+#| message: false
+#| error: false
+
+## se determina la semilla aleatoria
+set.seed(1994)
+
+## se entrena el modelo
+model <- train(as.factor(RENTA) ~. , 
+               data = rtrain, 
+               method = "xgbTree", 
+               objective = "multi:softprob",
+               metric = "Accuracy",
+               trControl = trainControl(classProbs = TRUE, method = "cv", number = 10, 
+                                        verboseIter = FALSE), 
+               tuneGrid = tuneGrid)
+
+# se muestra la salida del modelo
+model$bestTune
+```
+
+```{r}
+#| label: importance-Xgboost-r
+#| echo: false
+#| eval: false
+#| warning: false
+#| message: false
+#| error: false
+
+library(vip)
+vip(model$finalModel)
+```
+
+## Python
+
+```{python}
+#| label: tratamientoDatos-Xgboost-python
+#| echo: false
+#| eval: false
+#| warning: false
+#| message: false
+#| error: false
+
+import xgboost as xgb
+
+# Convertir los datos a DMatrix
+dtrain = xgb.DMatrix(pyX_train, label = pyy_train)
+dtest = xgb.DMatrix(pyX_test, label = pyy_test)
+```
+
+```{python}
+#| label: parametros-Xgboost-python
+#| echo: false
+#| eval: false
+#| warning: false
+#| message: false
+#| error: false
+
+params = {
+    'objective': 'multi:softmax',  # Problema de clasificación multiclase
+    'num_class': 3,                # Número de clases (para el conjunto de datos Iris)
+    'max_depth': 3,                # Profundidad máxima de los árboles
+    'eta': 0.1,                    # Tasa de aprendizaje
+    'eval_metric': 'merror'        # Métrica de evaluación: error en clasificación
+}
+```
+
+```{python}
+#| label: algoritmo-Xgboost-python
+#| echo: false
+#| eval: false
+#| warning: false
+#| message: false
+#| error: false
+
+# Entrenar el modelo
+num_round = 50  # Número de iteraciones (rounds) de boosting
+model = xgb.train(params, dtrain, num_round)
+```
+
+```{python}
+#| label: importance-Xgboost-python
+#| echo: false
+#| eval: false
+#| warning: false
+#| message: false
+#| error: false
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+results = pd.DataFrame(model.feature_importances_, index=pyBCN.columns[:-1]).sort_values(by=0, ascending=False)
+
+# Crear gráfico de barras horizontales
+plt.figure(figsize=(10, 8))
+plt.barh(results.index, results[0], color='skyblue')
+
+# Añadir etiquetas y título
+plt.xlabel('Importancia')
+plt.ylabel('Características')
+plt.title('Importancia de las Características')
+plt.grid(axis='x', linestyle='--', alpha=0.7)
+plt.show()
+```
+
+Si quisieramos hacerlo en cross validación hariamos lo siguiente:
+
+```{python}
+#| label: cv-Xgboost-python
+#| echo: false
+#| eval: false
+#| warning: false
+#| message: false
+#| error: false
+
+from sklearn.model_selection import GridSearchCV
+from xgboost import XGBClassifier
+
+# Definir el modelo
+xgb_model = XGBClassifier(objective='multi:softmax', num_class=3)
+
+# Definir los hiperparámetros a ajustar
+param_grid = {
+    'max_depth': [3, 5, 7],
+    'eta': [0.01, 0.1, 0.3],
+    'n_estimators': [50, 100, 200]
+}
+
+# Configurar GridSearchCV
+grid_search = GridSearchCV(estimator=xgb_model, param_grid=param_grid, cv=3, scoring='accuracy')
+
+# Entrenar el modelo con ajuste de hiperparámetros
+grid_search.fit(X_train, y_train)
+
+# Mostrar los mejores parámetros y resultados
+print(f"Mejores parámetros: {grid_search.best_params_}")
+print(f"Mejor precisión: {grid_search.best_score_:.4f}")
+```
+:::
+
+## Predicciones
+
+::: panel-tabset
+## R
+
+```{r}
+#| label: predicciones-Xgboost-r
+#| echo: false
+#| eval: false
+#| warning: false
+#| message: false
+#| error: false
+
+prediccion <- predict(model$finalModel, dtest, type = "prob")
+
+# Realizamos las predicciones de este ultimo arbol para la predicción de test
+## Si no decimos nada en type (type = prob), nos devolvera la probabilidad de 
+## pertenecer a cada clase. 
+rtest_matrix <- rtest %>% select(-RENTA) %>% as.matrix()
+prediccion <- predict(model$finalModel, rtest_matrix, type = "class")
+
+## Para ver la performance, realizaremos la matriz de confusión 
+caret::confusionMatrix(prediccion, as.factor(rtest$RENTA))
+```
+
+```{r}
+#| label: plot-confusionMatrix-Xgboost-r
+#| echo: false
+#| eval: false
+#| warning: false
+#| message: false
+#| error: false
+
+CM <- caret::confusionMatrix(prediccion, as.factor(rtest$RENTA)); CM <- data.frame(CM$table)
+
+grafico <- ggplot(CM, aes(Prediction,Reference, fill= Freq)) +
+        geom_tile() + geom_text(aes(label=Freq)) +
+        scale_fill_gradient(low="white", high="#009194") +
+        labs(x = "Reference",y = "Prediction")
+
+plot(grafico)
+```
+
+## Python
+
+```{python}
+#| label: predicciones-Xgboost-python
+#| echo: false
+#| eval: false
+#| warning: false
+#| message: false
+#| error: false 
+
+# Realizar predicciones
+y_pred = model.predict(dtest)
+
+# Convertir las predicciones de flotante a enteros (si se usa 'multi:softmax')
+y_pred = np.round(y_pred).astype(int)
+
+```
+
+```{python}
+#| label: plot-confusionMatrix-Xgboost-python
+#| echo: false
+#| eval: false
+#| warning: false
+#| message: false
+#| error: false
+
+# Confusion matrix
+cf_matrix = confusion_matrix(pyy_test, y_pred)
+sns.heatmap(cf_matrix, annot=True, fmt='d', cmap='Blues', cbar=False)
+```
+:::

@@ -78,11 +78,9 @@ Respecte als mètodes avançats d'anàlisi de dades, es veuran tècniques d'anà
 
 ## Geospatial Analysis
 
-### Geovisualitzation 
+### Geodescriptiva 
 
-[Geovisualitzation](material/05_GeospatialAnalysis/teoria/)
-
-[Lab sesion 9 - Geovisualitzation](material/05_GeospatialAnalysis/laboratorio/)
+[Geodescriptiva](material/05_GeospatialAnalysis/teoria/geodescriptiva.qmd)
 
 ### Geostatatistica  
 
