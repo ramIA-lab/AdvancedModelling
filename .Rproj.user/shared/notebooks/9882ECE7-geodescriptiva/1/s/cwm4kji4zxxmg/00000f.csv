@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 <<<<<<<< Updated upstream:.Rproj.user/shared/notebooks/9882ECE7-geodescriptiva/1/s/cwm4kji4zxxmg/00000f.csv
 "0","reticulate::repl_python()"
 "0","#| label: bbdd-ejemplo-Py"
@@ -6,6 +7,11 @@
 "0","#| label: comprobacion-CRS-R"
 "0","#| echo: true"
 >>>>>>>> Stashed changes:.Rproj.user/shared/notebooks/9882ECE7-geodescriptiva/1/s/cgwd9kbbct13g/00000f.csv
+=======
+"0","reticulate::repl_python()"
+"0","#| label: bbdd-ejemplo-Py"
+"0","#| echo: false"
+>>>>>>> Stashed changes
 "0","#| eval: true"
 "0","#| warning: false"
 "0","#| message: false"

@@ -1,4 +1,5 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 <<<<<<<< Updated upstream:.Rproj.user/shared/notebooks/9882ECE7-geodescriptiva/1/s/c9fzjpvi8uh8c/00000f.csv
 "0","#| label: geo-BCN-R-plot1"
 "0","#| echo: false"
@@ -6,6 +7,10 @@
 "0","#| label: comprobacion-CRS-R"
 "0","#| echo: true"
 >>>>>>>> Stashed changes:.Rproj.user/shared/notebooks/9882ECE7-geodescriptiva/1/s/cgwd9kbbct13g/00000f.csv
+=======
+"0","#| label: geo-BCN-R-plot1"
+"0","#| echo: false"
+>>>>>>> Stashed changes
 =======
 "0","#| label: geo-BCN-R-plot1"
 "0","#| echo: false"

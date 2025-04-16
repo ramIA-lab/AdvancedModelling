@@ -669,7 +669,11 @@ Para poder seguir con la sesión de hoy, necesitaremos instalar el paquete `CDR`
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 ![](https://private-user-images.githubusercontent.com/80209018/274188258-b0583cce-9621-4b37-b157-b576f4450b1c.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NDQ3NDExMTQsIm5iZiI6MTc0NDc0MDgxNCwicGF0aCI6Ii84MDIwOTAxOC8yNzQxODgyNTgtYjA1ODNjY2UtOTYyMS00YjM3LWIxNTctYjU3NmY0NDUwYjFjLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTA0MTUlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUwNDE1VDE4MTMzNFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWYyNmNhMmRlZjk2MjFmYjVmODFmYTNlMGZjNTJjMGMxZmNhOGZkODg1ODE5M2NhZWVmMTNkMGQzZWRkMWZiODkmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.zV-56DEmAj2s9iXotYGx5jJwaEUpKIEHVSPr9zSWCeQ){fig-align="center" fig-asp=".5\""}
+=======
+![](https://private-user-images.githubusercontent.com/80209018/274188258-b0583cce-9621-4b37-b157-b576f4450b1c.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NDQ3NDExMTQsIm5iZiI6MTc0NDc0MDgxNCwicGF0aCI6Ii84MDIwOTAxOC8yNzQxODgyNTgtYjA1ODNjY2UtOTYyMS00YjM3LWIxNTctYjU3NmY0NDUwYjFjLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTA0MTUlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUwNDE1VDE4MTMzNFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWYyNmNhMmRlZjk2MjFmYjVmODFmYTNlMGZjNTJjMGMxZmNhOGZkODg1ODE5M2NhZWVmMTNkMGQzZWRkMWZiODkmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.zV-56DEmAj2s9iXotYGx5jJwaEUpKIEHVSPr9zSWCeQ){fig-align="center" fig-asp=.5"}
+>>>>>>> Stashed changes
 =======
 ![](https://private-user-images.githubusercontent.com/80209018/274188258-b0583cce-9621-4b37-b157-b576f4450b1c.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NDQ3NDExMTQsIm5iZiI6MTc0NDc0MDgxNCwicGF0aCI6Ii84MDIwOTAxOC8yNzQxODgyNTgtYjA1ODNjY2UtOTYyMS00YjM3LWIxNTctYjU3NmY0NDUwYjFjLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTA0MTUlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUwNDE1VDE4MTMzNFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWYyNmNhMmRlZjk2MjFmYjVmODFmYTNlMGZjNTJjMGMxZmNhOGZkODg1ODE5M2NhZWVmMTNkMGQzZWRkMWZiODkmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.zV-56DEmAj2s9iXotYGx5jJwaEUpKIEHVSPr9zSWCeQ){fig-align="center" fig-asp=.5"}
 >>>>>>> Stashed changes
@@ -713,6 +717,10 @@ Su sintaxis concisa permite crear mapas atractivos con un mínimo de código (mu
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 =======
 
 >>>>>>> Stashed changes
@@ -741,6 +749,10 @@ g1 <- tm_shape(nz) +
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 =======
 
 >>>>>>> Stashed changes
@@ -769,6 +781,10 @@ g2 <- tm_shape(nz) +
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 =======
 
 >>>>>>> Stashed changes
@@ -839,11 +855,14 @@ print(g3)
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 :::
 ::::::
 
 Ver <https://r.geocompx.org/adv-map> para saber mas.
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
@@ -855,6 +874,9 @@ Ver <https://r.geocompx.org/adv-map> para saber mas.
 Ver [https://r.geocompx.org/adv-map](https://r.geocompx.org/adv-map) para saber mas.
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -999,6 +1021,7 @@ theme_minimal()
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 ------------------------------------------------------------------------
 
 ### Mapa facetados
@@ -1011,6 +1034,8 @@ Normalmente, todas las facetas individuales de un mapa facetado contienen los mi
 
 ------------------------------------------------------------------------
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
@@ -1028,6 +1053,9 @@ Normalmente, todas las facetas individuales de un mapa facetado contienen los mi
 ---
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -1056,7 +1084,11 @@ tm_shape(world) +
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 ------------------------------------------------------------------------
+=======
+--- 
+>>>>>>> Stashed changes
 =======
 --- 
 >>>>>>> Stashed changes
@@ -1078,7 +1110,11 @@ También se pueden usar para enfocar un área más pequeña con más detalle o p
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 ------------------------------------------------------------------------
+=======
+---
+>>>>>>> Stashed changes
 =======
 ---
 >>>>>>> Stashed changes
@@ -1130,7 +1166,11 @@ alaska_map = tm_shape(alaska) +
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 ------------------------------------------------------------------------
+=======
+---
+>>>>>>> Stashed changes
 =======
 ---
 >>>>>>> Stashed changes
@@ -1162,7 +1202,11 @@ print(alaska_map, vp = grid::viewport(0.15, 0.15, width = 0.3, height = 0.3))
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 ------------------------------------------------------------------------
+=======
+---
+>>>>>>> Stashed changes
 =======
 ---
 >>>>>>> Stashed changes
@@ -1281,6 +1325,7 @@ print(gr)
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 ------------------------------------------------------------------------
 
 ## Mapas animados
@@ -1314,6 +1359,12 @@ A continuación vamos a crear el nuestro gráfico animado:
 ## Mapas animados
 
 >>>>>>> Stashed changes
+=======
+---
+
+## Mapas animados
+
+>>>>>>> Stashed changes
 Los **mapas facetados** permiten mostrar cómo cambian las distribuciones espaciales de las variables pero este enfoque presenta desventajas, que son: 
 
   - Las facetas se vuelven diminutas cuando hay muchas. 
@@ -1328,6 +1379,9 @@ Los mapas animados resuelven estos problemas. Esto se puede resolver con el paqu
 A continuación vamos a crear el nuestro gráfico animado: 
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -1368,7 +1422,11 @@ tmap_animation(urb_anim, filename = "urb_anim.gif",
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 ------------------------------------------------------------------------
+=======
+---
+>>>>>>> Stashed changes
 =======
 ---
 >>>>>>> Stashed changes
@@ -1390,7 +1448,11 @@ Estos mapas dinámicos, ampliables y desplazables son más informativos que los 
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 ------------------------------------------------------------------------
+=======
+---
+>>>>>>> Stashed changes
 =======
 ---
 >>>>>>> Stashed changes
@@ -1420,7 +1482,11 @@ map_nz
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 ------------------------------------------------------------------------
+=======
+---
+>>>>>>> Stashed changes
 =======
 ---
 >>>>>>> Stashed changes
@@ -1451,7 +1517,11 @@ tm_shape(world_coffee) +
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 ------------------------------------------------------------------------
+=======
+---
+>>>>>>> Stashed changes
 =======
 ---
 >>>>>>> Stashed changes
