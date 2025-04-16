@@ -181,6 +181,9 @@ sf::st_geometry(BCN) <- "geometry"
 pyBCN = r.BCN
 ```
 
+
+# Estadística para datos espaciales
+
 ------------------------------------------------------------------------
 
 ## Estadística para datos espaciales
@@ -427,109 +430,6 @@ plt.show()
 
 ------------------------------------------------------------------------
 
-### Sistema de referencia de coordenadas
-
-Los **CRS** permiten identificar con exactitud la posición de los datos sobre el globo terráqueo.
-
-:::: fragment
-::: callout-tip
-Cuando se trabaja con datos espaciales procedentes de distintas fuentes de información es necesario comprobar que las coordenadas correspondientes a dichos datos se encuentran definidas en el mismo **CRS**.
-:::
-::::
-
-:::: fragment
-::: callout-tip
-Esto se consigue transformándolas (o proyectándolas) a un CRS común.
-:::
-::::
-
-------------------------------------------------------------------------
-
-A continuación se muestra un mapa mundial con la representación en puntos (rojos) de los puertos que existen.
-
-```{r}
-#| label: puertos-R
-#| echo: false
-#| eval: true
-#| warning: false
-#| message: false
-#| error: false
-
-paises <- gisco_get_countries()
-puertos <- gisco_get_ports()
-paises_robin <- st_transform(paises, st_crs("ESRI:54030")) #Proyección Robinson
-
-plot(st_geometry(paises_robin), main = " ")
-plot(st_geometry(puertos), add = TRUE, col="2", pch=20, lwd=2.5)
-```
-
-¿Que podemos ver en el gráfico?
-
--   Las coordenadas del mapa y las coordenadas de la base de datos se encuentran en diferentes referencias (CRS)
-
-------------------------------------------------------------------------
-
-Los tipos de CRS que existen son los siguientes:
-
-1.  **Geográficos**: aquellos en los que los parámetros empleados para localizar una posición espacial son:
-
-    -   La **latitud** (Norte-Sur): \[$-90º, 90º$\]
-    -   La **longitud** (Este−Oeste): \[$-180º, 180º$\]
-    -   Están basados en la geometría esférica (las distancias entre dos puntos son **distancias angulares**)
-
-2.  **Proyectados**: permiten reducir la superficie de la esfera terrestre (3D) a un sistema cartesiano (2D).
-
-    -   Es necesario transformar las coordenadas longitud y latitud en coordenadas cartesianas [^1] X e Y
-    -   La unidad de distancia, habitualmente, es el **metro**
-
-[^1]: Las **coordenadas cartesianas** (sistema cartesiano) son un tipo de coordenadas ortogonales usadas en espacios euclídeos, para la representación gráfica de una relación matemática, movimiento o posición en física, caracterizadas por tener como referencia ejes ortogonales entre sí que concurren en el punto de origen.
-
-------------------------------------------------------------------------
-
-Seguimos con el ejemplo de los puertos marítimos y proyectamos los puertos en el mismo CRS que el mapamundi utilizando la proyección de Robinson[^2] (la proyección cartográfica más popular para mapamundis)
-
-[^2]: proyección cartográfica que representa el mundo en un plano, diseñada para minimizar la distorsión de las formas y tamaños de los continentes y océanos
-
-```{r}
-#| label: comprobacion-CRS-R
-#| echo: true
-#| eval: true
-#| warning: false
-#| message: false
-#| error: false
-
-st_crs(puertos) == st_crs(paises_robin)
-```
-
-```{r}
-#| label: puertos-R-Robinson
-#| echo: true
-#| eval: true
-#| warning: false
-#| message: false
-#| error: false
-
-puertos_robin <- st_transform(puertos, st_crs(paises_robin))
-plot(st_geometry(paises_robin), main = " ")
-plot(st_geometry(puertos_robin), add = TRUE, col = 4, pch = 20)
-```
-
-------------------------------------------------------------------------
-
-Seguimos con el ejemplo de los puertos marítimos y proyectamos los puertos en el mismo CRS que el mapamundi utilizando la proyección de Robinson[^3] (la proyección cartográfica más popular para mapamundis)
-
-[^3]: proyección cartográfica que representa el mundo en un plano, diseñada para minimizar la distorsión de las formas y tamaños de los continentes y océanos
-
-:::: fragment
-::: {.callout-tip title="R packages"}
-El paquete `crsuggest` facilita la elección de la proyección más conveniente, al sugerir transformaciones de sistemas de referencia de coordenadas adecuadas para conjuntos de datos espaciales. Devuelve un marco de datos con códigos CRS que se pueden utilizar para proyectos de transformación y mapeo CRS.
-:::
-::::
-
-![](https://paulblgis.wordpress.com/wp-content/uploads/2016/11/geographic_crs.png){fig-align="center" width="507"}
-
-------------------------------------------------------------------------
-
 ## Formatos de datos espaciales
 
 En el ámbito del análisis espacial los datos espaciales pueden tener formato **vector** (o datos vectoriales) o **formato raster** (*raster* o *rasterizados* o mapa de *bits*).
@@ -541,7 +441,9 @@ Los **datos vectoriales** pueden representar tres tipos distintos de entidades: 
 
 ### *Raster*
 
-Los datos ***raster***, son una malla (una matriz) donde cada celda (o *píxel*) tiene un tamaño similar y un valor específico.
+El ***modelo de datos raster***, divide la superfície en celdas de tamaño constante en una malla (una matriz) donde cada celda (o *píxel*) tiene un tamaño similar y un valor específico.
+
+Los **rasters** agregan características espacialmente específicas a una resolución dada, lo que significa que son consistentes en el espacio y escalables (muchos conjuntos disponibles en todo el mundo).
 
 Cuando se tiene una imagen en color, el raster está compuesto por 3 matrices sobrepuestas, cada una con el valor del color primario correspondiente.
 
@@ -550,7 +452,126 @@ Cuando se utilizan imágenes de satélite u otros sensores cada archivo puede co
 
 ## Datos vectoriales
 
-Este modelo de datos está basado en puntos **georreferenciados.** Los **puntos**, por ejemplo, representan localizaciones específicas.
+El **modelo de datos vectoriales** representa el mundo mediante *puntos*, *líneas* y *polígonos* **georreferenciados.** Estos tienen bordes discretos y bien definidos, lo que significa que los conjuntos de datos vectoriales suelen tener un alto nivel de precisión (aunque no necesariamente exactitud). 
+
+Se basa en puntos ubicados dentro de un sistema de referencia de coordenadas (CRS). 
+
+Los puntos pueden representar características independientes o pueden vincularse para formar geometrías más complejas, como líneas y polígonos. 
+
+La mayoría de las geometrías de puntos contienen solo dos dimensiones. Tambíen las geometrías tridimensionales (dimension $z$) que normalmente representa la altura sobre el nivel del mar.
+
+![](https://r.geocompx.org/images/vector_projected.png)
+
+|:--------:|------------------------------------------------------------------------------------------------------------------------------|
+| **GDAL** | Leer, escribir y manipular datos geográficos                                                                                 |
+| **PROJ** | Permite transformar el sistema de coordenadas                                                                                |
+| **GEOS** | motor de geometría planar para operaciones  como el cálculo de zonas de influencia y centroides en datos con CRS proyectadas |
+|  **S2**  | motor de geometría esférica desarrollado por Google                                                                          |
+---
+
+## Características simples 
+
+Las **características simples** son un modelo de datos jerárquico que representa una amplia gama de tipos de geometría. 
+
+Está compuesto por 18 tipos de geometría de las cuales las mas utilizadas son las siguiente 7:
+
+![](https://r.geocompx.org/images/sf-classes.png){fig-align="center"}
+
+Podemos encontrar 3 paquetes muy utilizados: 
+
+|:---------:|------------------|
+|  **sp**   |  clases de datos |
+| **rgdal** | lectura y escritura de datos mediante GDAL y PROJ|
+| **rgeos** | operaciones espaciales mediante GEOS|
+     
+```{r}
+#| label: estructura-datos
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+(world_mini <- world[1:2, 1:3])
+```
+
+---
+
+Las **características simples** son un modelo de datos ampliamente compatible que sustenta las estructuras de datos en numerosas aplicaciones SIG, como QGIS y PostGIS. 
+
+Una ventaja importante es que su uso garantiza la transferencia de su trabajo a otras configuraciones, por ejemplo, al importar y exportar a bases de datos espaciales.
+
+```{r}
+#| label: lectura-datos
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+world_dfr = st_read(system.file("shapes/world.gpkg", package = "spData"))
+world_tbl = read_sf(system.file("shapes/world.gpkg", package = "spData"))
+class(world_dfr)
+class(world_tbl)
+```
+
+```{r}
+#| label: mapa-mundo-centroides
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+#| fig-align: center
+
+plot(world["continent"], reset = FALSE)
+cex = sqrt(world$pop) / 10000
+world_cents = st_centroid(world, of_largest = TRUE)
+plot(st_geometry(world_cents), add = TRUE, cex = cex)
+```
+
+--- 
+
+### Tipos de geometría
+
+Las geometrías son los componentes básicos de las características simples. Podemos encontrar las siguientes geometrías: 
+
+- **Puntos**: La base de cada tipo de geometría es el punto. Un punto es simplemente una coordenada en un espacio bidimensional, tridimensional o cuatridimensional.
+
+  - `POINT(5 2)`
+  
+- **Cadena de líneas**: Secuencia de puntos con una línea recta que conecta los puntos.
+
+  - `LINESTRING (1 5, 4 4, 4 1, 2 2, 3 2)`
+
+- **Polígono**: Secuencia de puntos que forman un anillo cerrado que no se interseca. Se denomina cerrado si el primer y último punto tienen las mismas coordenadas. 
+
+  - `POLYGON ((1 5, 2 2, 4 1, 4 4, 1 5))`
+
+![](https://r.geocompx.org/figures/sfcs-1.png){fig-align="center"}
+
+---
+
+El estándar de entidades simple también permite la existencia de múltiples geometrías de un mismo tipo dentro de una misma entidad, dentro de la versión *"multi"* de cada tipo de geometría.
+
+- **Multipunto**: `MULTIPOINT (5 2, 1 3, 3 4, 3 2)`
+
+- **Cadena multilineal**: `MULTILINESTRING ((1 5, 4 4, 4 1, 2 2, 3 2), (1 2, 2 4))`
+
+- **Multipolígono**: `MULTIPOLYGON (((1 5, 2 2, 4 1, 4 4, 1 5), (0 2, 1 2, 1 3, 0 3, 0 2)))`
+
+
+![](https://r.geocompx.org/figures/multis-1.png){fig-align="center"}
+
+---
+
+Finalmente, una colección de geometría puede contener cualquier combinación de geometrías, incluidos (multi)puntos y cadenas de líneas.
+
+- **Colección de geometría**: `GEOMETRYCOLLECTION (MULTIPOINT (5 2, 1 3, 3 4, 3 2), LINESTRING (1 5, 4 4, 4 1, 2 2, 3 2))`
+
+![](https://r.geocompx.org/figures/geomcollection-1.png){fig-align="center"}
+
+## Ejemplo
 
 ```{r}
 #| label: mercadona-R-bbdd
@@ -637,6 +658,34 @@ En el ámbito de los datos espaciales, un archivo raster está formado por una m
 
 ![](https://cdr-book.github.io/img/elev-toledo.png){fig-align="center"}
 
+----
+
+El modelo de datos ráster suele constar de un encabezado ráster y una matriz (con filas y columnas) que representa celdas equidistantes (también llamadas píxeles. 
+
+El encabezado ráster define: 
+
+  - El **CRS**  
+  - El **origen** (o punto de partida): Coordenada de la esquina inferior izquierda de la matriz.
+  - La **extensión**: Número de columnas, el número de filas y la resolución del tamaño de celda.
+
+La resolución se puede calcular de la siguiente manera:
+
+$$
+resolución = \frac{xmax-xmin}{ncol}, \frac{ymax - ymin}{nrow}
+$$
+
+Partiendo del origen, podemos acceder y modificar fácilmente cada celda, ya sea usando su ID o especificando explícitamente las filas y columnas.
+
+Esta representación matricial evita almacenar explícitamente las coordenadas de los cuatro vértices de hecho, solo almacena una coordenada, el origen. Esto hace que el procesamiento ráster sea mucho más eficiente y rápido que el procesamiento de datos vectoriales.
+
+A diferencia de los datos vectoriales, la celda de una capa ráster solo puede contener un único valor. El valor puede ser continuo o categórico. 
+
+![](https://r.geocompx.org/figures/raster-intro-plot-1.png){fig-align="center"}
+
+Los mapas ráster suelen representar fenómenos continuos como la elevación, la temperatura, la densidad de población o datos espectrales o características discretas, como el suelo o las clases de cobertura terrestre. 
+
+![](https://r.geocompx.org/figures/raster-intro-plot2-1.png){fig-align="center"}
+
 ------------------------------------------------------------------------
 
 Las extensiones más habituales de los archivos que contienen datos *raster* son las siguientes:
@@ -659,6 +708,143 @@ Como ejemplo, vamos a cargar la base de datos de nueva zelanda.
 
 nz_elev = rast(system.file("raster/nz_elev.tif", package = "spDataLarge"))
 ```
+
+------------------------------------------------------------------------
+
+### Sistema de referencia de coordenadas
+
+Los **CRS** permiten identificar con exactitud la posición de los datos sobre el globo terráqueo. Los **CRS** definen como se relacionan los elementos espaciales de los datos con la superfície terrestre. 
+
+Los CRS identifican cualquier ubicación en la superficie terrestre mediante dos valores:
+
+- **Longitud**: Ubicación en dirección este-oeste en distancia angular desde el plano del meridiano de Greenwich.
+- **Latitud**: Distancia angular al norte o al sur del plano ecuatorial.
+
+Las distancias en los CRS geográficos no se miden en metros.
+
+La superficie de la Tierra en los CRS geográficos se representa mediante: 
+
+- **Una superficie esférica**: Asumen que la Tierra es una esfera perfecta de un radio determinado; presentan la ventaja de la simplicidad, pero, al mismo tiempo, son imprecisos, ya que la Tierra no es exactamente una esfera.
+
+- **Una superficie elipsoidal**: Son ligeramente más precisos y se definen por dos parámetros: el radio ecuatorial (aproximadamente 11.5 km mas largo que el radio polar) y el radio polar. Estos son adecuados porque la Tierra está comprimida. Esta son una parte del *datum*.
+
+---
+
+El **datum** contiene información sobre qué elipsoide usar y la relación precisa entre las coordenadas y la ubicación en la superficie de la Tierra. Hay dos tipos de datum: 
+
+  - **geocéntrico** (como WGS84) 
+  - **local** (como NAD83). 
+  
+![](https://r.geocompx.org/images/02_datum_fig.png){fig-align="center"}
+
+---
+
+:::: fragment
+::: callout-tip
+Cuando se trabaja con datos espaciales procedentes de distintas fuentes de información es necesario comprobar que las coordenadas correspondientes a dichos datos se encuentran definidas en el mismo **CRS**.
+:::
+::::
+
+:::: fragment
+::: callout-tip
+Esto se consigue transformándolas (o proyectándolas) a un CRS común.
+:::
+::::
+
+A continuación se muestra un mapa mundial con la representación en puntos (rojos) de los puertos que existen.
+
+```{r}
+#| label: puertos-R
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+paises <- gisco_get_countries()
+puertos <- gisco_get_ports()
+paises_robin <- st_transform(paises, st_crs("ESRI:54030")) #Proyección Robinson
+
+plot(st_geometry(paises_robin), main = " ")
+plot(st_geometry(puertos), add = TRUE, col="2", pch=20, lwd=2.5)
+```
+
+¿Que podemos ver en el gráfico?
+
+-   Las coordenadas del mapa y las coordenadas de la base de datos se encuentran en diferentes referencias (CRS)
+
+------------------------------------------------------------------------
+
+Los tipos de CRS que existen son los siguientes:
+
+1.  **Geográficos**: aquellos en los que los parámetros empleados para localizar una posición espacial son:
+
+    -   La **latitud** (Norte-Sur): \[$-90º, 90º$\]
+    -   La **longitud** (Este−Oeste): \[$-180º, 180º$\]
+    -   Están basados en la geometría esférica (las distancias entre dos puntos son **distancias angulares**)
+
+2.  **Proyectados**: permiten reducir la superficie de la esfera terrestre (3D) a un sistema cartesiano (2D).
+
+    -   Es necesario transformar las coordenadas longitud y latitud en coordenadas cartesianas [^1] X e Y
+    -   La unidad de distancia, habitualmente, es el **metro**
+
+[^1]: Las **coordenadas cartesianas** (sistema cartesiano) son un tipo de coordenadas ortogonales usadas en espacios euclídeos, para la representación gráfica de una relación matemática, movimiento o posición en física, caracterizadas por tener como referencia ejes ortogonales entre sí que concurren en el punto de origen.
+
+------------------------------------------------------------------------
+
+Seguimos con el ejemplo de los puertos marítimos y proyectamos los puertos en el mismo CRS que el mapamundi utilizando la proyección de Robinson[^2] (la proyección cartográfica más popular para mapamundis)
+
+[^2]: proyección cartográfica que representa el mundo en un plano, diseñada para minimizar la distorsión de las formas y tamaños de los continentes y océanos
+
+```{r}
+#| label: comprobacion-CRS-R
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+st_crs(puertos) == st_crs(paises_robin)
+```
+
+```{r}
+#| label: puertos-R-Robinson
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+puertos_robin <- st_transform(puertos, st_crs(paises_robin))
+plot(st_geometry(paises_robin), main = " ")
+plot(st_geometry(puertos_robin), add = TRUE, col = 4, pch = 20)
+```
+
+------------------------------------------------------------------------
+
+Seguimos con el ejemplo de los puertos marítimos y proyectamos los puertos en el mismo CRS que el mapamundi utilizando la proyección de Robinson[^3] (la proyección cartográfica más popular para mapamundis)
+
+[^3]: proyección cartográfica que representa el mundo en un plano, diseñada para minimizar la distorsión de las formas y tamaños de los continentes y océanos
+
+:::: fragment
+::: {.callout-tip title="R packages"}
+El paquete `crsuggest` facilita la elección de la proyección más conveniente, al sugerir transformaciones de sistemas de referencia de coordenadas adecuadas para conjuntos de datos espaciales. Devuelve un marco de datos con códigos CRS que se pueden utilizar para proyectos de transformación y mapeo CRS.
+:::
+::::
+
+![](https://paulblgis.wordpress.com/wp-content/uploads/2016/11/geographic_crs.png){fig-align="center" width="507"}
+
+# Operaciones geospaciales 
+
+## Datos de atributos
+
+## Datos espaciales
+
+## Geometría
+
+## ráster - vector
+
+## Reproyecciones de datos geográficos
 
 # Creación de mapas
 
@@ -936,16 +1122,6 @@ theme_minimal()
 
 ### Mapa facetados
 
-Los mapas facetados se componen de muchos mapas dispuestos uno junto al otro, y a veces apilados verticalmente.
-
-Las facetas permiten visualizar cómo cambian las relaciones espaciales con respecto a otra variable, como el tiempo.
-
-Normalmente, todas las facetas individuales de un mapa facetado contienen los mismos datos geométricos repetidos varias veces, una por cada columna de los datos de atributos (este es el método de representación gráfica predeterminado para sfobjetos).
-
-------------------------------------------------------------------------
-
-### Mapa facetados
-
 Los mapas facetados se componen de muchos mapas dispuestos uno junto al otro, y a veces apilados verticalmente. 
 
 Las facetas permiten visualizar cómo cambian las relaciones espaciales con respecto a otra variable, como el tiempo. 
@@ -1163,23 +1339,6 @@ Los mapas animados resuelven estos problemas. Esto se puede resolver con el paqu
 
 ![](https://r.geocompx.org/images/urban-animated.gif){fig-align="center"}
 
-------------------------------------------------------------------------
-
-A continuación vamos a crear el nuestro gráfico animado:
-
----
-
-## Mapas animados
-
-Los **mapas facetados** permiten mostrar cómo cambian las distribuciones espaciales de las variables pero este enfoque presenta desventajas, que son: 
-
-  - Las facetas se vuelven diminutas cuando hay muchas. 
-  - cada faceta esté físicamente separada en la pantalla (diferencias sutiles entre ellas pueden ser difíciles de detectar).
-
-Los mapas animados resuelven estos problemas. Esto se puede resolver con el paquete `tmap` (utilizaremos a continuación) o el `gganimate()` de `ggplot2`. 
-
-![](https://r.geocompx.org/images/urban-animated.gif){fig-align="center"}
-
 ---
 
 A continuación vamos a crear el nuestro gráfico animado: 
@@ -1390,4 +1549,8 @@ El proyecto consistió en poder alojar contenido sobre [Geocomputación con R](h
 
 # ¿Y cuál es el futuro que nos espera?
 
-## Linias futuras
+## Bibliografia
+
+![https://r.geocompx.org/read-write](https://r.geocompx.org/read-write)
+
+![https://r.geocompx.org/spatial-class](https://r.geocompx.org/spatial-class)
