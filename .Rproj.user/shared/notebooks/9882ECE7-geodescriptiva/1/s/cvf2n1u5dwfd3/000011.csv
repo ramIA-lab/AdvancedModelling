@@ -1,1 +1,0 @@
-"0","plot(st_geometry(puertos), add = TRUE, col=""2"", pch=20, lwd=2.5)"

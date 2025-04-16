@@ -666,7 +666,7 @@ nz_elev = rast(system.file("raster/nz_elev.tif", package = "spDataLarge"))
 
 Para poder seguir con la sesión de hoy, necesitaremos instalar el paquete `CDR`. Para ello deberemos de seguir las siguientes indicaciones:
 
-![](https://private-user-images.githubusercontent.com/80209018/274188258-b0583cce-9621-4b37-b157-b576f4450b1c.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NDQ3NDExMTQsIm5iZiI6MTc0NDc0MDgxNCwicGF0aCI6Ii84MDIwOTAxOC8yNzQxODgyNTgtYjA1ODNjY2UtOTYyMS00YjM3LWIxNTctYjU3NmY0NDUwYjFjLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTA0MTUlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUwNDE1VDE4MTMzNFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWYyNmNhMmRlZjk2MjFmYjVmODFmYTNlMGZjNTJjMGMxZmNhOGZkODg1ODE5M2NhZWVmMTNkMGQzZWRkMWZiODkmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.zV-56DEmAj2s9iXotYGx5jJwaEUpKIEHVSPr9zSWCeQ){fig-align="center" fig-asp=.5"}
+![](https://private-user-images.githubusercontent.com/80209018/274188258-b0583cce-9621-4b37-b157-b576f4450b1c.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NDQ3NDExMTQsIm5iZiI6MTc0NDc0MDgxNCwicGF0aCI6Ii84MDIwOTAxOC8yNzQxODgyNTgtYjA1ODNjY2UtOTYyMS00YjM3LWIxNTctYjU3NmY0NDUwYjFjLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTA0MTUlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUwNDE1VDE4MTMzNFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWYyNmNhMmRlZjk2MjFmYjVmODFmYTNlMGZjNTJjMGMxZmNhOGZkODg1ODE5M2NhZWVmMTNkMGQzZWRkMWZiODkmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.zV-56DEmAj2s9iXotYGx5jJwaEUpKIEHVSPr9zSWCeQ){fig-align="center" fig-asp=".5\""}
 
 ```{r}
 #| label: cargar-paquete-CDR
@@ -698,7 +698,6 @@ Su sintaxis concisa permite crear mapas atractivos con un mínimo de código (mu
 
 :::::: columns
 ::: {.column width="33%"}
-
 Añadir el interior
 
 ```{r}
@@ -715,7 +714,6 @@ g1 <- tm_shape(nz) +
 :::
 
 ::: {.column width="33%"}
-
 Añadir el contorno
 
 ```{r}
@@ -732,7 +730,6 @@ g2 <- tm_shape(nz) +
 :::
 
 ::: {.column width="33%"}
-
 Añadir ambos (También `qtm()`)
 
 ```{r}
@@ -791,11 +788,10 @@ print(g2)
 
 print(g3)
 ```
-
 :::
 ::::::
 
-Ver [https://r.geocompx.org/adv-map](https://r.geocompx.org/adv-map) para saber mas.
+Ver <https://r.geocompx.org/adv-map> para saber mas.
 
 ------------------------------------------------------------------------
 
@@ -932,17 +928,17 @@ guides(fill = guide_colorsteps()) +
 theme_minimal()
 ```
 
----
+------------------------------------------------------------------------
 
 ### Mapa facetados
 
-Los mapas facetados se componen de muchos mapas dispuestos uno junto al otro, y a veces apilados verticalmente. 
+Los mapas facetados se componen de muchos mapas dispuestos uno junto al otro, y a veces apilados verticalmente.
 
-Las facetas permiten visualizar cómo cambian las relaciones espaciales con respecto a otra variable, como el tiempo. 
+Las facetas permiten visualizar cómo cambian las relaciones espaciales con respecto a otra variable, como el tiempo.
 
-Normalmente, todas las facetas individuales de un mapa facetado contienen los mismos datos geométricos repetidos varias veces, una por cada columna de los datos de atributos (este es el método de representación gráfica predeterminado para sfobjetos). 
+Normalmente, todas las facetas individuales de un mapa facetado contienen los mismos datos geométricos repetidos varias veces, una por cada columna de los datos de atributos (este es el método de representación gráfica predeterminado para sfobjetos).
 
----
+------------------------------------------------------------------------
 
 ```{r}
 #| label: mapas-facetados
@@ -963,7 +959,7 @@ tm_shape(world) +
   tm_facets_wrap(by = "year", nrow = 2)
 ```
 
---- 
+------------------------------------------------------------------------
 
 ## Mapas insertados
 
@@ -973,7 +969,7 @@ También se pueden usar para enfocar un área más pequeña con más detalle o p
 
 ![](https://r.geocompx.org/figures/insetmap1-1.png){fig-align="center"}
 
----
+------------------------------------------------------------------------
 
 Los mapas insertados también se utilizan para crear un mapa de áreas no contiguas. Probablemente, el ejemplo más común es el mapa de Estados Unidos, que incluye los Estados Unidos contiguos, Hawái y Alaska. En estos casos, es fundamental encontrar la mejor proyección para cada recuadro.
 
@@ -1013,7 +1009,7 @@ alaska_map = tm_shape(alaska) +
   tm_layout(frame = FALSE, bg.color = NA)
 ```
 
----
+------------------------------------------------------------------------
 
 El mapa final se crea combinando, redimensionando y organizando estos tres mapas:
 
@@ -1033,7 +1029,7 @@ print(alaska_map, vp = grid::viewport(0.15, 0.15, width = 0.3, height = 0.3))
 
 ![](https://r.geocompx.org/figures/insetmap2-1.png){fig-align="center"}
 
----
+------------------------------------------------------------------------
 
 ## Mapas espaciotemporales
 
@@ -1140,22 +1136,22 @@ print(gr)
 :::
 :::::
 
----
+------------------------------------------------------------------------
 
 ## Mapas animados
 
-Los **mapas facetados** permiten mostrar cómo cambian las distribuciones espaciales de las variables pero este enfoque presenta desventajas, que son: 
+Los **mapas facetados** permiten mostrar cómo cambian las distribuciones espaciales de las variables pero este enfoque presenta desventajas, que son:
 
-  - Las facetas se vuelven diminutas cuando hay muchas. 
-  - cada faceta esté físicamente separada en la pantalla (diferencias sutiles entre ellas pueden ser difíciles de detectar).
+-   Las facetas se vuelven diminutas cuando hay muchas.
+-   cada faceta esté físicamente separada en la pantalla (diferencias sutiles entre ellas pueden ser difíciles de detectar).
 
-Los mapas animados resuelven estos problemas. Esto se puede resolver con el paquete `tmap` (utilizaremos a continuación) o el `gganimate()` de `ggplot2`. 
+Los mapas animados resuelven estos problemas. Esto se puede resolver con el paquete `tmap` (utilizaremos a continuación) o el `gganimate()` de `ggplot2`.
 
 ![](https://r.geocompx.org/images/urban-animated.gif){fig-align="center"}
 
----
+------------------------------------------------------------------------
 
-A continuación vamos a crear el nuestro gráfico animado: 
+A continuación vamos a crear el nuestro gráfico animado:
 
 ```{r}
 #| label: crea-mapa-urbanización
@@ -1188,7 +1184,7 @@ tmap_animation(urb_anim, filename = "urb_anim.gif",
 
 ![](https://user-images.githubusercontent.com/1825120/38543030-5794b6f0-3c9b-11e8-9da9-10ec1f3ea726.gif){fig-align="center"}
 
----
+------------------------------------------------------------------------
 
 ## Mapas interactivos
 
@@ -1198,7 +1194,7 @@ El desarrollo de la informática ha propiciado también el desarrollo de la geoc
 
 Estos mapas dinámicos, ampliables y desplazables son más informativos que los mapas estáticos y, además, constituyen una alternativa que puede proporcionar al usuario una experiencia diferente, además de una mayor interacción.
 
----
+------------------------------------------------------------------------
 
 A través de la función `tmap_mode("view")` nos permite pasar de un mapa estático a un mapa interactivo.
 
@@ -1216,7 +1212,7 @@ tmap_mode("view")
 map_nz
 ```
 
----
+------------------------------------------------------------------------
 
 ```{r}
 #| label: mapa-interactivo-doble
@@ -1235,7 +1231,7 @@ tm_shape(world_coffee) +
   tm_facets_wrap(nrow = 1, sync = TRUE)
 ```
 
----
+------------------------------------------------------------------------
 
 ### Otra forma: **mapview**
 
