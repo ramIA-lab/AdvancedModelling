@@ -3,6 +3,14 @@
     "rmdVisualWrapConfigured": "true",
     "source_window_id": "",
     "Source": "Source",
+<<<<<<< Updated upstream
     "cursorPosition": "1325,106",
     "scrollLine": "1326"
+=======
+    "docOutlineVisible": "0",
+    "rmdVisualCollapsedChunks": "",
+    "cursorPosition": "1369,195",
+    "scrollLine": "1358",
+    "rmdVisualModeLocation": "23610:48649"
+>>>>>>> Stashed changes
 }
