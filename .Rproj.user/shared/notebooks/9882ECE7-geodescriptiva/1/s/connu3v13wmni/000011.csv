@@ -1,0 +1,22 @@
+"0","library(tmap)
+"
+"2","Avisos:
+"
+"2","1: "
+"2","In doTryCatch(return(expr), name, parentenv, handler) :"
+"2","
+ "
+"2"," display list redraw incomplete
+"
+"2","2: "
+"2","In doTryCatch(return(expr), name, parentenv, handler) :"
+"2","
+ "
+"2"," invalid graphics state
+"
+"2","3: "
+"2","In doTryCatch(return(expr), name, parentenv, handler) :"
+"2","
+ "
+"2"," invalid graphics state
+"

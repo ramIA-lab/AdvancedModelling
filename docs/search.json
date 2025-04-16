@@ -638,7 +638,7 @@
     "href": "material/05_GeospatialAnalysis/teoria/geodescriptiva.html#introducción",
     "title": "Geodescriptiva",
     "section": "Introducción",
-    "text": "Introducción\nLos datos espaciales, (datos geográficos o datos georreferenciados), son aquellos que contienen información de una localización o área geográfica de la superficie anclados al espacio."
+    "text": "Introducción\nLos datos espaciales, (datos geográficos o datos georreferenciados), son aquellos que contienen información de una localización o área geográfica de la superficie anclados al espacio.\nLa cartografía, el arte de la cartografía, es una habilidad ancestral que implica comunicación, atención al detalle y un componente creativo.\nUn mapa cuidadosamente elaborado puede ser la mejor manera de comunicar los resultados de su trabajo, pero un diseño deficiente puede causar una mala impresión.\nEntre los problemas de diseño más comunes se incluyen: - la ubicación - el tamaño - la legibilidad deficientes del texto - selección descuidada de colores (guía de estilos)\nLos mapas de aspecto amateur pueden dificultar la comprensión de información importante por parte del público y debilitar la presentación de una investigación de datos profesional."
   },
   {
     "objectID": "material/05_GeospatialAnalysis/teoria/geodescriptiva.html#história-del-análisis-geospacial-snow-1856",
@@ -743,14 +743,14 @@
     "href": "material/05_GeospatialAnalysis/teoria/geodescriptiva.html#mapas-espaciotemporales",
     "title": "Geodescriptiva",
     "section": "Mapas espaciotemporales",
-    "text": "Mapas espaciotemporales"
+    "text": "Mapas espaciotemporales\nLa dimensión temporal cobra cada vez más relevancia en el ámbito espacial, y por ello es importante representar en el tiempo los procesos espaciales.\nVamos a representar la temperatura mínima registrada en España del 6 al 10 de enero de 2021, durante la Borrasca Filomena.\n\ntmin_sf &lt;- st_as_sf(tempmin_data, \n  coords = c(\"longitud\", \"latitud\"),\n  crs = 4326) # coordenadas geográficas longitud/latitud WGS84\n\nesp &lt;- esp_get_ccaa() |&gt; # sf objeto, contorno de España\n        filter(ine.ccaa.name != \"Canarias\") # excluye Canarias\n\n\nst_crs(tmin_sf) == st_crs(esp)\n\n[1] FALSE\n\nesp2 &lt;- st_transform(esp, st_crs(tmin_sf))\nst_crs(tmin_sf) == st_crs(esp2)\n\n[1] TRUE"
   },
   {
     "objectID": "material/05_GeospatialAnalysis/teoria/geodescriptiva.html#mapas-interactivos",
     "href": "material/05_GeospatialAnalysis/teoria/geodescriptiva.html#mapas-interactivos",
     "title": "Geodescriptiva",
     "section": "Mapas interactivos",
-    "text": "Mapas interactivos"
+    "text": "Mapas interactivos\nSi bien los mapas estáticos y animados pueden revitalizar los conjuntos de datos geográficos, los mapas interactivos pueden llevarlos a un nuevo nivel.\nEl desarrollo de la informática ha propiciado también el desarrollo de la geocomputación, que está relacionada con los desarrollos webs y permite, entre otras cosas, la representación de mapas interactivos.\nEstos mapas dinámicos, ampliables y desplazables son más informativos que los mapas estáticos y, además, constituyen una alternativa que puede proporcionar al usuario una experiencia diferente, además de una mayor interacción."
   },
   {
     "objectID": "material/05_GeospatialAnalysis/teoria/geodescriptiva.html",
@@ -764,7 +764,7 @@
     "href": "material/05_GeospatialAnalysis/teoria/geodescriptiva.html#mapas-animados",
     "title": "Geodescriptiva",
     "section": "Mapas animados",
-    "text": "Mapas animados"
+    "text": "Mapas animados\nLos mapas facetados permiten mostrar cómo cambian las distribuciones espaciales de las variables pero este enfoque presenta desventajas, que son:\n\nLas facetas se vuelven diminutas cuando hay muchas.\ncada faceta esté físicamente separada en la pantalla (diferencias sutiles entre ellas pueden ser difíciles de detectar).\n\nLos mapas animados resuelven estos problemas. Esto se puede resolver con el paquete tmap (utilizaremos a continuación) o el gganimate() de ggplot2."
   },
   {
     "objectID": "material/05_GeospatialAnalysis/teoria/geodescriptiva.html#footnotes",
@@ -772,6 +772,79 @@
     "title": "Geodescriptiva",
     "section": "Footnotes",
     "text": "Footnotes\n\n\nLas coordenadas cartesianas (sistema cartesiano) son un tipo de coordenadas ortogonales usadas en espacios euclídeos, para la representación gráfica de una relación matemática, movimiento o posición en física, caracterizadas por tener como referencia ejes ortogonales entre sí que concurren en el punto de origen.↩︎\nproyección cartográfica que representa el mundo en un plano, diseñada para minimizar la distorsión de las formas y tamaños de los continentes y océanos↩︎\nproyección cartográfica que representa el mundo en un plano, diseñada para minimizar la distorsión de las formas y tamaños de los continentes y océanos↩︎"
+<<<<<<< Updated upstream
 >>>>>>> c0198ffe475236c81887a954fe885a8a683c7965
+=======
+  },
+  {
+    "objectID": "material/05_GeospatialAnalysis/teoria/geodescriptiva.html#referentes-actuales-del-mundo-del-geospacial",
+    "href": "material/05_GeospatialAnalysis/teoria/geodescriptiva.html#referentes-actuales-del-mundo-del-geospacial",
+    "title": "Geodescriptiva",
+    "section": "Referentes actuales del mundo del Geospacial",
+    "text": "Referentes actuales del mundo del Geospacial\n\n\n\n\nDominic Royé Climatólogo y educador de R con un gran compromiso con la comunidad. Su investigación se centra en la biometeorología, entre otros temas, y en la relación entre la salud humana y el medio ambiente atmosférico. Sus proyectos comunitarios valoran la colaboración entre las herramientas de código abierto, la alfabetización de datos y la graficación como una forma de generar poder e impulsar el cambio.\n\n\n\nJakub Nowosad Geógrafo computacional y trabaja entre la geocomputación y las ciencias ambientales. Su investigación se centra en el desarrollo y la aplicación de métodos espaciales para ampliar la comprensión de los procesos y patrones ambientales. Parte fundamental de su trabajo es crear, colaborar y mejorar software geocomputacional. Miembro activo de la comunidad #rspatial y coautor de los libros “Geocomputación con R” y “Geocomputación con Python”."
+  },
+  {
+    "objectID": "material/05_GeospatialAnalysis/teoria/geodescriptiva.html#paquetes-de-r-para-el-geospacial",
+    "href": "material/05_GeospatialAnalysis/teoria/geodescriptiva.html#paquetes-de-r-para-el-geospacial",
+    "title": "Geodescriptiva",
+    "section": "Paquetes de R para el Geospacial",
+    "text": "Paquetes de R para el Geospacial"
+  },
+  {
+    "objectID": "material/05_GeospatialAnalysis/teoria/geodescriptiva.html#paquetes-de-python-para-el-geospacial",
+    "href": "material/05_GeospatialAnalysis/teoria/geodescriptiva.html#paquetes-de-python-para-el-geospacial",
+    "title": "Geodescriptiva",
+    "section": "Paquetes de Python para el Geospacial",
+    "text": "Paquetes de Python para el Geospacial"
+  },
+  {
+    "objectID": "material/05_GeospatialAnalysis/teoria/geodescriptiva.html#linias-futuras",
+    "href": "material/05_GeospatialAnalysis/teoria/geodescriptiva.html#linias-futuras",
+    "title": "Geodescriptiva",
+    "section": "Linias futuras",
+    "text": "Linias futuras"
+  },
+  {
+    "objectID": "material/05_GeospatialAnalysis/teoria/geodescriptiva.html#bibiligrafia",
+    "href": "material/05_GeospatialAnalysis/teoria/geodescriptiva.html#bibiligrafia",
+    "title": "Geodescriptiva",
+    "section": "Bibiligrafia",
+    "text": "Bibiligrafia\n\n\n\n\n\n\n\n\nEl proyecto consistió en poder alojar contenido sobre Geocomputación con R. Desde la publicación de dicho libro en 2019, la comunidad en torno al libro ha crecido e incluye una comunidad emergente llamada «geocompy» y el proyecto de libro de código abierto asociado, Geocomputación con Python. Quedó claro que el nombre «geocompr» ya no era apropiado para la naturaleza multilingüe del proyecto."
+  },
+  {
+    "objectID": "material/05_GeospatialAnalysis/teoria/geodescriptiva.html#história-del-análisis-geospacial-caso-snow-1856",
+    "href": "material/05_GeospatialAnalysis/teoria/geodescriptiva.html#história-del-análisis-geospacial-caso-snow-1856",
+    "title": "Geodescriptiva",
+    "section": "História del análisis geospacial (caso Snow, 1856)",
+    "text": "História del análisis geospacial (caso Snow, 1856)\nLos mapas se han utilizado durante miles de años para una amplia variedad de propósitos. Algunos ejemplos históricos incluyen mapas de edificios y propiedad de la tierra en la antigua dinastía babilónica, hace más de 3000 años, y el mapamundi de Ptolomeo en su obra maestra , Geografía, hace casi 2000 años.\n\n\nEl primer análisis de datos espaciales fue realizado por el médico John Snow en 1854."
+  },
+  {
+    "objectID": "material/05_GeospatialAnalysis/teoria/geodescriptiva.html#mapas-estáticos",
+    "href": "material/05_GeospatialAnalysis/teoria/geodescriptiva.html#mapas-estáticos",
+    "title": "Geodescriptiva",
+    "section": "Mapas estáticos",
+    "text": "Mapas estáticos\nLos mapas estáticos son el tipo de resultado visual más común de la geocomputación. Suelen almacenarse en formatos estándar, como .png y .pdf para salidas gráficas ráster y vectoriales, respectivamente.\nLa función genérica plot() suele ser la forma más rápida de crear mapas estáticos a partir de objetos espaciales vectoriales y ráster por su simplicidad y la velocidad.\ntmap es un paquete de creación de mapas potente y flexible con valores predeterminados.\nSu sintaxis concisa permite crear mapas atractivos con un mínimo de código (muy similar a ggplot2). Ofrece la posibilidad de generar mapas estáticos e interactivos utilizando el mismo código mediante tmap_mode()."
+  },
+  {
+    "objectID": "material/05_GeospatialAnalysis/teoria/geodescriptiva.html#conceptos-básicos",
+    "href": "material/05_GeospatialAnalysis/teoria/geodescriptiva.html#conceptos-básicos",
+    "title": "Geodescriptiva",
+    "section": "Conceptos básicos",
+    "text": "Conceptos básicos\n\n\nAñadir el interior\n\ng1 &lt;- tm_shape(nz) +\n  tm_fill() \n\n\nAñadir el contorno\n\ng2 &lt;- tm_shape(nz) +\n  tm_borders() \n\n\nAñadir ambos (También qtm())\n\ng3 &lt;- tm_shape(nz) +\n  tm_fill() +\n  tm_borders() \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nVer https://r.geocompx.org/adv-map para saber mas."
+  },
+  {
+    "objectID": "material/05_GeospatialAnalysis/teoria/geodescriptiva.html#mapa-de-la-renta",
+    "href": "material/05_GeospatialAnalysis/teoria/geodescriptiva.html#mapa-de-la-renta",
+    "title": "Geodescriptiva",
+    "section": "Mapa de la renta",
+    "text": "Mapa de la renta\nConcretamente, se representa la distribución de la renta neta per cápita (renta_municipio_data) por municipio (municipios) en España en el año 2019.\nEl primer paso será integrar los ficheros renta_municipio-data y municipios, los cuales deben tener un campo en común (codigo_ine), para unir.\n\nmunis_renta &lt;- municipios |&gt;\n  left_join(renta_municipio_data) |&gt;\n  select(name, cpro, cmun, `2019`)    \n\nEl siguiente paso es la representación gráfica de estos datos en el mapa.\n\ngrafico &lt;- ggplot(munis_renta) +\n  geom_sf(aes(fill = `2019`), color = NA) +\n  scale_fill_continuous(\n    labels = scales::label_number(\n      big.mark = \".\", decimal.mark = \",\", suffix = \" €\" )) +\n  theme_minimal()\nprint(grafico)"
+  },
+  {
+    "objectID": "material/05_GeospatialAnalysis/teoria/geodescriptiva.html#mapas-insertados",
+    "href": "material/05_GeospatialAnalysis/teoria/geodescriptiva.html#mapas-insertados",
+    "title": "Geodescriptiva",
+    "section": "Mapas insertados",
+    "text": "Mapas insertados\nUn mapa insertado es un mapa más pequeño que se representa dentro o junto al mapa principal. Puede tener diversas funciones, como proporcionar contexto o acercar regiones no contiguas para facilitar su comparación.\nTambién se pueden usar para enfocar un área más pequeña con más detalle o para cubrir la misma área que el mapa, pero representando un tema diferente."
+>>>>>>> Stashed changes
   }
 ]

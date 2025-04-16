@@ -1,0 +1,1370 @@
+---
+title: "Geodescriptiva"
+subtitle: "2024 - 2025"
+title-slide-attributes:
+    # data-background-image: ../../../imagenes/ideai_logo.png
+    data-background-image: https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToarIkwdutv5YPT_-6EgdYP-LV63oltlKcFQ&s
+    data-background-size: contain
+    data-background-opacity: "0.25"
+    data-background-color: "white"
+author: "Conti, D; Ramirez, S"
+format: 
+  revealjs:
+    incremental: true
+    # theme: night
+    theme: [night, ../../../ideai.scss]
+    background-transition: slide
+    logo: ../../../imagenes/Logo_UPC.svg.png
+    css: ../../../logo.css
+    footer: "Preprocessing i Models Avançats d'Anàlisis de Dades (PMAAD)"
+    # slide-tone: true # Introduce sonido al cambio de transparencias para gente ciega
+    # embed-resources: true # Para generar un fichero html con todo completo sin necesidad de tener varios ficheros con los estilos
+    # multiplex: true # Para que puedan ver lo que se esta presentando
+    controls-tutorial: true
+    scale: 0.9
+    chalkboard: true
+    transition: fade # Estilo de transición
+    transitionSpeed: slow # Velocidad: 'fast', 'normal', 'slow'
+    code-block-height: 650px
+editor: visual
+---
+
+## Introducción
+
+Los **datos espaciales**, (datos geográficos o datos georreferenciados), son aquellos que contienen información de una localización o área geográfica de la superficie anclados al espacio.
+
+La cartografía, el arte de la cartografía, es una habilidad ancestral que implica comunicación, atención al detalle y un componente creativo.
+
+Un mapa cuidadosamente elaborado puede ser la mejor manera de comunicar los resultados de su trabajo, pero un diseño deficiente puede causar una mala impresión.
+
+Entre los problemas de diseño más comunes se incluyen: - la ubicación - el tamaño - la legibilidad deficientes del texto - selección descuidada de colores ([guía de estilos](https://files.taylorandfrancis.com/TJOM-suppmaterial-quick-guide.pdf))
+
+Los mapas de aspecto amateur pueden dificultar la comprensión de información importante por parte del público y debilitar la presentación de una investigación de datos profesional.
+
+## História del análisis geospacial (caso Snow, 1856)
+
+Los mapas se han utilizado durante miles de años para una amplia variedad de propósitos. Algunos ejemplos históricos incluyen mapas de edificios y propiedad de la tierra en la antigua dinastía babilónica, hace más de 3000 años, y el mapamundi de Ptolomeo en su obra maestra , Geografía, hace casi 2000 años.
+
+::::: columns
+::: {.column width="60%"}
+El primer análisis de datos espaciales fue realizado por el médico John Snow en 1854.
+
+![](https://ichef.bbci.co.uk/ace/ws/640/cpsprodpb/6655/production/_113279162_gettyimages-463899545.jpg.webp){fig-align="center"}
+:::
+
+::: {.column width="40%"}
+![](https://cdn.britannica.com/00/161400-050-E49598A0/John-Snow.jpg){fig-align="right"}
+:::
+:::::
+
+------------------------------------------------------------------------
+
+Construyó un famoso mapa que mostraba las muertes causadas por un brote de cólera.
+
+-   Se detectarón 127 muertes en 3 días
+
+-   Se ubicaban en el barrio del Soho de Londres
+
+-   Se posicionaron las bombas de agua del área
+
+![](https://cdr-book.github.io/img/colera_new.png){fig-align="center"}
+
+------------------------------------------------------------------------
+
+### Solución:
+
+Descubrió que había un agrupamiento significativo de muertes alrededor de una determinada bomba, y al quitar la manija de la bomba se detuvo el brote.
+
+::::: columns
+::: {.column width="50%"}
+![](https://blog.rtwilson.com/wp-content/uploads/2012/01/OSColor_Points.png){fig-align="center"}
+:::
+
+::: {.column width="50%"}
+![](https://learn.arcgis.com/es/projects/map-a-historic-cholera-outbreak/GUID-9AF27AFC-17B4-45CE-A31F-B1976C31F2C2-web.png){fig-align="center"}
+:::
+:::::
+
+------------------------------------------------------------------------
+
+### Conclusiones
+
+El análisis espacial de Snow es considerado el antecedente conocido más antiguo de la ciencia de datos, porque:
+
+1.  La información clave se obtuvo mediante
+
+-   las muertes por cólera
+-   las ubicaciones de las bombas de agua
+-   el mapa de calles de Londres
+
+2.  Se puede crear un modelo espacial directamente a partir de los datos
+
+3.  El problema solo se resolvió cuando la evidencia basada en datos se combinó con un modelo plausible que explicaba el fenómeno físico.
+
+# Que és la geostadística? (Marco teórico)
+
+```{r}
+#| label: librerias-R
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+# Librerias de bases de datos
+library(isdas)
+library(idealista18)
+library(CDR)
+
+# Bases de datos de gestión
+library(leaflet)
+library(ggplot2)
+library(dplyr)
+library(tidyverse)
+library(classInt)
+
+# Paquetes de geocomputacion
+library(sf)
+library(maptiles)
+library(mapSpain)
+library(tidyterra)
+library(giscoR)
+library(terra)
+library(spData)
+library(spDataLarge)
+library(osmdata)
+library(ggmap)
+library(mapview)
+library(tmap)
+```
+
+```{python}
+#| label: librerias-Py
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+from plotnine import ggplot, aes, geom_point, coord_fixed, theme_minimal
+from plotnine import ggtitle, xlab, ylab
+
+import geopandas as gpd
+import matplotlib.pyplot as plt
+import contextily as ctx
+from shapely.geometry import Point
+```
+
+```{r}
+#| label: bbdd-ejemplo-R
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+BCN <- get(data("Barcelona_Sale"))
+
+# Filtramos la epoca a Navidad
+BCN <- BCN[which(BCN$PERIOD == "201812"), ]
+sf::st_geometry(BCN) <- "geometry"
+```
+
+```{python}
+#| label: bbdd-ejemplo-Py
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+pyBCN = r.BCN
+```
+
+------------------------------------------------------------------------
+
+## Estadística para datos espaciales
+
+::: callout-tip
+El área que se encarga de estudiar y analizar los datos espaciales es la **estadística espacial** o la estadística para datos espaciales.
+:::
+
+Debido a que los datos espaciales surgen en múltiples campos y aplicaciones, hay una gran variedad de tipos de datos, estructuras y escenarios espaciales .
+
+En 1993, N.A.C Cressie clasificó los datos geospaciales, basado en la naturaleza del dominio espacial, de la siguiente forma:
+
+![](https://cdr-book.github.io/img/cressie_simulados.png){fig-align="center"}
+
+------------------------------------------------------------------------
+
+### Conceptos Clave
+
+A continuación vamos a representar la localización de los inmuebles vendidos por idealista en Barcelona durante el mes de diciembre de 2018.
+
+::::::::: panel-tabset
+## R
+
+::::: columns
+::: {.column width="50%"}
+```{r}
+#| label: geo-BCN-R
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+#| column: margin
+
+p <- ggplot(data = BCN,
+       aes(x = LONGITUDE, y = LATITUDE)) + 
+  geom_point(col="blue", size = 0.1, alpha = 0.3) +
+  coord_fixed()
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+#| label: geo-BCN-R-plot1
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+#| column: margin
+
+print(p)
+```
+:::
+:::::
+
+## Python
+
+::::: columns
+::: {.column width="65%"}
+```{python}
+#| label: geo-BCN-Py
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+p = (ggplot(pyBCN, aes(x='LONGITUDE', y='LATITUDE')) +
+     geom_point(color='blue', size=0.1, alpha=0.3) +
+     coord_fixed() +
+     theme_minimal() +
+     ggtitle("Pisos en Barcelona") +
+     xlab("Longitud") +
+     ylab("Latitud"))
+```
+:::
+
+::: {.column width="35%"}
+```{python}
+#| label: geo-BCN-Py-plot1
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+p.show()
+```
+:::
+:::::
+:::::::::
+
+------------------------------------------------------------------------
+
+En una representación de geodatos o geostadística es importante las siguientes cuestiones:
+
+-   Las **coordendadas**
+
+-   El marco o **contexto espacial**
+
+-   Conocimiento del **sistema de referencia de coordenadas** (*Coordinate reference system* (CRS)) en las que están georreferenciadas o proyectadas las coordenadas
+
+-   Formato de los datos en los que se están trabajando: **vector** o **raster**.
+
+------------------------------------------------------------------------
+
+:::: panel-tabset
+## Gestión de datos con R
+
+Cambiamos el sistema de referencia de coordenadas al sistema de referencia (CRS) Europeo.
+
+```{r}
+#| label: geo-BCN-R-cambiarCRS
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+idealista2018_sf <- sf::st_as_sf(BCN,
+  coords = c("LATITUDE", "LONGITUDE"),
+  crs = 25830) # proyección ETRS89/ UTM zone 30N. Área de uso: Europa    
+```
+
+Generamos el mapa estático para poder representar nuestra información en él.
+
+::: callout-warning
+El sistema de referencias (CRS) de las coordenadas ha de coincidir con el de los mapas sino no geolocaliza correctamente el punto buscado.
+:::
+
+```{r}
+#| label: geo-BCN-R-descargarMapa
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+Barcelona <- mapSpain::esp_get_munic(munic = "^Barcelona$") |>
+  sf::st_transform(25830) 
+
+# descara imagen de un de mapa estático de las carreteas de Madrid
+tile <- maptiles::get_tiles(BCN, provider = "Esri.WorldStreetMap", zoom = 10, crop = TRUE)
+
+# tile <- esp_getTiles(Barcelona, "IGNBase.Gris", zoommin = 3, verbose = FALSE)
+```
+
+## Mapa con R
+
+```{r}
+#| label: geo-BCN-R-creacionMapa
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+#| column: screen-inset-right
+
+ggplot() +
+  tidyterra::geom_spatraster_rgb(data = tile) +
+  geom_sf(data = idealista2018_sf, 
+    col = "blue", size = 0.1, alpha = 0.3) +
+  coord_sf(expand = FALSE)
+```
+
+## Gestión de datos con Python
+
+Cambiamos el sistema de referencia de coordenadas al sistema de referencia (CRS) Europeo.
+
+```{python}
+#| label: geo-BCN-py-cambiarCRS
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+# 1. Crear GeoDataFrame desde DataFrame (suponiendo que tienes 'LATITUDE' y 'LONGITUDE')
+# Nota: en Python 'LONGITUDE' es x, 'LATITUDE' es y
+gdf = gpd.GeoDataFrame(pyBCN, geometry = gpd.points_from_xy(pyBCN['LONGITUDE'], pyBCN['LATITUDE']), crs = "EPSG:4326") # primero en WGS84
+
+# 2. Reproyectar a EPSG:25830
+gdf_utm = gdf.to_crs(epsg = 25830)
+```
+
+Generamos el mapa estático para poder representar nuestra información en él.
+
+```{python}
+#| label: geo-BCN-py-descargarMapa
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+# 3. Definir límites para el mapa base
+# bounds = gdf_utm.total_bounds  # xmin, ymin, xmax, ymax
+bounds = [905729.8210,4580494.7340,958814.7353,4610801.5327]
+```
+
+Podemos buscar el boundary box en la siguiente url: <http://bboxfinder.com/>
+
+## Mapa con Python
+
+```{python}
+#| label: geo-BCN-py-creacionMapa
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+# 4. Plot con mapa base (tiles tipo Esri.WorldStreetMap)
+fig, ax = plt.subplots(figsize = (8, 8))
+
+# Plot puntos
+gdf_utm.plot(ax = ax, color = 'blue', markersize = 1, alpha = 0.3)
+
+# Añadir tiles (contextily necesita CRS compatible, normalmente 3857)
+# Convertir a 3857 para el tile
+gdf_webmerc = gdf_utm.to_crs(epsg = 3857)
+ax = gdf_webmerc.plot(ax = ax, color = 'blue', markersize = 1, alpha = 0.3)
+
+# Añadir fondo tipo Esri (o CartoDB, OSM, etc.)
+ctx.add_basemap(ax, source = ctx.providers.Esri.WorldStreetMap)
+```
+
+```{python}
+#| label: geo-BCN-py-creacionMapa2
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+#| panel: sidebar
+
+# Quitar márgenes blancos
+ax.set_axis_off()
+plt.tight_layout()
+plt.show()
+```
+::::
+
+------------------------------------------------------------------------
+
+### Sistema de referencia de coordenadas
+
+Los **CRS** permiten identificar con exactitud la posición de los datos sobre el globo terráqueo.
+
+:::: fragment
+::: callout-tip
+Cuando se trabaja con datos espaciales procedentes de distintas fuentes de información es necesario comprobar que las coordenadas correspondientes a dichos datos se encuentran definidas en el mismo **CRS**.
+:::
+::::
+
+:::: fragment
+::: callout-tip
+Esto se consigue transformándolas (o proyectándolas) a un CRS común.
+:::
+::::
+
+------------------------------------------------------------------------
+
+A continuación se muestra un mapa mundial con la representación en puntos (rojos) de los puertos que existen.
+
+```{r}
+#| label: puertos-R
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+paises <- gisco_get_countries()
+puertos <- gisco_get_ports()
+paises_robin <- st_transform(paises, st_crs("ESRI:54030")) #Proyección Robinson
+
+plot(st_geometry(paises_robin), main = " ")
+plot(st_geometry(puertos), add = TRUE, col="2", pch=20, lwd=2.5)
+```
+
+¿Que podemos ver en el gráfico?
+
+-   Las coordenadas del mapa y las coordenadas de la base de datos se encuentran en diferentes referencias (CRS)
+
+------------------------------------------------------------------------
+
+Los tipos de CRS que existen son los siguientes:
+
+1.  **Geográficos**: aquellos en los que los parámetros empleados para localizar una posición espacial son:
+
+    -   La **latitud** (Norte-Sur): \[$-90º, 90º$\]
+    -   La **longitud** (Este−Oeste): \[$-180º, 180º$\]
+    -   Están basados en la geometría esférica (las distancias entre dos puntos son **distancias angulares**)
+
+2.  **Proyectados**: permiten reducir la superficie de la esfera terrestre (3D) a un sistema cartesiano (2D).
+
+    -   Es necesario transformar las coordenadas longitud y latitud en coordenadas cartesianas [^1] X e Y
+    -   La unidad de distancia, habitualmente, es el **metro**
+
+[^1]: Las **coordenadas cartesianas** (sistema cartesiano) son un tipo de coordenadas ortogonales usadas en espacios euclídeos, para la representación gráfica de una relación matemática, movimiento o posición en física, caracterizadas por tener como referencia ejes ortogonales entre sí que concurren en el punto de origen.
+
+------------------------------------------------------------------------
+
+Seguimos con el ejemplo de los puertos marítimos y proyectamos los puertos en el mismo CRS que el mapamundi utilizando la proyección de Robinson[^2] (la proyección cartográfica más popular para mapamundis)
+
+[^2]: proyección cartográfica que representa el mundo en un plano, diseñada para minimizar la distorsión de las formas y tamaños de los continentes y océanos
+
+```{r}
+#| label: comprobacion-CRS-R
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+st_crs(puertos) == st_crs(paises_robin)
+```
+
+```{r}
+#| label: puertos-R-Robinson
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+puertos_robin <- st_transform(puertos, st_crs(paises_robin))
+plot(st_geometry(paises_robin), main = " ")
+plot(st_geometry(puertos_robin), add = TRUE, col = 4, pch = 20)
+```
+
+------------------------------------------------------------------------
+
+Seguimos con el ejemplo de los puertos marítimos y proyectamos los puertos en el mismo CRS que el mapamundi utilizando la proyección de Robinson[^3] (la proyección cartográfica más popular para mapamundis)
+
+[^3]: proyección cartográfica que representa el mundo en un plano, diseñada para minimizar la distorsión de las formas y tamaños de los continentes y océanos
+
+:::: fragment
+::: {.callout-tip title="R packages"}
+El paquete `crsuggest` facilita la elección de la proyección más conveniente, al sugerir transformaciones de sistemas de referencia de coordenadas adecuadas para conjuntos de datos espaciales. Devuelve un marco de datos con códigos CRS que se pueden utilizar para proyectos de transformación y mapeo CRS.
+:::
+::::
+
+![](https://paulblgis.wordpress.com/wp-content/uploads/2016/11/geographic_crs.png){fig-align="center" width="507"}
+
+------------------------------------------------------------------------
+
+## Formatos de datos espaciales
+
+En el ámbito del análisis espacial los datos espaciales pueden tener formato **vector** (o datos vectoriales) o **formato raster** (*raster* o *rasterizados* o mapa de *bits*).
+
+::: panel-tabset
+### Datos vectoriales
+
+Los **datos vectoriales** pueden representar tres tipos distintos de entidades: puntos, líneas y polígonos, y, quizás, su característica más importante es que cada punto, línea o polígono puede tener una tabla de atributos asociados.
+
+### *Raster*
+
+Los datos ***raster***, son una malla (una matriz) donde cada celda (o *píxel*) tiene un tamaño similar y un valor específico.
+
+Cuando se tiene una imagen en color, el raster está compuesto por 3 matrices sobrepuestas, cada una con el valor del color primario correspondiente.
+
+Cuando se utilizan imágenes de satélite u otros sensores cada archivo puede contener hasta cientos de matrices que representan distintos rangos de lo observado.
+:::
+
+## Datos vectoriales
+
+Este modelo de datos está basado en puntos **georreferenciados.** Los **puntos**, por ejemplo, representan localizaciones específicas.
+
+```{r}
+#| label: mercadona-R-bbdd
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+q <- getbb("Barcelona") |>
+  opq(timeout = 25 * 100) |>
+  add_osm_feature("name", "Mercadona") |>
+  add_osm_feature("shop", "supermarket")
+
+# building the query
+# query
+mercadona <- osmdata_sf(q)
+```
+
+```{r}
+#| label: mercadona-R-BCN
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+ggplot() +
+  geom_sf(data = mercadona$osm_points, 
+          aes(fill = "Mercadona"), 
+          color = "lightgreen") +
+  labs(title = NULL, fill = NULL) +
+  theme_minimal() +
+  theme(legend.position = "right")
+```
+
+------------------------------------------------------------------------
+
+Los puntos también pueden estar conectados entre sí, de manera que formen geometrías más complejas, como **líneas** y **polígonos**. El río Tajo está representado como una línea (tajo, sucesión de puntos unidos entre sí) y la ciudad de Toledo como un polígono (toledo, línea de puntos cerrada formando un espacio continuo).
+
+```{r}
+#| label: mercadona-R-Barcelona-completo
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| error: false
+
+ggplot(toledo) +
+  geom_sf(fill = "cornsilk2") +
+  geom_sf(data = tajo, col = "lightblue2", lwd = 2, alpha = 0.7) +
+  geom_sf(data = hosp_toledo, col = "blue") +
+  coord_sf(xlim = c(-4.2, -3.8), ylim = c(39.8, 39.95)) +
+  theme_minimal()
+```
+
+![](https://cdr-book.github.io/img/rio-toledo.png){fig-align="center"}
+
+------------------------------------------------------------------------
+
+Las extensiones más habituales de los archivos que contienen datos de vectores son las siguientes:
+
+| **Tipo**                  | **Extensión**          |
+|---------------------------|------------------------|
+| Shapefile                 | `.shp`, `.shx`, `.dbf` |
+| GeoPackage vector         | `.gpkg`                |
+| GeoJson                   | `.geojson`             |
+| GPX                       | `.gpx`                 |
+| Geography Markup Language | `.gml`                 |
+| Keyhole Markup Language   | `.kml`                 |
+| Otros                     | `.csv`, `.txt`, `xlsx` |
+
+::: {.callout-tip title="R packages"}
+**ESRI Shapefile** surgió como uno de los primeros formatos de intercambio de datos geográficos y en la actualidad es, quizá, el formato más empleado. Sin embargo, tiene una serie de limitaciones: es un formato multiarchivo y el CRS es opcional.
+:::
+
+## Datos en *Raster*
+
+Los **datos raster** son datos proporcionados en una rejilla de píxeles (regulares o no) denominada matriz.
+
+El caso más popular de un raster es una fotografía. La imagen se representa como una serie de celdas, determinadas por la resolución de la imagen (el tamaño del píxel, 5x5 (regular) y 10x10 (irregular)) y el valor del *píxel* (**RGB** –red, green, blue–) que determina el color que presenta cada uno de estos píxeles.
+
+En el ámbito de los datos espaciales, un archivo raster está formado por una malla de píxeles georreferenciada.
+
+![](https://cdr-book.github.io/img/elev-toledo.png){fig-align="center"}
+
+------------------------------------------------------------------------
+
+Las extensiones más habituales de los archivos que contienen datos *raster* son las siguientes:
+
+| **Tipo**                     | **Extensión**   |
+|------------------------------|-----------------|
+| ASCII Grid                   | `.asc`          |
+| GeoTIFF                      | `.tif`, `.tiff` |
+| Enhanced Compression Wavelet | `.ecw`          |
+
+Como ejemplo, vamos a cargar la base de datos de nueva zelanda.
+
+```{r}
+#| label: nz-raster-r
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+nz_elev = rast(system.file("raster/nz_elev.tif", package = "spDataLarge"))
+```
+
+# Creación de mapas
+
+------------------------------------------------------------------------
+
+Para poder seguir con la sesión de hoy, necesitaremos instalar el paquete `CDR`. Para ello deberemos de seguir las siguientes indicaciones:
+
+![](https://private-user-images.githubusercontent.com/80209018/274188258-b0583cce-9621-4b37-b157-b576f4450b1c.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NDQ3NDExMTQsIm5iZiI6MTc0NDc0MDgxNCwicGF0aCI6Ii84MDIwOTAxOC8yNzQxODgyNTgtYjA1ODNjY2UtOTYyMS00YjM3LWIxNTctYjU3NmY0NDUwYjFjLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTA0MTUlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUwNDE1VDE4MTMzNFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWYyNmNhMmRlZjk2MjFmYjVmODFmYTNlMGZjNTJjMGMxZmNhOGZkODg1ODE5M2NhZWVmMTNkMGQzZWRkMWZiODkmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.zV-56DEmAj2s9iXotYGx5jJwaEUpKIEHVSPr9zSWCeQ){fig-align="center" fig-asp=.5"}
+
+```{r}
+#| label: cargar-paquete-CDR
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| error: false
+
+install.packages("remotes")
+remotes::install_github("cdr-book/CDR")
+```
+
+------------------------------------------------------------------------
+
+## Mapas estáticos
+
+Los mapas estáticos son el tipo de resultado visual más común de la geocomputación. Suelen almacenarse en formatos estándar, como .png y .pdf para salidas gráficas ráster y vectoriales, respectivamente.
+
+La función genérica `plot()` suele ser la forma más rápida de crear mapas estáticos a partir de objetos espaciales vectoriales y ráster por su simplicidad y la velocidad.
+
+**`tmap`** es un paquete de creación de mapas potente y flexible con valores predeterminados.
+
+Su sintaxis concisa permite crear mapas atractivos con un mínimo de código (muy similar a `ggplot2`). Ofrece la posibilidad de generar mapas estáticos e interactivos utilizando el mismo código mediante `tmap_mode()`.
+
+------------------------------------------------------------------------
+
+### Conceptos básicos
+
+:::::: columns
+::: {.column width="33%"}
+
+Añadir el interior
+
+```{r}
+#| label: mapas-nz-usandoTmap-g1
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+g1 <- tm_shape(nz) +
+  tm_fill() 
+```
+:::
+
+::: {.column width="33%"}
+
+Añadir el contorno
+
+```{r}
+#| label: mapas-nz-usandoTmap-g2
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+g2 <- tm_shape(nz) +
+  tm_borders() 
+```
+:::
+
+::: {.column width="33%"}
+
+Añadir ambos (También `qtm()`)
+
+```{r}
+#| label: mapas-nz-usandoTmap-g3
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+g3 <- tm_shape(nz) +
+  tm_fill() +
+  tm_borders() 
+```
+:::
+::::::
+
+:::::: columns
+::: {.column width="33%"}
+```{r}
+#| label: mapas-nz-usandoTmap-pg1
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+#| fig-asp: 1
+
+print(g1)
+```
+:::
+
+::: {.column width="33%"}
+```{r}
+#| label: mapas-nz-usandoTmap-pg2
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+#| fig-asp: 1
+
+print(g2)
+```
+:::
+
+::: {.column width="33%"}
+```{r}
+#| label: mapas-nz-usandoTmap-pg3
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+#| fig-asp: 1
+
+print(g3)
+```
+
+:::
+::::::
+
+Ver [https://r.geocompx.org/adv-map](https://r.geocompx.org/adv-map) para saber mas.
+
+------------------------------------------------------------------------
+
+### Mapa de la renta
+
+Concretamente, se representa la distribución de la renta neta per cápita (`renta_municipio_data`) por municipio (`municipios`) en España en el año 2019.
+
+El primer paso será integrar los ficheros `renta_municipio-data` y `municipios`, los cuales deben tener un campo en común (`codigo_ine`), para unir.
+
+```{r}
+#| label: crear-rentaxmunicipio
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+munis_renta <- municipios |>
+  left_join(renta_municipio_data) |>
+  select(name, cpro, cmun, `2019`)    
+```
+
+El siguiente paso es la representación gráfica de estos datos en el mapa.
+
+```{r}
+#| label: printarrentaxmunicipio
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+#| fig-align: center
+
+grafico <- ggplot(munis_renta) +
+  geom_sf(aes(fill = `2019`), color = NA) +
+  scale_fill_continuous(
+    labels = scales::label_number(
+      big.mark = ".", decimal.mark = ",", suffix = " €" )) +
+  theme_minimal()
+print(grafico)
+```
+
+------------------------------------------------------------------------
+
+Podemos ver que es un **mapa temático de coropletas**. Un gráfico de coropletas es una visualización sencilla de cómo varía la distribunción de una variable.
+
+Si visualizamos el contenido del objeto `munis_renta` pueden verse una serie de elementos gráficos característicos de los objetos espaciales:
+
+```{r}
+#| label: visualizar-raster-R
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+head(munis_renta)[1:3, ]
+```
+
+-   Los datos son de tipo vector
+-   El tipo de geometría es MULTIPOLYGON
+-   El CRS es ETRS89
+-   Leyenda explica el significado de la variable.
+
+## Atención !!! Cuidado cómo se miente en los mapas
+
+A veces, cuando se crea un mapa de coropletas la información puede aparecer distorsionada.
+
+Por ello, para la correcta visualización de los datos que favorezca una interpretación realista es necesario tomar una serie de decisiones:
+
+1.  El número de intervalos (cortes o límites de intervalos) en caso de distribución por intervalos.
+
+2.  La escala de color a utilizar.
+
+3.  El tratamiento de los valores perdidos.
+
+------------------------------------------------------------------------
+
+Los mapas de coropletas muestran la distribución espacial de una variable cuyos valores se dividen en clases o intervalos a los cuales se les aplica un esquema de colores, también llamado **paleta**, dónde a cada clase le corresponde un color de la paleta.
+
+Existen muchas formas para agrupar los valores de una variable en clases pero el **método de Fisher-Jenks** es el más popular en los mapas temáticos y en especial, en los de coropletas.
+
+:::: fragment
+::: {.callout-tip title="R packages"}
+El método de agrupación de datos de **Fisher-Jenks** utiliza un algoritmo no lineal para agrupar observaciones de modo que se **maximice la homogeneidad dentro del grupo** y la **heterogeneidad entre los mismos**.
+
+Este algoritmo está desarrollado específicamente para la clasificación de datos espaciales y su visualización en mapas.
+:::
+::::
+
+------------------------------------------------------------------------
+
+A continuación, vamos a realizar el mapa de la renta neta per cápita en España, a escala municipal, en 2019 con los intervalos realizados con **Fisher-Jenks**
+
+```{r}
+#| label: bbdd-filtrado-renta-R
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+munis_renta_clean <- munis_renta |>
+  filter(!is.na(`2019`))
+```
+
+```{r}
+#| label: cortes-Fisher-Jenks-R
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+# crea Fisher-Jenks clases
+fisher <- classIntervals(munis_renta_clean$`2019`, style = "fisher", n = 10)
+```
+
+```{r}
+#| label: mapa-renta-FJ-R
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+#| fig-align: center
+
+ggplot(munis_renta_clean) +
+  geom_sf(aes(fill = cut(`2019`, fisher$brks)), color = NA) +
+            scale_fill_viridis_d(option= "A" , 
+                                 labels= scales::label_number(suffix= "€")) +
+guides(fill = guide_colorsteps()) +
+  labs(fill= "Fisher-Jenks") +
+theme_minimal()
+```
+
+---
+
+### Mapa facetados
+
+Los mapas facetados se componen de muchos mapas dispuestos uno junto al otro, y a veces apilados verticalmente. 
+
+Las facetas permiten visualizar cómo cambian las relaciones espaciales con respecto a otra variable, como el tiempo. 
+
+Normalmente, todas las facetas individuales de un mapa facetado contienen los mismos datos geométricos repetidos varias veces, una por cada columna de los datos de atributos (este es el método de representación gráfica predeterminado para sfobjetos). 
+
+---
+
+```{r}
+#| label: mapas-facetados
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+#| fig-align: center
+
+urb_1970_2030 = urban_agglomerations |> 
+  filter(year %in% c(1970, 1990, 2010, 2030))
+
+tm_shape(world) +
+  tm_polygons() +
+  tm_shape(urb_1970_2030) +
+  tm_symbols(fill = "black", col = "white", size = "population_millions") +
+  tm_facets_wrap(by = "year", nrow = 2)
+```
+
+--- 
+
+## Mapas insertados
+
+Un **mapa insertado** es un mapa más pequeño que se representa dentro o junto al mapa principal. Puede tener diversas funciones, como proporcionar contexto o acercar regiones no contiguas para facilitar su comparación.
+
+También se pueden usar para enfocar un área más pequeña con más detalle o para cubrir la misma área que el mapa, pero representando un tema diferente.
+
+![](https://r.geocompx.org/figures/insetmap1-1.png){fig-align="center"}
+
+---
+
+Los mapas insertados también se utilizan para crear un mapa de áreas no contiguas. Probablemente, el ejemplo más común es el mapa de Estados Unidos, que incluye los Estados Unidos contiguos, Hawái y Alaska. En estos casos, es fundamental encontrar la mejor proyección para cada recuadro.
+
+```{r}
+#| label: insertados-EEUU
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+#| fig-align: center
+
+us_states_map = tm_shape(us_states, crs = "EPSG:9311") + 
+  tm_polygons() + 
+  tm_layout(frame = FALSE)
+```
+
+El resto de nuestros objetos, `hawaii` y `alaska`, ya tienen proyecciones adecuadas; por lo tanto, solo necesitamos crear dos mapas separados:
+
+```{r}
+#| label: insertados-hawaii
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+#| fig-align: center
+
+hawaii_map = tm_shape(hawaii) +
+  tm_polygons() + 
+  tm_title("Hawaii") +
+  tm_layout(frame = FALSE, bg.color = NA, 
+            title.position = c("LEFT", "BOTTOM"))
+alaska_map = tm_shape(alaska) +
+  tm_polygons() + 
+  tm_title("Alaska") +
+  tm_layout(frame = FALSE, bg.color = NA)
+```
+
+---
+
+El mapa final se crea combinando, redimensionando y organizando estos tres mapas:
+
+```{r}
+#| label: insertado-final
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| error: false
+#| fig-align: center
+
+us_states_map
+print(hawaii_map, vp = grid::viewport(0.35, 0.1, width = 0.2, height = 0.1))
+print(alaska_map, vp = grid::viewport(0.15, 0.15, width = 0.3, height = 0.3))
+```
+
+![](https://r.geocompx.org/figures/insetmap2-1.png){fig-align="center"}
+
+---
+
+## Mapas espaciotemporales
+
+La dimensión temporal cobra cada vez más relevancia en el ámbito espacial, y por ello es importante representar en el tiempo los procesos espaciales.
+
+Vamos a representar la temperatura mínima registrada en España del 6 al 10 de enero de 2021, durante la Borrasca Filomena.
+
+```{r}
+#| label: crea-bbdd-temperaturas
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+tmin_sf <- st_as_sf(tempmin_data, 
+  coords = c("longitud", "latitud"),
+  crs = 4326) # coordenadas geográficas longitud/latitud WGS84
+
+esp <- esp_get_ccaa() |> # sf objeto, contorno de España
+        filter(ine.ccaa.name != "Canarias") # excluye Canarias
+```
+
+```{r}
+#| label: comprovacion-crs
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+st_crs(tmin_sf) == st_crs(esp)
+esp2 <- st_transform(esp, st_crs(tmin_sf))
+st_crs(tmin_sf) == st_crs(esp2)
+```
+
+------------------------------------------------------------------------
+
+Muestramos la localización de las estaciones que registran la temperatura en España.
+
+```{r}
+#| label: mapa-estaciones
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+#| fig-align: center
+
+ggplot(esp2) +
+  geom_sf() +   
+  geom_sf(data = tmin_sf) 
+```
+
+------------------------------------------------------------------------
+
+A continuación realizamos el mapa correspondiente a las temperaturas dividido por diferentes dias.
+
+::::: columns
+::: {.column width="45%"}
+```{r}
+#| label: mapa-temperaturas
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+#| fig-align: center
+
+# definición de intervalos
+cortes <- c(-Inf, seq(-20, 20, 2.5), Inf)
+colores <- hcl.colors(15, "PuOr", rev = TRUE)
+
+tmin_sf_sptem <- tmin_sf |>
+  arrange(fecha, desc(tmin))
+
+gr <- ggplot() +
+  geom_sf(data = esp2, fill = "grey95") +
+  geom_sf(data = tmin_sf, aes(color = tmin), 
+          size=3, alpha= .7) +
+  facet_wrap(vars(fecha),ncol = 3) + 
+  labs(color = "Temp. mím") +
+  scale_color_gradientn(
+    colours = colores,
+    breaks = cortes,
+    labels = ~str_c(. , "º"),
+    guide = "legend") +
+    theme_light()
+```
+:::
+
+::: {.column width="55%"}
+```{r}
+#| label: mapa-temperaturas-print
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+#| fig-align: center
+
+print(gr)
+```
+:::
+:::::
+
+---
+
+## Mapas animados
+
+Los **mapas facetados** permiten mostrar cómo cambian las distribuciones espaciales de las variables pero este enfoque presenta desventajas, que son: 
+
+  - Las facetas se vuelven diminutas cuando hay muchas. 
+  - cada faceta esté físicamente separada en la pantalla (diferencias sutiles entre ellas pueden ser difíciles de detectar).
+
+Los mapas animados resuelven estos problemas. Esto se puede resolver con el paquete `tmap` (utilizaremos a continuación) o el `gganimate()` de `ggplot2`. 
+
+![](https://r.geocompx.org/images/urban-animated.gif){fig-align="center"}
+
+---
+
+A continuación vamos a crear el nuestro gráfico animado: 
+
+```{r}
+#| label: crea-mapa-urbanización
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+#| fig-align: center
+
+urb_anim <- tm_shape(world) + tm_polygons() + 
+  tm_shape(urban_agglomerations) + 
+  tm_symbols(size = "population_millions") +
+  tm_facets_wrap(by = "year", nrow = 1, 
+                 ncol = 1, free.coords = FALSE)
+```
+
+```{r}
+#| label: crea-mapa-urbanizacion
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| error: false
+#| fig-align: center
+
+tmap_animation(urb_anim, filename = "urb_anim.gif", 
+               delay = 25)
+```
+
+![](https://user-images.githubusercontent.com/1825120/38543030-5794b6f0-3c9b-11e8-9da9-10ec1f3ea726.gif){fig-align="center"}
+
+---
+
+## Mapas interactivos
+
+Si bien los mapas estáticos y animados pueden revitalizar los conjuntos de datos geográficos, los mapas interactivos pueden llevarlos a un nuevo nivel.
+
+El desarrollo de la informática ha propiciado también el desarrollo de la geocomputación, que está relacionada con los desarrollos webs y permite, entre otras cosas, la representación de mapas interactivos.
+
+Estos mapas dinámicos, ampliables y desplazables son más informativos que los mapas estáticos y, además, constituyen una alternativa que puede proporcionar al usuario una experiencia diferente, además de una mayor interacción.
+
+---
+
+A través de la función `tmap_mode("view")` nos permite pasar de un mapa estático a un mapa interactivo.
+
+```{r}
+#| label: herramienta-basica
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+#| fig-align: center
+
+map_nz = tm_shape(nz) + tm_polygons()
+tmap_mode("view")
+map_nz
+```
+
+---
+
+```{r}
+#| label: mapa-interactivo-doble
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+#| fig-align: center
+
+world_coffee = left_join(world, coffee_data, 
+                         by = "name_long")
+facets = c("coffee_production_2016", "coffee_production_2017")
+tm_shape(world_coffee) + 
+  tm_polygons(facets) + 
+  tm_facets_wrap(nrow = 1, sync = TRUE)
+```
+
+---
+
+### Otra forma: **mapview**
+
+```{r}
+#| label: modificación-noInteractivo
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+tmap_mode("plot")
+```
+
+```{r}
+#| label: alemania
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+oberfranken = subset(franconia, district == "Oberfranken")
+trails |>
+  st_transform(st_crs(oberfranken)) |>
+  st_intersection(oberfranken) |>
+  st_collection_extract("LINESTRING") |>
+  mapview(color = "red", lwd = 3, layer.name = "trails") +
+  mapview(franconia, zcol = "district") +
+  breweries
+```
+
+------------------------------------------------------------------------
+
+### Mapa de Snow interactivo
+
+Vamos a representar la versión interactiva del mapa de Snow. Para ello se utiliza la librería `leaflet.`
+
+::::: columns
+::: {.column width="45%"}
+```{r}
+#| label: mapa-leaflet
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+#| fig-align: center
+
+data("snow_deaths")
+data("snow_pumps")
+
+## crea mapa interactivo
+snow_map <- leaflet() |>
+  setView(lng = -0.136, lat = 51.513, zoom = 16) |>
+  addTiles() |>
+  addMarkers( data = snow_deaths, ~long, ~lat,
+    clusterOptions = markerClusterOptions(),
+    group = "Deaths" ) |>
+  addMarkers(data = snow_pumps, ~long, ~lat,
+    group = "Pumps" )
+```
+:::
+
+::: {.column width="55%"}
+```{r}
+#| label: mapa-leaflet-print
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+#| fig-align: center
+
+snow_map
+```
+:::
+:::::
+
+# A tener en cuenta 🗒️
+
+## Referentes actuales del mundo del Geospacial
+
+::::: columns
+::: {.column width="25%"}
+![](https://investigacion.usc.gal/img/uploaded/92537D3790E0868F1CB3340F8B32BE7C.jpg)
+:::
+
+::: {.column width="75%"}
+[Dominic Royé](https://dominicroye.github.io/) Climatólogo y educador de R con un gran compromiso con la comunidad. Su investigación se centra en la biometeorología, entre otros temas, y en la relación entre la salud humana y el medio ambiente atmosférico. Sus proyectos comunitarios valoran la colaboración entre las herramientas de código abierto, la alfabetización de datos y la graficación como una forma de generar poder e impulsar el cambio.
+:::
+:::::
+
+::::: columns
+::: {.column width="75%"}
+[Jakub Nowosad](https://jakubnowosad.com/) Geógrafo computacional y trabaja entre la geocomputación y las ciencias ambientales. Su investigación se centra en el desarrollo y la aplicación de métodos espaciales para ampliar la comprensión de los procesos y patrones ambientales. Parte fundamental de su trabajo es crear, colaborar y mejorar software geocomputacional. Miembro activo de la comunidad `#rspatial` y coautor de los libros *"Geocomputación con R"* y *"Geocomputación con Python"*.
+:::
+
+::: {.column width="25%"}
+![](https://jakubnowosad.com/static/img/nowosad_by_adrian_wykrota1s.png)
+:::
+:::::
+
+## Bibiligrafia
+
+:::::: columns
+::: {.column width="33%"}
+![](https://geocompx.org/static/img/book_cover_r2.jpg){width="60%"}
+:::
+
+::: {.column width="33%"}
+![](https://geocompx.org/static/img/book_cover_py.png){width="60%"}
+:::
+
+::: {.column width="33%"}
+![](https://geocompx.org/static/img/book_cover_jl.png){width="60%"}
+:::
+::::::
+
+El proyecto consistió en poder alojar contenido sobre [Geocomputación con R](https://r.geocompx.org/). Desde la publicación de dicho libro en 2019, la comunidad en torno al libro ha crecido e incluye una comunidad emergente llamada *«geocompy»* y el proyecto de libro de código abierto asociado, [Geocomputación con Python](https://py.geocompx.org/). Quedó claro que el nombre *«geocompr»* ya no era apropiado para la naturaleza multilingüe del proyecto.
+
+## Paquetes de R para el Geospacial
+
+## Paquetes de Python para el Geospacial
+
+# ¿Y cuál es el futuro que nos espera?
+
+## Linias futuras
+
+![](https://media.istockphoto.com/id/626627638/vector/gis-concept-data-layers-for-infographic.jpg?s=612x612&w=0&k=20&c=wdSrUVvDAPJMNbw7-wX_Qgr0T6xdk0wp2leFj1fFWSA=){fig-align="center"}
+
+![](https://us.123rf.com/450wm/naschy/naschy1611/naschy161100007/67318621-vector-illustration-von-gis-spatial-data-layer-konzept-f%C3%BCr-business-analysis-geographisches.jpg){fig-align="center"}
