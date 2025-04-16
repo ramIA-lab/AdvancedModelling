@@ -1,19 +1,8 @@
 {
-    "rmdVisualMode": "true",
+    "rmdVisualMode": "false",
     "rmdVisualWrapConfigured": "true",
     "source_window_id": "",
     "Source": "Source",
-<<<<<<< Updated upstream
-    "docOutlineVisible": "1",
-    "cursorPosition": "0,0",
-    "scrollLine": "0",
-    "rmdVisualModeLocation": "28521:47734",
-    "rmdVisualCollapsedChunks": ""
-=======
-    "docOutlineVisible": "0",
-    "rmdVisualCollapsedChunks": "",
-    "cursorPosition": "1369,195",
-    "scrollLine": "1358",
-    "rmdVisualModeLocation": "23610:48649"
->>>>>>> Stashed changes
+    "cursorPosition": "1325,106",
+    "scrollLine": "1326"
 }
