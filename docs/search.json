@@ -773,8 +773,11 @@
     "section": "Footnotes",
     "text": "Footnotes\n\n\nLas coordenadas cartesianas (sistema cartesiano) son un tipo de coordenadas ortogonales usadas en espacios euclídeos, para la representación gráfica de una relación matemática, movimiento o posición en física, caracterizadas por tener como referencia ejes ortogonales entre sí que concurren en el punto de origen.↩︎\nproyección cartográfica que representa el mundo en un plano, diseñada para minimizar la distorsión de las formas y tamaños de los continentes y océanos↩︎\nproyección cartográfica que representa el mundo en un plano, diseñada para minimizar la distorsión de las formas y tamaños de los continentes y océanos↩︎"
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 >>>>>>> c0198ffe475236c81887a954fe885a8a683c7965
 =======
+=======
+>>>>>>> Stashed changes
   },
   {
     "objectID": "material/05_GeospatialAnalysis/teoria/geodescriptiva.html#referentes-actuales-del-mundo-del-geospacial",
@@ -845,6 +848,9 @@
     "title": "Geodescriptiva",
     "section": "Mapas insertados",
     "text": "Mapas insertados\nUn mapa insertado es un mapa más pequeño que se representa dentro o junto al mapa principal. Puede tener diversas funciones, como proporcionar contexto o acercar regiones no contiguas para facilitar su comparación.\nTambién se pueden usar para enfocar un área más pequeña con más detalle o para cubrir la misma área que el mapa, pero representando un tema diferente."
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
   }
 ]
