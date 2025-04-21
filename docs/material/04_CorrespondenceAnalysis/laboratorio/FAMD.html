@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Dante Conti, Sergi Ramirez, (c) IDEAI">
-<meta name="dcterms.date" content="2025-04-17">
+<meta name="dcterms.date" content="2025-04-21">
 
 <title>Anàlisis factorial per a Dades mixtes (FAMD) – PMAAD</title>
 <style>
@@ -221,14 +221,14 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">April 17, 2025</p>
+      <p class="date">April 21, 2025</p>
     </div>
   </div>
   
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">April 17, 2025</p>
+      <p class="date-modified">April 21, 2025</p>
     </div>
   </div>
     
@@ -278,10 +278,12 @@ window.Quarto = {
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> prince</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> light_famd <span class="im">import</span> FAMD</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.cm <span class="im">as</span> cm</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib.colors <span class="im">import</span> LinearSegmentedColormap, Normalize</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -482,8 +484,7 @@ Consejo
 <div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
 <p>La función <code>prince.FAMD()</code> del paquete <code>prince</code>se puede utilizar para calcular los planos factoriales. La descripción de la función es la siguiente:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>famd <span class="op">=</span> prince.FAMD(n_components <span class="op">=</span> <span class="dv">2</span>, n_iter <span class="op">=</span> <span class="dv">3</span>, copy <span class="op">=</span> <span class="va">True</span>, check_input <span class="op">=</span> <span class="va">True</span>,</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    random_state <span class="op">=</span> <span class="dv">42</span>, engine <span class="op">=</span> <span class="st">"sklearn"</span>, handle_unknown <span class="op">=</span> <span class="st">"error"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>famd <span class="op">=</span> prince.FAMD(n_components <span class="op">=</span> <span class="dv">2</span>, n_iter <span class="op">=</span> <span class="dv">3</span>, copy <span class="op">=</span> <span class="va">True</span>, check_input <span class="op">=</span> <span class="va">True</span>, random_state <span class="op">=</span> <span class="dv">42</span>, engine <span class="op">=</span> <span class="st">"sklearn"</span>, handle_unknown <span class="op">=</span> <span class="st">"error"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li><p><code>n_components</code>: El número de dimensiones que se mantienen en los resultados <em>(por defecto 2)</em></p></li>
@@ -494,8 +495,8 @@ Consejo
 </ul>
 <p>A continuación, vamos a calcular el FAMD de la siguiente manera:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>famd <span class="op">=</span> prince.FAMD(n_components<span class="op">=</span><span class="dv">10</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>famdPy <span class="op">=</span> famd.fit(pydf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>famdPy <span class="op">=</span> prince.FAMD(n_components<span class="op">=</span><span class="dv">10</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>famdPy <span class="op">=</span> famdPy.fit(pydf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -560,8 +561,8 @@ Dim.6   1.015145         4.413675                    57.40794</code></pre>
 <div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
 <p>La proporción de varianzas retenidas (<em>eigenvalues</em>) por las diferentes dimensiones (ejes) se puede extraer utilizando el método <code>.eigenvalues_</code> de la siguiente manera:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>eigenvalues <span class="op">=</span> famd.eigenvalues_</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>famd.eigenvalues_summary</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>eigenvalues <span class="op">=</span> famdPy.eigenvalues_</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>famdPy.eigenvalues_summary</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          eigenvalue % of variance % of variance (cumulative)
 component                                                    
@@ -587,7 +588,7 @@ component
 <span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Valor propio (Eigenvalue)'</span>)</span>
 <span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>plt.xticks(<span class="bu">range</span>(<span class="dv">1</span>, <span class="bu">len</span>(eigenvalues) <span class="op">+</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>([&lt;matplotlib.axis.XTick object at 0x0000019752FF2F90&gt;, &lt;matplotlib.axis.XTick object at 0x0000019752FF2AE0&gt;, &lt;matplotlib.axis.XTick object at 0x0000019752FF0830&gt;, &lt;matplotlib.axis.XTick object at 0x000001973987F770&gt;, &lt;matplotlib.axis.XTick object at 0x0000019752F96FC0&gt;, &lt;matplotlib.axis.XTick object at 0x0000019752F94830&gt;, &lt;matplotlib.axis.XTick object at 0x0000019752F94110&gt;, &lt;matplotlib.axis.XTick object at 0x0000019752F95160&gt;, &lt;matplotlib.axis.XTick object at 0x0000019752F21E20&gt;, &lt;matplotlib.axis.XTick object at 0x0000019752F23C20&gt;], [Text(1, 0, '1'), Text(2, 0, '2'), Text(3, 0, '3'), Text(4, 0, '4'), Text(5, 0, '5'), Text(6, 0, '6'), Text(7, 0, '7'), Text(8, 0, '8'), Text(9, 0, '9'), Text(10, 0, '10')])</code></pre>
+<pre><code>([&lt;matplotlib.axis.XTick object at 0x0000024D1690F7D0&gt;, &lt;matplotlib.axis.XTick object at 0x0000024D1690DE50&gt;, &lt;matplotlib.axis.XTick object at 0x0000024D168CBE90&gt;, &lt;matplotlib.axis.XTick object at 0x0000024D1690D7C0&gt;, &lt;matplotlib.axis.XTick object at 0x0000024D1683EA50&gt;, &lt;matplotlib.axis.XTick object at 0x0000024D168242F0&gt;, &lt;matplotlib.axis.XTick object at 0x0000024D16824D10&gt;, &lt;matplotlib.axis.XTick object at 0x0000024D16824B60&gt;, &lt;matplotlib.axis.XTick object at 0x0000024D168746E0&gt;, &lt;matplotlib.axis.XTick object at 0x0000024D16874F50&gt;], [Text(1, 0, '1'), Text(2, 0, '2'), Text(3, 0, '3'), Text(4, 0, '4'), Text(5, 0, '5'), Text(6, 0, '6'), Text(7, 0, '7'), Text(8, 0, '8'), Text(9, 0, '9'), Text(10, 0, '10')])</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>plt.grid(<span class="va">True</span>)</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -627,43 +628,15 @@ component
 <h4 data-number="2.4.1.1" class="anchored" data-anchor-id="coordenadas-de-las-componentes"><span class="header-section-number">2.4.1.1</span> Coordenadas de las componentes</h4>
 <p>Se puede acceder a los diferentes componentes de la siguiente manera:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(var<span class="sc">$</span>coord)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(var<span class="sc">$</span>coord[, <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                      Dim.1        Dim.2        Dim.3        Dim.4        Dim.5
-Tenure         0.4206809111 0.2864370404 5.868863e-02 0.0218736221 0.0457414192
-MonthlyCharges 0.7115470075 0.2017404911 2.527110e-03 0.0009313836 0.0373283234
-TotalCharges   0.7986771845 0.0407946811 2.999847e-02 0.0137505310 0.0002819435
-Gender         0.0001947487 0.0001642962 3.424638e-06 0.0015453361 0.0004039431
-SeniorCitizen  0.0304048842 0.1378319021 5.802770e-03 0.0057238890 0.3353323926
-Partner        0.0969690101 0.1609366512 6.777893e-02 0.3774002728 0.0210933977
-                      Dim.6        Dim.7        Dim.8        Dim.9       Dim.10
-Tenure         0.0029714256 0.0027429293 7.207226e-04 0.0019253192 0.0001662265
-MonthlyCharges 0.0017659924 0.0016048597 2.060097e-03 0.0024653067 0.0006742955
-TotalCharges   0.0006692374 0.0007429025 1.192828e-06 0.0000503063 0.0014968379
-Gender         0.5699953144 0.0066959594 4.067682e-01 0.0099656888 0.0033994054
-SeniorCitizen  0.0176392989 0.0220825549 1.815717e-02 0.0329897921 0.2538389658
-Partner        0.0001656422 0.0011872334 4.440980e-03 0.0122687338 0.0216571075
-                     Dim.11       Dim.12       Dim.13       Dim.14       Dim.15
-Tenure         4.981054e-03 0.0267256698 1.850589e-02 1.850273e-05 0.0034256618
-MonthlyCharges 3.863952e-03 0.0039277693 6.322752e-03 1.485444e-06 0.0017050717
-TotalCharges   3.368100e-03 0.0089892406 1.274734e-03 2.784590e-04 0.0038733938
-Gender         9.755036e-07 0.0002331641 3.296441e-05 1.558037e-05 0.0001994270
-SeniorCitizen  5.217503e-03 0.0779633402 3.633753e-03 1.591970e-02 0.0004404344
-Partner        2.754490e-06 0.0078130672 3.866355e-05 1.698396e-04 0.0001266777
-                     Dim.16       Dim.17       Dim.18       Dim.19       Dim.20
-Tenure         4.670909e-04 2.284007e-03 1.469844e-03 4.847367e-05 0.0478358122
-MonthlyCharges 4.227004e-04 3.543009e-03 1.582231e-03 1.445384e-04 0.0045808492
-TotalCharges   4.619748e-06 5.613798e-03 2.565614e-03 1.539323e-04 0.0290454761
-Gender         1.059940e-04 7.070834e-07 5.598966e-05 2.985598e-07 0.0002082851
-SeniorCitizen  6.968803e-05 2.874512e-02 5.093689e-03 2.982280e-03 0.0001185972
-Partner        1.363573e-03 8.667739e-02 8.881079e-02 4.534216e-02 0.0043867745
-                     Dim.21       Dim.22       Dim.23
-Tenure         3.107601e-02 2.121374e-02 3.356178e-09
-MonthlyCharges 1.007993e-02 6.933745e-04 4.874746e-04
-TotalCharges   2.527184e-02 3.309750e-02 8.054459e-09
-Gender         1.002096e-05 2.509762e-07 7.642205e-11
-SeniorCitizen  1.026425e-05 2.015929e-06 5.707411e-12
-Partner        1.362083e-03 8.266294e-06 2.637956e-10</code></pre>
+<pre><code>                      Dim.1        Dim.2        Dim.3        Dim.4
+Tenure         0.4206809111 0.2864370404 5.868863e-02 0.0218736221
+MonthlyCharges 0.7115470075 0.2017404911 2.527110e-03 0.0009313836
+TotalCharges   0.7986771845 0.0407946811 2.999847e-02 0.0137505310
+Gender         0.0001947487 0.0001642962 3.424638e-06 0.0015453361
+SeniorCitizen  0.0304048842 0.1378319021 5.802770e-03 0.0057238890
+Partner        0.0969690101 0.1609366512 6.777893e-02 0.3774002728</code></pre>
 </div>
 </div>
 </section>
@@ -671,43 +644,15 @@ Partner        1.362083e-03 8.266294e-06 2.637956e-10</code></pre>
 <h4 data-number="2.4.1.2" class="anchored" data-anchor-id="coseno2"><span class="header-section-number">2.4.1.2</span> Coseno<span class="math inline">\(^2\)</span></h4>
 <p>A continuación se muestra el coseno<span class="math inline">\(^2\)</span> que representa la calidad de la representación en el mapa factorial.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(var<span class="sc">$</span>cos2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(var<span class="sc">$</span>cos2[, <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                      Dim.1        Dim.2        Dim.3        Dim.4        Dim.5
-Tenure         1.769724e-01 8.204618e-02 3.444355e-03 4.784553e-04 2.092277e-03
-MonthlyCharges 5.062991e-01 4.069923e-02 6.386284e-06 8.674754e-07 1.393404e-03
-TotalCharges   6.378852e-01 1.664206e-03 8.999080e-04 1.890771e-04 7.949213e-08
-Gender         3.792705e-08 2.699325e-08 1.172814e-11 2.388064e-06 1.631700e-07
-SeniorCitizen  9.244570e-04 1.899763e-02 3.367214e-05 3.276290e-05 1.124478e-01
-Partner        9.402989e-03 2.590061e-02 4.593984e-03 1.424310e-01 4.449314e-04
-                      Dim.6        Dim.7        Dim.8        Dim.9       Dim.10
-Tenure         8.829370e-06 7.523661e-06 5.194411e-07 3.706854e-06 2.763125e-08
-MonthlyCharges 3.118729e-06 2.575575e-06 4.243998e-06 6.077737e-06 4.546744e-07
-TotalCharges   4.478787e-07 5.519042e-07 1.422838e-12 2.530724e-09 2.240524e-06
-Gender         3.248947e-01 4.483587e-05 1.654604e-01 9.931495e-05 1.155596e-05
-SeniorCitizen  3.111449e-04 4.876392e-04 3.296827e-04 1.088326e-03 6.443422e-02
-Partner        2.743734e-08 1.409523e-06 1.972231e-05 1.505218e-04 4.690303e-04
-                     Dim.11       Dim.12       Dim.13       Dim.14       Dim.15
-Tenure         2.481089e-05 7.142614e-04 3.424680e-04 3.423510e-10 1.173516e-05
-MonthlyCharges 1.493012e-05 1.542737e-05 3.997719e-05 2.206542e-12 2.907269e-06
-TotalCharges   1.134410e-05 8.080645e-05 1.624948e-06 7.753942e-08 1.500318e-05
-Gender         9.516073e-13 5.436552e-08 1.086652e-09 2.427479e-10 3.977112e-08
-SeniorCitizen  2.722234e-05 6.078282e-03 1.320416e-05 2.534368e-04 1.939825e-07
-Partner        7.587217e-12 6.104402e-05 1.494870e-09 2.884550e-08 1.604723e-08
-                     Dim.16       Dim.17       Dim.18       Dim.19       Dim.20
-Tenure         2.181739e-07 5.216686e-06 2.160443e-06 2.349697e-09 2.288265e-03
-MonthlyCharges 1.786756e-07 1.255291e-05 2.503454e-06 2.089135e-08 2.098418e-05
-TotalCharges   2.134207e-11 3.151473e-05 6.582377e-06 2.369514e-08 8.436397e-04
-Gender         1.123473e-08 4.999670e-13 3.134842e-09 8.913794e-14 4.338268e-08
-SeniorCitizen  4.856421e-09 8.262820e-04 2.594567e-05 8.893993e-06 1.406531e-08
-Partner        1.859330e-06 7.512970e-03 7.887356e-03 2.055911e-03 1.924379e-05
-                     Dim.21       Dim.22       Dim.23
-Tenure         9.657182e-04 4.500228e-04 1.126393e-17
-MonthlyCharges 1.016049e-04 4.807682e-07 2.376315e-07
-TotalCharges   6.386660e-04 1.095444e-03 6.487430e-17
-Gender         1.004197e-10 6.298905e-14 5.840329e-21
-SeniorCitizen  1.053548e-10 4.063970e-12 3.257454e-23
-Partner        1.855271e-06 6.833162e-11 6.958814e-20</code></pre>
+<pre><code>                      Dim.1        Dim.2        Dim.3        Dim.4
+Tenure         1.769724e-01 8.204618e-02 3.444355e-03 4.784553e-04
+MonthlyCharges 5.062991e-01 4.069923e-02 6.386284e-06 8.674754e-07
+TotalCharges   6.378852e-01 1.664206e-03 8.999080e-04 1.890771e-04
+Gender         3.792705e-08 2.699325e-08 1.172814e-11 2.388064e-06
+SeniorCitizen  9.244570e-04 1.899763e-02 3.367214e-05 3.276290e-05
+Partner        9.402989e-03 2.590061e-02 4.593984e-03 1.424310e-01</code></pre>
 </div>
 </div>
 </section>
@@ -715,43 +660,15 @@ Partner        1.855271e-06 6.833162e-11 6.958814e-20</code></pre>
 <h4 data-number="2.4.1.3" class="anchored" data-anchor-id="contribuciones"><span class="header-section-number">2.4.1.3</span> Contribuciones</h4>
 <p>En el siguiente apartado, podemos visualizar la contribución de cada una de las varaibles a las dimensiones.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(var<span class="sc">$</span>contrib)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(var<span class="sc">$</span>contrib[, <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                      Dim.1        Dim.2        Dim.3       Dim.4       Dim.5
-Tenure          8.001354821 10.029653733 3.1536958900  1.87871471  4.35664277
-MonthlyCharges 13.533630663  7.063986094 0.1357969462  0.07999608  3.55533722
-TotalCharges   15.190847437  1.428434412 1.6119995933  1.18102638  0.02685371
-Gender          0.003704122  0.005752867 0.0001840266  0.13272816  0.03847357
-SeniorCitizen   0.578301180  4.826213291 0.3118180199  0.49162203 31.93874325
-Partner         1.844351468  5.635230981 3.6421732973 32.41472495  2.00904126
-                     Dim.6      Dim.7        Dim.8       Dim.9      Dim.10
-Tenure          0.29270941 0.27422854 7.322369e-02 0.212969557  0.01960159
-MonthlyCharges  0.17396451 0.16044829 2.093009e-01 0.272700375  0.07951358
-TotalCharges    0.06592529 0.07427281 1.211885e-04 0.005564641  0.17650859
-Gender         56.14913986 0.66943876 4.132667e+01 1.102356579  0.40086121
-SeniorCitizen   1.73761333 2.20773710 1.844725e+00 3.649172179 29.93293914
-Partner         0.01631709 0.11869547 4.511929e-01 1.357108337  2.55382730
-                     Dim.11      Dim.12      Dim.13       Dim.14     Dim.15
-Tenure         0.6499287792  3.73205584 2.737664890 0.0029757420 0.55800709
-MonthlyCharges 0.5041691151  0.54848595 0.935354831 0.0002388997 0.27773965
-TotalCharges   0.4394703000  1.25528558 0.188577535 0.0447837802 0.63093830
-Gender         0.0001272839  0.03255977 0.004876582 0.0025057471 0.03248472
-SeniorCitizen  0.6807807661 10.88704387 0.537558363 2.5603202217 0.07174250
-Partner        0.0003594064  1.09104106 0.005719683 0.0273148289 0.02063457
-                     Dim.16       Dim.17      Dim.18       Dim.19      Dim.20
-Tenure         0.0782042308 4.732908e-01  0.31395346 1.046222e-02 14.71421048
-MonthlyCharges 0.0707720112 7.341808e-01  0.33795875 3.119615e-02  1.40906104
-TotalCharges   0.0007734766 1.163289e+00  0.54800596 3.322366e-02  8.93433661
-Gender         0.0177463952 1.465215e-04  0.01195919 6.443904e-05  0.06406812
-SeniorCitizen  0.0116677487 5.956551e+00  1.08799356 6.436743e-01  0.03648030
-Partner        0.2283006539 1.796125e+01 18.96966271 9.786333e+00  1.34936400
-                     Dim.21       Dim.22       Dim.23
-Tenure         11.474106762 36.961897749 4.472128e-04
-MonthlyCharges  3.721783141  1.208105574 6.495628e+01
-TotalCharges    9.331051522 57.667637189 1.073261e-03
-Gender          0.003700011  0.000437290 1.018328e-05
-SeniorCitizen   0.003789839  0.003512467 7.605160e-07
-Partner         0.502918193  0.014402831 3.515093e-05</code></pre>
+<pre><code>                      Dim.1        Dim.2        Dim.3       Dim.4
+Tenure          8.001354821 10.029653733 3.1536958900  1.87871471
+MonthlyCharges 13.533630663  7.063986094 0.1357969462  0.07999608
+TotalCharges   15.190847437  1.428434412 1.6119995933  1.18102638
+Gender          0.003704122  0.005752867 0.0001840266  0.13272816
+SeniorCitizen   0.578301180  4.826213291 0.3118180199  0.49162203
+Partner         1.844351468  5.635230981 3.6421732973 32.41472495</code></pre>
 </div>
 </div>
 <p>La siguiente figura muestra la correlación entre las variables, tanto cuantitativas como cualitativas, y las dimensiones principales, así como la contribución de las variables a las dimensiones 1 y 2. Se utilizan las siguientes funciones del paquete <code>factoextra</code>:</p>
@@ -813,7 +730,7 @@ Partner         0.502918193  0.014402831 3.515093e-05</code></pre>
 <p>Se puede acceder a los diferentes componentes de la siguiente manera:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co">## famd.row_coordinates(pydf)  ## Individuos</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>famd.column_coordinates_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>famdPy.column_coordinates_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>component                0         1  ...         8             9
 variable                              ...                        
@@ -846,9 +763,32 @@ Tenure            0.525252  0.173087  ...  0.945035  9.635537e-01
 <h4 data-number="2.4.1.5" class="anchored" data-anchor-id="coseno2-1"><span class="header-section-number">2.4.1.5</span> Coseno<span class="math inline">\(^2\)</span></h4>
 <p>A continuación se muestra el coseno<span class="math inline">\(^2\)</span> que representa la calidad de la representación en el mapa factorial.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>famd.column_cosine_similarities_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>famdPy.column_coordinates_ <span class="op">**</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;bound method FAMD.column_cosine_similarities_ of FAMD(n_components=10, random_state=42)&gt;</code></pre>
+<pre><code>component                    0             1  ...             8             9
+variable                                      ...                            
+MonthlyCharges    2.663429e-01  1.069192e-01  ...  5.978147e-10  7.398242e-08
+TotalCharges      5.749627e-01  1.524285e-06  ...  1.834568e-06  1.958368e-12
+Churn             1.000095e-03  1.517529e-01  ...  1.690637e-06  3.993541e-06
+Contract          4.172909e-02  1.851923e-01  ...  1.353859e-05  8.714880e-07
+Dependents        2.018980e-04  4.272720e-02  ...  6.534426e-07  1.092735e-12
+DeviceProtection  1.821192e-01  8.619380e-06  ...  4.627334e-05  1.818758e-14
+Gender            6.145598e-08  1.445026e-07  ...  4.577077e-05  4.931367e-05
+InternetService   8.528444e-02  2.563737e-01  ...  3.075429e-05  2.417889e-06
+MultipleLines     4.279747e-02  2.981547e-03  ...  4.902979e-06  1.867618e-07
+OnlineBackup      1.224257e-01  4.230329e-06  ...  1.709518e-06  2.107805e-06
+OnlineSecurity    7.439183e-02  1.536858e-03  ...  1.064014e-04  1.212164e-06
+PaperlessBilling  2.630919e-03  5.840094e-02  ...  2.342487e-06  5.380497e-04
+Partner           2.062052e-02  9.395777e-03  ...  2.113838e-07  5.502509e-07
+PaymentMethod     4.179515e-02  1.453325e-01  ...  4.049852e-04  1.158845e-06
+PhoneService      2.085858e-06  1.482284e-04  ...  1.666081e-09  1.552041e-10
+SeniorCitizen     1.596509e-04  2.818686e-02  ...  2.887529e-07  1.610393e-05
+StreamingMovies   1.649421e-01  7.779385e-03  ...  3.674741e-07  9.811864e-10
+StreamingTV       1.598736e-01  8.112913e-03  ...  1.034660e-05  2.899077e-06
+TechSupport       1.125803e-01  7.815585e-04  ...  2.060583e-08  2.672637e-11
+Tenure            2.758900e-01  2.995894e-02  ...  8.930918e-01  9.284358e-01
+
+[20 rows x 10 columns]</code></pre>
 </div>
 </div>
 </section>
@@ -856,7 +796,7 @@ Tenure            0.525252  0.173087  ...  0.945035  9.635537e-01
 <h4 data-number="2.4.1.6" class="anchored" data-anchor-id="contribuciones-1"><span class="header-section-number">2.4.1.6</span> Contribuciones</h4>
 <p>En el siguiente apartado, podemos visualizar la contribución de cada una de las varaibles a las dimensiones.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>(famd.column_contributions_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>(famdPy.column_contributions_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>component                0         1  ...         8             9
 variable                              ...                        
@@ -887,7 +827,7 @@ Tenure            0.014517  0.006527  ...  0.104116  1.062860e-01
 <p>La siguiente figura muestra la correlación entre las variables, tanto cuantitativas como cualitativas, y las dimensiones principales, así como la contribución de las variables a las dimensiones 1 y 2.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Coordenadas de las variables (componentes 1 y 2)</span></span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>coords <span class="op">=</span> famd.column_coordinates_</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>coords <span class="op">=</span> famdPy.column_coordinates_</span>
 <span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Elegimos los dos primeros componentes</span></span>
 <span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> coords[<span class="dv">0</span>]</span>
@@ -923,7 +863,7 @@ Tenure            0.014517  0.006527  ...  0.104116  1.062860e-01
 <p>A continuación vamos a visualizar las contribuciones de las variables en la primera dimensión.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Obtener coordenadas de las variables</span></span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>coords <span class="op">=</span> famd.column_coordinates_</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>coords <span class="op">=</span> famdPy.column_coordinates_</span>
 <span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcular la contribución (cos²) al eje 1</span></span>
 <span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Es la coordenada al cuadrado de cada variable en ese eje</span></span>
@@ -958,7 +898,7 @@ Tenure            0.014517  0.006527  ...  0.104116  1.062860e-01
 <p>Seguidamente podemos ver las contribuciones de las variables en la 2a dimensión.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Obtener coordenadas de las variables</span></span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>coords <span class="op">=</span> famd.column_coordinates_</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>coords <span class="op">=</span> famdPy.column_coordinates_</span>
 <span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcular la contribución (cos²) al eje 1</span></span>
 <span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Es la coordenada al cuadrado de cada variable en ese eje</span></span>
@@ -1010,10 +950,6 @@ Tenure            0.014517  0.006527  ...  0.104116  1.062860e-01
 <section id="variables-cuantitativas" class="level3" data-number="2.4.2">
 <h3 data-number="2.4.2" class="anchored" data-anchor-id="variables-cuantitativas"><span class="header-section-number">2.4.2</span> Variables cuantitativas</h3>
 <p>Para extraer los resultados de las variables cuantitativas, se debe realizar el siguiente proceso:</p>
-<div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" role="tab" aria-controls="tabset-6-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" role="tab" aria-controls="tabset-6-2" aria-selected="false">Python</a></li></ul>
-<div class="tab-content">
-<div id="tabset-6-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-6-1-tab">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>(quanti.var <span class="ot">&lt;-</span> <span class="fu">get_famd_var</span>(res.famd, <span class="st">"quanti.var"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1057,12 +993,6 @@ Tenure            0.014517  0.006527  ...  0.104116  1.062860e-01
 <figure class="figure">
 <p><img src="FAMD_files/figure-html/circulo unitario calidad-R-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
-</div>
-</div>
-</div>
-</div>
-<div id="tabset-6-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-2-tab">
-
 </div>
 </div>
 </div>
