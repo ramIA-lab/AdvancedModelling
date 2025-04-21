@@ -15,65 +15,33 @@ editor: visual
 #execute: 
 #  freeze: auto
 ---
-# 
 
-Descripció de la columna:
+# Introducción 
 
-- **Gender:** El gènere del client: Home (1), Femení (0).
+El Análisis Factorial de Datos Mixtos (FAMD) es una potente técnica estadística que se utiliza para analizar conjuntos de datos que contienen variables numéricas y categóricas. Amplía el análisis factorial tradicional para gestionar tipos de datos mixtos, proporcionando una comprensión integral de la estructura subyacente de conjuntos de datos complejos. 
 
-- **SeniorCitizen:** Indica si el client té 65 anys o més: No (0), Sí (1).
-
-- **Partner:** El contracte de servei és revenut pel soci: No (0), Sí (1).
-
-- **Dependents:** Indica si el client viu amb algun dependent: No (0), Sí (1).
-
-- **Tenure:** Indica l'import total de mesos que el client ha estat amb l'empresa.
-
-- **PhoneService:** Indica si el client es subscriu al servei de telèfon de casa amb l'empresa: No (0), Sí (1).
-
-- **MultipleLines:** Indica si el client es subscriu a diverses línies telefòniques amb l'empresa: No (0), Sí (1).
-
-- **InternetService:** Indica si el client es subscriu al servei d'Internet amb l'empresa: No (0), DSL (1), Fibra òptica (2).
-
-- **OnlineSecurity:** Indica si el client es subscriu a un servei addicional de seguretat en línia prestat per l'empresa: No (0), Sí (1), NA (2).
-
-- **OnlineBackup:** Indica si el client es subscriu a un servei de backup online addicional proporcionat per l'empresa: No (0), Sí (1), NA (2).
-
-- **DeviceProtection:** Indica si el client es subscriu a un pla addicional de protecció de dispositius per als seus equips d'Internet proporcionats per l'empresa: No (0), Sí (1), NA (2).
-
-- **TechSupport:** Indica si el client es subscriu a un pla de suport tècnic addicional de l'empresa amb temps d'espera reduïts: No (0), Sí (1), NA (2).
-
-- **StreamingTV:** Indica si el client utilitza el seu servei d'Internet per transmetre la programació de televisió d'un proveïdor de tercers: No (0), Sí (1), NA (2). L'empresa no cobra cap càrrec addicional per aquest servei.
-
-- **StreamingMovies:** Indica si el client utilitza el seu servei d'Internet per transmetre pel·lícules d'un proveïdor de tercers: No (0), Sí (1), NA (2). L'empresa no cobra cap càrrec addicional per aquest servei.
-
-- **Contract:** Indica el tipus de contracte actual del client: Mes a mes (0), Un any (1), Dos anys (2).
-
-- **PaperlessBilling:** Indica si el client ha triat facturació sense paper: No (0), Sí (1).
-
-- **Mètode de pagament:** Indica com el client paga la seva factura: transferència bancària - automàtica (0), targeta de crèdit - automàtica (1), xec electrònic (2), xec per correu (3).
-
-- **MonthlyCharges:** Indica el total de la quota mensual actual del client per a tots els seus serveis de l'empresa.
-
-- **TotalCharges:** Indica el total de càrrecs del client.
-
-- **Churn:** Indica si el client es talla o no: No (0), Sí (1).
-
-```{r}
-#| echo: true
-#| eval: true
-#| warning: false
-#| message: false
-#| error: false
-
-## Import data
-df <- read.csv('https://github.com/nchelaru/data-prep/raw/master/telco_cleaned_renamed.csv')
-
-## Preview data
-head(df)
+```{mermaid}
+flowchart TD
+    cat?(¿BBDD Categorica?) --> |"✅"| num_too?(¿Contiene numéricas?)
+    num_too? --> |"✅"| FAMD
+    num_too? --> |"❌"| multiple_cat?(¿Más de dos columnas?)
+    multiple_cat? --> |"✅"| MCA
+    multiple_cat? --> |"❌"| CA
+    cat? --> |"❌"| groups?(¿Columnas agrupadas?)
+    groups? --> |"✅"| MFA
+    groups? --> |"❌"| shapes?(Analysing shapes?)
+    shapes? --> |"✅"| GPA
+    shapes? --> |"❌"| PCA
 ```
 
+Para poder realizar los métodos, necesitaremos importar las siguientes librerias: 
+
+:::: panel-tabset
+
+## R
+
 ```{r}
+#| label: cargar-librerias-R
 #| echo: true
 #| eval: true
 #| warning: false
@@ -85,8 +53,171 @@ library(FactoMineR)
 library(factoextra)
 ```
 
+## Python
+
+```{python}
+#| label: cargar-librerias-python
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+import prince
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib.cm as cm
+import seaborn as sns
+from matplotlib.colors import LinearSegmentedColormap, Normalize
+```
+::::
+
+# Planteamiento del problema
+
+Descripció de la columna:
+
+-   **Gender:** El gènere del client: Home (1), Femení (0).
+
+-   **SeniorCitizen:** Indica si el client té 65 anys o més: No (0), Sí (1).
+
+-   **Partner:** El contracte de servei és revenut pel soci: No (0), Sí (1).
+
+-   **Dependents:** Indica si el client viu amb algun dependent: No (0), Sí (1).
+
+-   **Tenure:** Indica l'import total de mesos que el client ha estat amb l'empresa.
+
+-   **PhoneService:** Indica si el client es subscriu al servei de telèfon de casa amb l'empresa: No (0), Sí (1).
+
+-   **MultipleLines:** Indica si el client es subscriu a diverses línies telefòniques amb l'empresa: No (0), Sí (1).
+
+-   **InternetService:** Indica si el client es subscriu al servei d'Internet amb l'empresa: No (0), DSL (1), Fibra òptica (2).
+
+-   **OnlineSecurity:** Indica si el client es subscriu a un servei addicional de seguretat en línia prestat per l'empresa: No (0), Sí (1), NA (2).
+
+-   **OnlineBackup:** Indica si el client es subscriu a un servei de backup online addicional proporcionat per l'empresa: No (0), Sí (1), NA (2).
+
+-   **DeviceProtection:** Indica si el client es subscriu a un pla addicional de protecció de dispositius per als seus equips d'Internet proporcionats per l'empresa: No (0), Sí (1), NA (2).
+
+-   **TechSupport:** Indica si el client es subscriu a un pla de suport tècnic addicional de l'empresa amb temps d'espera reduïts: No (0), Sí (1), NA (2).
+
+-   **StreamingTV:** Indica si el client utilitza el seu servei d'Internet per transmetre la programació de televisió d'un proveïdor de tercers: No (0), Sí (1), NA (2). L'empresa no cobra cap càrrec addicional per aquest servei.
+
+-   **StreamingMovies:** Indica si el client utilitza el seu servei d'Internet per transmetre pel·lícules d'un proveïdor de tercers: No (0), Sí (1), NA (2). L'empresa no cobra cap càrrec addicional per aquest servei.
+
+-   **Contract:** Indica el tipus de contracte actual del client: Mes a mes (0), Un any (1), Dos anys (2).
+
+-   **PaperlessBilling:** Indica si el client ha triat facturació sense paper: No (0), Sí (1).
+
+-   **PaymentMethod:** Indica com el client paga la seva factura: transferència bancària - automàtica (0), targeta de crèdit - automàtica (1), xec electrònic (2), xec per correu (3).
+
+-   **MonthlyCharges:** Indica el total de la quota mensual actual del client per a tots els seus serveis de l'empresa.
+
+-   **TotalCharges:** Indica el total de càrrecs del client.
+
+-   **Churn:** Indica si el client es talla o no: No (0), Sí (1).
+
+:::: panel-tabset
+
+## R
 
 ```{r}
+#| label: importacion-datos-R
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+## Import data
+df <- read.csv('https://raw.githubusercontent.com/nchelaru/data-prep/refs/heads/master/telco_cleaned_renamed.csv')
+
+## Preview data
+head(df)
+```
+
+Visualizamos la estructura de los datos: 
+
+```{r}
+#| label: estructura-datos-R
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+str(df)
+```
+
+## Python
+
+```{python}
+#| label: importacion-datos-Py
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+pydf = pd.read_csv('https://raw.githubusercontent.com/nchelaru/data-prep/refs/heads/master/telco_cleaned_renamed.csv')
+```
+
+Visualizamos la estructura de los datos: 
+
+```{python}
+#| label: estructura-datos-Py
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+pydf.info()
+```
+
+:::: 
+
+Los datos contienen 20 columnas divididas en: 
+  - **Numéricas**: `Tenure`, `MonthlyCharges` y `TotalCharges`
+  - **Categóricas**: `Gender`, `SeniorCitizen`, `Partner`, `Dependents`, `PhoneService`, `MultipleLines`, `InternetService`, `OnlineSecurity`, `OnlineBackup`, `DeviceProtection`, `TechSupport`, `StreamingTV`, `StreamingMovies`, `Contract`, `PaperlessBilling`, `PaymentMethod` y `Churn` (variable respuesta)
+
+::: {.callout-tip title="Consejo"}
+El objetivo de este estudio es poder estudiar las relaciones y asociaciones que existen en los clientes de la empresa Telecom.
+:::
+
+## Entrenamiento
+
+:::: panel-tabset
+
+## R
+
+La función `FAMD()` del paquete `FactoMineR`se puede utilizar para calcular los planos factoriales. La descripción de la función es la siguiente: 
+
+```{r}
+#| label: explicación-funcion-R
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| error: false
+
+FAMD (base, ncp = 5, sup.var = NULL, ind.sup = NULL, graph = TRUE)
+```
+
+- `base`: Un `data.frame` con n filas (individuos) y p columnas (variables).
+
+- `ncp`: El número de dimensiones que se mantienen en los resultados *(por defecto 5)*
+
+- `sup.var`: Un vector que indica los índices de las variables suplementarias.
+
+- `ind.sup`: Un vector que indica los índices de los individuos suplementarios.
+
+- `graph`: Un valor lógico. Si es `VERDADERO`, se muestra un gráfico.
+
+A continuación, vamos a calcular el FAMD de la siguiente manera: 
+
+```{r}
+#| label: calculo-FAMD
 #| echo: true
 #| eval: true
 #| warning: false
@@ -94,16 +225,105 @@ library(factoextra)
 #| error: false
 
 ## FAMD
-res.famd <- FAMD(df, 
-                 sup.var = 20,  ## Set the target variable "Churn" as a supplementary variable
-                 graph = FALSE, 
-                 ncp=25)
-
-## Inspect principal components
-get_eigenvalue(res.famd)
+res.famd <- FAMD(df, sup.var = 20, graph = FALSE, ncp = 25)
 ```
 
+La salida que obtenemos con la función `FAMD()` es una lista que incluye: 
+
 ```{r}
+#| label: lista-valores-FAMD
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+print(res.famd)
+```
+
+## Python 
+
+La función `prince.FAMD()` del paquete `prince`se puede utilizar para calcular los planos factoriales. La descripción de la función es la siguiente: 
+
+```{python}
+#| label: explicación-funcion-Py
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| error: false
+
+famd = prince.FAMD(n_components = 2, n_iter = 3, copy = True, check_input = True, random_state = 42, engine = "sklearn", handle_unknown = "error")
+```
+
+- `n_components`: El número de dimensiones que se mantienen en los resultados *(por defecto 2)*
+
+- `n_iter`: El número de iteraciones de las cuales ha de realizar el FAMD *(por defecto 3)*
+
+- `copy`: Indica si queremos realizar una copia o por el contrario de la base de datos
+
+- `check_input`: Valida las variables de entrada
+
+- `random_state`: Asigna una semilla para los cálculos
+
+A continuación, vamos a calcular el FAMD de la siguiente manera: 
+
+```{python}
+#| label: calculo-FAMD-Py
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+famd = prince.FAMD(n_components=10, random_state=42)
+famdPy = famd.fit(pydf)
+```
+:::: 
+
+
+## Visualización e interpretación
+
+Utilizaremos las siguientes funciones del paquete `factoextra` para poder obtener las interpretaciones correspondientes: 
+
+- `get_eigenvalue(res.famd)`: Extraer los valores propios/varianzas retenidas por cada dimensión (eje).
+
+- `fviz_eig(res.famd)`: Visualizar los valores propios/varianzas. 
+
+- `get_famd_ind(res.famd)`: Extraer los resultados para individuos. 
+
+- `get_famd_var(res.famd)`: Extraer los resultados de las variables cuantitativas y cualitativas.
+
+- `fviz_famd_ind(res.famd)` y `fviz_famd_var(res.famd)`: Visualizar los resultados para individuos y variables, respectivamente. 
+
+::: {.callout-tip title="Aviso"}
+Recordad que, para la interpretación de FAMD se ha de realizar lo mismo hecho en clases anteriores en métodos como el ACP, ACS y ACM. 
+:::
+
+## Eigenvalues y Eigenvectors
+
+:::: panel-tabset
+
+## R
+
+La proporción de varianzas retenidas (*eigenvalues*) por las diferentes dimensiones (ejes) se puede extraer utilizando la función `get_eigenvalue()` del paquete `factoextra` de la siguiente manera:
+
+```{r}
+#| label: eigenvalues-R
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+eig.val <- get_eigenvalue(res.famd)
+head(eig.val)
+```
+
+La función `fviz_eig()` o `fviz_screeplot()` del paquete `factoextra` se puede utilizar para dibujar el diagrama de codo (los porcentajes de inercia explicados por cada dimensión de FAMD):
+
+```{r}
+#| label: screePlot-R
 #| echo: true
 #| eval: true
 #| warning: false
@@ -113,63 +333,132 @@ get_eigenvalue(res.famd)
 fviz_screeplot(res.famd)
 ```
 
-```{r}
+## Python 
+
+La proporción de varianzas retenidas (*eigenvalues*) por las diferentes dimensiones (ejes) se puede extraer utilizando el método `.eigenvalues_` de la siguiente manera:
+
+```{python}
+#| label: eigenvalues-Python
 #| echo: true
 #| eval: true
 #| warning: false
 #| message: false
 #| error: false
 
-var <- get_famd_var(res.famd)
-var
-```
-Es pot accedir a les diferents fonts de la següent forma: 
-
-```{r}
-#| echo: true
-#| eval: true
-#| warning: false
-#| message: false
-#| error: false
-
-# Coordinates of variables
-head(var$coord)
+eigenvalues = famdPy.eigenvalues_
+famdPy.eigenvalues_summary
 ```
 
+La función `fviz_eig()` o `fviz_screeplot()` del paquete `factoextra` se puede utilizar para dibujar el diagrama de codo (los porcentajes de inercia explicados por cada dimensión de FAMD):
 
-```{r}
+```{python}
+#| label: screePlot-python
 #| echo: true
 #| eval: true
 #| warning: false
 #| message: false
 #| error: false
 
-# Cos2: quality of representation on the factore map
-head(var$cos2)
+# Hacer el scree plot
+plt.figure(figsize=(8, 5))
+plt.plot(range(1, len(eigenvalues) + 1), eigenvalues, marker='o')
+plt.title('Scree Plot - FAMD')
+plt.xlabel('Componentes')
+plt.ylabel('Valor propio (Eigenvalue)')
+plt.xticks(range(1, len(eigenvalues) + 1))
+plt.grid(True)
+plt.show()
 ```
 
+:::: 
+
+## Variables
+
+### Todas las variables
+
+:::: panel-tabset
+
+## R
+
+La función `get_mfa_var()` del paquete `factoextra` se utiliza para extraer los resultados de las variables. Por defecto, esta función devuelve una lista con las coordenadas, el coseno$^2$ y la contribución de todas las variables: 
+
 ```{r}
+#| label: infoVariables-R
 #| echo: true
 #| eval: true
 #| warning: false
 #| message: false
 #| error: false
 
-# Contributions to the  dimensions
-head(var$contrib)
+(var <- get_famd_var(res.famd))
 ```
 
+#### Coordenadas de las componentes
+
+Se puede acceder a los diferentes componentes de la siguiente manera: 
+
 ```{r}
+#| label: componentesVariables-R
 #| echo: true
 #| eval: true
 #| warning: false
 #| message: false
 #| error: false
 
-# Plot of variables
+head(var$coord[, 1:4])
+```
+
+#### Coseno$^2$
+
+A continuación se muestra el coseno$^2$ que representa la calidad de la representación en el mapa factorial. 
+
+```{r}
+#| label: coseno2-R
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+head(var$cos2[, 1:4])
+```
+
+#### Contribuciones
+
+En el siguiente apartado, podemos visualizar la contribución de cada una de las varaibles a las dimensiones. 
+
+```{r}
+#| label: contribuciones-R
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+head(var$contrib[, 1:4])
+```
+
+La siguiente figura muestra la correlación entre las variables, tanto cuantitativas como cualitativas, y las dimensiones principales, así como la contribución de las variables a las dimensiones 1 y 2. Se utilizan las siguientes funciones del paquete `factoextra`:
+
+- `fviz_famd_var()`: para representar gráficamente variables cuantitativas y cualitativas
+
+- `fviz_contrib()`: para visualizar la contribución de las variables a las dimensiones principales
+
+```{r}
+#| label: graficoVariables-R
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
 fviz_famd_var(res.famd, repel = TRUE)
 ```
+
+A continuación vamos a visualizar las contribuciones de las variables en la primera dimensión. 
+
 ```{r}
+#| label: contribuciones1aDim-R
 #| echo: true
 #| eval: true
 #| warning: false
@@ -180,7 +469,10 @@ fviz_famd_var(res.famd, repel = TRUE)
 fviz_contrib(res.famd, "var", axes = 1)
 ```
 
+Seguidamente podemos ver las contribuciones de las variables en la 2a dimensión. 
+
 ```{r}
+#| label: contribuciones2aDim-R
 #| echo: true
 #| eval: true
 #| warning: false
@@ -191,18 +483,213 @@ fviz_contrib(res.famd, "var", axes = 1)
 fviz_contrib(res.famd, "var", axes = 2)
 ```
 
-```{r}
+La línea discontinua roja en el gráfico anterior indica el valor promedio esperado, si las contribuciones fueran uniformes. 
+
+De los gráficos anteriormente expuestos se puede observar que: 
+
+- Las variables más contribuyentes a la primera dimensión són: 
+
+  - ...
+  
+- Las variables que más contribuyen a la segunda dimensión son: 
+
+  - ...
+  
+## Python 
+
+#### Coordenadas de las componentes
+
+Se puede acceder a los diferentes componentes de la siguiente manera: 
+
+```{python}
+#| label: componentesVariables-Py
 #| echo: true
 #| eval: true
 #| warning: false
 #| message: false
 #| error: false
 
-quanti.var <- get_famd_var(res.famd, "quanti.var")
-quanti.var 
+## famd.row_coordinates(pydf)  ## Individuos
+famdPy.column_coordinates_
 ```
 
+#### Coseno$^2$
+
+A continuación se muestra el coseno$^2$ que representa la calidad de la representación en el mapa factorial. 
+
+```{python}
+#| label: coseno2-py
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+famdPy.column_coordinates_ ** 2
+```
+
+#### Contribuciones
+
+En el siguiente apartado, podemos visualizar la contribución de cada una de las varaibles a las dimensiones. 
+
+```{python}
+#| label: contribuciones-py
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+(famdPy.column_contributions_)
+```
+
+La siguiente figura muestra la correlación entre las variables, tanto cuantitativas como cualitativas, y las dimensiones principales, así como la contribución de las variables a las dimensiones 1 y 2. 
+
+```{python}
+#| label: graficoVariables-py
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+# Coordenadas de las variables (componentes 1 y 2)
+coords = famdPy.column_coordinates_
+
+# Elegimos los dos primeros componentes
+x = coords[0]
+y = coords[1]
+
+plt.figure(figsize=(8, 8))
+plt.axhline(0, color='gray', lw=1)
+plt.axvline(0, color='gray', lw=1)
+
+# Dibujar solo puntos con etiquetas
+plt.scatter(x, y, color='white')
+
+for i in range(len(coords)):
+    plt.text(x[i], y[i], coords.index[i], fontsize=9, color="red" , ha='center', va='center')
+
+plt.title("Variables en el plano factorial (FAMD)")
+plt.xlabel("Dim 1")
+plt.ylabel("Dim 2")
+plt.grid(True)
+plt.axis('equal')
+plt.show()
+```
+
+A continuación vamos a visualizar las contribuciones de las variables en la primera dimensión. 
+
+```{python}
+#| label: contribuciones1aDim-py
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+# Obtener coordenadas de las variables
+coords = famdPy.column_coordinates_
+
+# Calcular la contribución (cos²) al eje 1
+# Es la coordenada al cuadrado de cada variable en ese eje
+contrib = (coords[0] ** 2)
+
+# Normalizar en porcentaje
+contrib_percent = 100 * contrib / contrib.sum()
+
+# Ordenar de mayor a menor
+contrib_percent = contrib_percent.sort_values(ascending=False)
+
+# Calcular la media
+mean_contrib = 100 / len(contrib_percent)
+
+# Graficar
+plt.figure(figsize=(10, 6))
+sns.barplot(x=contrib_percent.values, y=contrib_percent.index, palette="Blues_d")
+plt.axvline(mean_contrib, color='red', linestyle='--', label=f'Media = {mean_contrib:.2f}%')
+plt.xlabel('Contribución al componente 1 (%)')
+plt.title('Contribución de variables al eje 1 (FAMD)')
+plt.legend()
+plt.tight_layout()
+plt.show()
+```
+
+Seguidamente podemos ver las contribuciones de las variables en la 2a dimensión. 
+
+```{python}
+#| label: contribuciones2aDim-py
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+# Obtener coordenadas de las variables
+coords = famd.column_coordinates_
+
+# Calcular la contribución (cos²) al eje 1
+# Es la coordenada al cuadrado de cada variable en ese eje
+contrib = (coords[1] ** 2)
+
+# Normalizar en porcentaje
+contrib_percent = 100 * contrib / contrib.sum()
+
+# Ordenar de mayor a menor
+contrib_percent = contrib_percent.sort_values(ascending=False)
+
+# Calcular la media
+mean_contrib = 100 / len(contrib_percent)
+
+# Graficar
+plt.figure(figsize=(10, 6))
+sns.barplot(x=contrib_percent.values, y=contrib_percent.index, palette="Blues_d")
+plt.axvline(mean_contrib, color='red', linestyle='--', label=f'Media = {mean_contrib:.2f}%')
+plt.xlabel('Contribución al componente 2 (%)')
+plt.title('Contribución de variables al eje 2 (FAMD)')
+plt.legend()
+plt.tight_layout()
+plt.show()
+```
+
+La línea discontinua roja en el gráfico anterior indica el valor promedio esperado, si las contribuciones fueran uniformes. 
+
+De los gráficos anteriormente expuestos se puede observar que: 
+
+- Las variables más contribuyentes a la primera dimensión són: 
+
+  - ...
+  
+- Las variables que más contribuyen a la segunda dimensión son: 
+
+  - ...
+
+::::
+
+### Variables cuantitativas
+
+Para extraer los resultados de las variables cuantitativas, se debe realizar el siguiente proceso: 
+
+:::: panel-tabset
+
+## R
+
 ```{r}
+#| label: varsCuantitativas-R
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+(quanti.var <- get_famd_var(res.famd, "quanti.var"))
+```
+
+A continuación vamos a visualizar el círculo unitario tal y como extraiamos de la aplicación del **ACP**. Para no superponer las etiquetas de las variables numéricas, vamos a utilizar el parámetro `repel = TRUE`. 
+
+
+```{r}
+#| label: circuloUnitario-R
 #| echo: true
 #| eval: true
 #| warning: false
@@ -213,72 +700,215 @@ fviz_famd_var(res.famd, "quanti.var", repel = TRUE,
               col.var = "black")
 ```
 
+El gráfico de variables (círculo unitario) muestra la relación entre las variables, la calidad de su representación, así como la correlación entre las variables y las dimensiones.
+
+Las variables cuantitativas más contribuyentes se pueden resaltar en el diagrama de dispersión mediante el argumento `col.var = "contrib"`. Esto produce un degradado de colores, que se puede personalizar mediante el argumento `gradient.cols`.
+
 ```{r}
+#| label: circulo Unitario Contribuciones-R
 #| echo: true
 #| eval: true
 #| warning: false
 #| message: false
 #| error: false
 
-fviz_famd_var(res.famd, "quanti.var", col.var = "contrib", 
-             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
-             repel = TRUE)
+fviz_famd_var(res.famd, "quanti.var", col.var = "contrib", gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"), repel = TRUE)
 ```
 
-Del mismo modo, puede resaltar variables cuantitativas utilizando sus valores cos2 que representan la calidad de la representación en el mapa factorial. Si una variable está bien representada por dos dimensiones, la suma del cos2 se cierra a uno. Para algunos de los elementos, es posible que se requieran más de 2 dimensiones para representar perfectamente los datos.
+Del mismo modo, puede resaltar variables cuantitativas utilizando sus valores cos$^2$ que representan la calidad de la representación en el mapa factorial. Si una variable está bien representada por dos dimensiones, la suma del cos$^2$ se aproxima a uno. Para algunos de los elementos, es posible que se requieran más de 2 dimensiones para representar perfectamente los datos.
 
 ```{r}
+#| label: circulo unitario calidad-R
 #| echo: true
 #| eval: true
 #| warning: false
 #| message: false
 #| error: false
 
-# Color by cos2 values: quality on the factor map
-fviz_famd_var(res.famd, "quanti.var", col.var = "cos2",
-             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"), 
-             repel = TRUE)
+fviz_famd_var(res.famd, "quanti.var", col.var = "cos2", gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"), repel = TRUE)
 ```
+
+## Python 
+
+A continuación vamos a visualizar el círculo unitario tal y como extraiamos de la aplicación del **ACP**. Para no superponer las etiquetas de las variables numéricas, vamos a utilizar el parámetro `repel = TRUE`. 
+
+```{python}
+#| label: circuloUnitario-py
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+# Filtrar las columnas numéricas del DataFrame
+numeric_cols = pydf.select_dtypes(include=[np.number]).columns
+
+# Obtener las coordenadas de las variables de FAMD
+coords = famdPy.column_coordinates_
+
+# Filtrar las coordenadas para solo las variables numéricas usando 'isin()'
+numeric_coords = coords[coords.index.isin(numeric_cols)]
+
+# Graficar las variables numéricas con flechas (en negro)
+plt.figure(figsize=(8, 8))
+plt.axhline(0, color='gray', lw=1)
+plt.axvline(0, color='gray', lw=1)
+
+# Graficar las flechas para cada variable numérica
+for i in range(len(numeric_coords)):
+    plt.arrow(0, 0, numeric_coords.iloc[i, 0], numeric_coords.iloc[i, 1], 
+              color='black', alpha=0.7, head_width=0.02, head_length=0.02)
+    plt.text(numeric_coords.iloc[i, 0] * 1.1, numeric_coords.iloc[i, 1] * 1.1, 
+             numeric_coords.index[i], color='black', ha='center', va='center', fontsize=9)
+
+# Dibujar el círculo unitario (radio = 1)
+circle = plt.Circle((0, 0), 1, color='gray', fill=False, linestyle='--', lw=1)
+plt.gca().add_artist(circle)
+
+# Ajustar los límites de los ejes para asegurar que el círculo se vea
+plt.xlim(-1.5, 1.5)
+plt.ylim(-1.5, 1.5)
+
+# Ajustes de la visualización
+plt.title('Variables cuantitativas en el plano factorial (FAMD)')
+plt.xlabel('Componente 1')
+plt.ylabel('Componente 2')
+plt.grid(True)
+plt.axis('equal')  # Esto asegura que los ejes tengan la misma escala
+plt.tight_layout()
+
+# Mostrar el gráfico
+plt.show()
+```
+
+El gráfico de variables (círculo unitario) muestra la relación entre las variables, la calidad de su representación, así como la correlación entre las variables y las dimensiones.
+
+Las variables cuantitativas más contribuyentes se pueden resaltar en el diagrama de dispersión mediante el argumento `col.var = "contrib"`. Esto produce un degradado de colores, que se puede personalizar mediante el argumento `gradient.cols`.
+
+```{python}
+#| label: circulo Unitario Contribuciones-py
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+import numpy as np
+
+# Coordenadas de variables (correlación con los componentes)
+coords = famdPy.column_correlations(pydf)
+
+# Supongamos que queremos calcular la contribución en Dim 1 y Dim 2
+# Contribución aproximada: proporcional al cuadrado de la coordenada
+contrib = famdPy.column_contributions_[0] + famdPy.column_contributions_[1]
+
+# Define tus colores del gradiente
+gradient_colors = ["#00AFBB", "#E7B800", "#FC4E07"]
+custom_cmap = LinearSegmentedColormap.from_list("custom", gradient_colors)
+
+plt.figure(figsize=(8, 8))
+sns.set(style="white")
+
+# Normaliza contribuciones para el colormap
+norm = plt.Normalize(contrib.min(), contrib.max())
+texts = []
+
+for var in coords.index:
+    x, y = coords.loc[var, ['Dim 1', 'Dim 2']]
+    contrib = coords.loc[var, 'contrib']
+    color = custom_cmap(norm(contrib))
+    
+    plt.arrow(0, 0, x, y, color=color, alpha=0.9, head_width=0.02)
+    texts.append(plt.text(x, y, var, color=color))
+
+adjust_text(texts)
+
+plt.axhline(0, color='grey', linestyle='--')
+plt.axvline(0, color='grey', linestyle='--')
+plt.xlabel("Dim 1")
+plt.ylabel("Dim 2")
+plt.title("Variables cuantitativas (coloreadas por contribución)")
+plt.grid(True)
+plt.xlim(-1, 1)
+plt.ylim(-1, 1)
+plt.gca().set_aspect('equal', adjustable='box')
+
+# Colorbar
+sm = plt.cm.ScalarMappable(cmap=custom_cmap, norm=norm)
+sm.set_array([])
+cbar = plt.colorbar(sm)
+cbar.set_label('Contribución (aproximada)')
+
+plt.show()
+
+ ```
+
+Del mismo modo, puede resaltar variables cuantitativas utilizando sus valores cos$^2$ que representan la calidad de la representación en el mapa factorial. Si una variable está bien representada por dos dimensiones, la suma del cos$^2$ se aproxima a uno. Para algunos de los elementos, es posible que se requieran más de 2 dimensiones para representar perfectamente los datos.
+
+```{python}
+#| label: circulo unitario calidad-py
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
+
+
+
+``` 
+
+::::
+
+### Variables cualitativas 
 
 Al igual que las variables cuantitativas, los resultados de las variables cualitativas se pueden extraer de la siguiente manera:
 
 ```{r}
+#| label: varsCualitativas-R
 #| echo: true
 #| eval: true
 #| warning: false
 #| message: false
 #| error: false
 
-quali.var <- get_famd_var(res.famd, "quali.var")
-quali.var 
+(quali.var <- get_famd_var(res.famd, "quali.var"))
 ```
+
+Para visualizar las variables cualitativas, se ha de escribir el siguiente código: 
 
 ```{r}
+#| label: varsCualitativasContribucion-R
+
 #| echo: true
 #| eval: true
 #| warning: false
 #| message: false
 #| error: false
 
-fviz_famd_var(res.famd, "quali.var", col.var = "contrib", 
-             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07")
-             )
+fviz_famd_var(res.famd, "quali.var", col.var = "contrib", gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"))
 ```
+
+La gráfica anterior muestra las categorías de las variables categóricas. 
+
+## Individuos
+
 Si se desean hacer gráficos individuales se realiza lo siguiente.
 
 ```{r}
+#| label: individuos-R
 #| echo: true
 #| eval: true
 #| warning: false
 #| message: false
 #| error: false
 
-ind <- get_famd_ind(res.famd)
-ind
+(ind <- get_famd_ind(res.famd))
 ```
-Para trazar individuos, use la función `fviz_mfa_ind()` [in factoextra]. De forma predeterminada, los individuos están coloreados en azul. Sin embargo, al igual que las variables, también es posible colorear a los individuos por sus valores de cos2 y contribución:
+
+Para representar gráficamente a los individuos, utilizaremos la función `fviz_mfa_ind()` del paquete `factoextra`. Por defecto, los individuos están coloreados en azul. Sin embargo, al igual que las variables, también es posible colorear a los individuos por sus valores de cos2 y contribución:
 
 ```{r}
+#| label: individuos-coseno2-R
 #| echo: true
 #| eval: false
 #| warning: false
@@ -286,13 +916,17 @@ Para trazar individuos, use la función `fviz_mfa_ind()` [in factoextra]. De for
 #| error: false
 
 fviz_famd_ind(res.famd, col.ind = "cos2", 
-             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
-             repel = TRUE)
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"), repel = TRUE)
 ```
+
+Las categorias de las variables cualitativas se muestran en negro. Para poder eliminar dichas modalidades, utilizamos el parámetro `invisible = "quali.var"`. 
+
+Los individuos con perfiles similares se encuentran cerca en el mapa factorial.
 
 Es posible colorear a los individuos utilizando cualquiera de las variables cualitativas en la tabla de datos inicial. Para ello, se utiliza el argumento habillage en la función `fviz_famd_ind()`.
 
 ```{r}
+#| label: varCat en planoFactorial - R
 #| echo: true
 #| eval: false
 #| warning: false
@@ -307,18 +941,29 @@ fviz_mfa_ind(res.famd,
              ) 
 ```
 
+Si lo que queremos es colorear los individuos usando múltiples variables categóricas al mismo tiempo, se deberá de utilizar la función `fviz_ellipses()` del paquete `factoextra` de la siguiente forma: 
+
 
 ```{r}
+#| label: multiples varCat en planoFactorial - R
 #| echo: true
-#| eval: false
+#| eval: true
 #| warning: false
 #| message: false
 #| error: false
 
 fviz_ellipses(res.famd, c("Churn", "Gender"), repel = TRUE)
-fviz_ellipses(res.famd, 1:2, geom = "point")
 ```
 
+También se puede identificar que variables categóricas queremos representar con el id de las variables: 
 
+```{r}
+#| label: multiples varCat en planoFactorial por id - R
+#| echo: true
+#| eval: true
+#| warning: false
+#| message: false
+#| error: false
 
-
+fviz_ellipses(res.famd, 1:2, geom = "point")
+```

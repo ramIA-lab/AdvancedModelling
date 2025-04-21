@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.33">
+<meta name="generator" content="quarto-1.6.37">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Dante Conti, Sergi Ramirez, (c) IDEAI">
-<meta name="dcterms.date" content="2025-01-11">
+<meta name="dcterms.date" content="2025-04-17">
 
 <title>Anàlisis factorial per a Dades mixtes (FAMD) – PMAAD</title>
 <style>
@@ -72,12 +72,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-07ba0ad10f5680c660e360ac31d2f3b6.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-8b864f0777c60eecff11d75b6b2e1175.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-29e2c20b02301cfff04dc8050bf30c7e.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-43df0d6f53b733b42d37fa7808e17715.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap-47f2ccf85c2c7b4f30914690ceb42b88.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../site_libs/bootstrap/bootstrap-dark-1ca3e0674a0602a244ceba853400d2ef.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../site_libs/bootstrap/bootstrap-83f5ffed4bb819e1a410337fb71ccdff.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark-1851c9bb8f3f4849af8ba858f06152b9.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -105,7 +105,39 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<script src="../../../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../../../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../../../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../../../styles.css">
 </head>
@@ -144,13 +176,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar"><div class="quarto-margin-header"><div class="margin-header-item">
-<p><img src="../../../imagenes/Logo_UPC.svg.png" class="img-fluid"></p>
+<p><img src="../../..\imagenes/Logo_UPC.svg.png" class="img-fluid"></p>
 </div></div>
         <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#section" id="toc-section" class="nav-link active" data-scroll-target="#section"><span class="header-section-number">1</span> </a></li>
+  <li><a href="#introducción" id="toc-introducción" class="nav-link active" data-scroll-target="#introducción"><span class="header-section-number">1</span> Introducción</a></li>
+  <li><a href="#planteamiento-del-problema" id="toc-planteamiento-del-problema" class="nav-link" data-scroll-target="#planteamiento-del-problema"><span class="header-section-number">2</span> Planteamiento del problema</a>
+  <ul class="collapse">
+  <li><a href="#entrenamiento" id="toc-entrenamiento" class="nav-link" data-scroll-target="#entrenamiento"><span class="header-section-number">2.1</span> Entrenamiento</a></li>
+  <li><a href="#visualización-e-interpretación" id="toc-visualización-e-interpretación" class="nav-link" data-scroll-target="#visualización-e-interpretación"><span class="header-section-number">2.2</span> Visualización e interpretación</a></li>
+  <li><a href="#eigenvalues-y-eigenvectors" id="toc-eigenvalues-y-eigenvectors" class="nav-link" data-scroll-target="#eigenvalues-y-eigenvectors"><span class="header-section-number">2.3</span> Eigenvalues y Eigenvectors</a></li>
+  <li><a href="#variables" id="toc-variables" class="nav-link" data-scroll-target="#variables"><span class="header-section-number">2.4</span> Variables</a>
+  <ul class="collapse">
+  <li><a href="#todas-las-variables" id="toc-todas-las-variables" class="nav-link" data-scroll-target="#todas-las-variables"><span class="header-section-number">2.4.1</span> Todas las variables</a></li>
+  <li><a href="#variables-cuantitativas" id="toc-variables-cuantitativas" class="nav-link" data-scroll-target="#variables-cuantitativas"><span class="header-section-number">2.4.2</span> Variables cuantitativas</a></li>
+  <li><a href="#variables-cualitativas" id="toc-variables-cualitativas" class="nav-link" data-scroll-target="#variables-cualitativas"><span class="header-section-number">2.4.3</span> Variables cualitativas</a></li>
+  </ul></li>
+  <li><a href="#individuos" id="toc-individuos" class="nav-link" data-scroll-target="#individuos"><span class="header-section-number">2.5</span> Individuos</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -176,14 +221,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">January 11, 2025</p>
+      <p class="date">April 17, 2025</p>
     </div>
   </div>
   
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">January 11, 2025</p>
+      <p class="date-modified">April 17, 2025</p>
     </div>
   </div>
     
@@ -194,8 +239,56 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="section" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> </h1>
+<section id="introducción" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Introducción</h1>
+<p>El Análisis Factorial de Datos Mixtos (FAMD) es una potente técnica estadística que se utiliza para analizar conjuntos de datos que contienen variables numéricas y categóricas. Amplía el análisis factorial tradicional para gestionar tipos de datos mixtos, proporcionando una comprensión integral de la estructura subyacente de conjuntos de datos complejos.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart TD
+    cat?(¿BBDD Categorica?) --&gt; |"✅"| num_too?(¿Contiene numéricas?)
+    num_too? --&gt; |"✅"| FAMD
+    num_too? --&gt; |"❌"| multiple_cat?(¿Más de dos columnas?)
+    multiple_cat? --&gt; |"✅"| MCA
+    multiple_cat? --&gt; |"❌"| CA
+    cat? --&gt; |"❌"| groups?(¿Columnas agrupadas?)
+    groups? --&gt; |"✅"| MFA
+    groups? --&gt; |"❌"| shapes?(Analysing shapes?)
+    shapes? --&gt; |"✅"| GPA
+    shapes? --&gt; |"❌"| PCA
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>Para poder realizar los métodos, necesitaremos importar las siguientes librerias:</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Import libraries</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(FactoMineR)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(factoextra)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> prince</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> light_famd <span class="im">import</span> FAMD</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="planteamiento-del-problema" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Planteamiento del problema</h1>
 <p>Descripció de la columna:</p>
 <ul>
 <li><p><strong>Gender:</strong> El gènere del client: Home (1), Femení (0).</p></li>
@@ -214,17 +307,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p><strong>StreamingMovies:</strong> Indica si el client utilitza el seu servei d’Internet per transmetre pel·lícules d’un proveïdor de tercers: No (0), Sí (1), NA (2). L’empresa no cobra cap càrrec addicional per aquest servei.</p></li>
 <li><p><strong>Contract:</strong> Indica el tipus de contracte actual del client: Mes a mes (0), Un any (1), Dos anys (2).</p></li>
 <li><p><strong>PaperlessBilling:</strong> Indica si el client ha triat facturació sense paper: No (0), Sí (1).</p></li>
-<li><p><strong>Mètode de pagament:</strong> Indica com el client paga la seva factura: transferència bancària - automàtica (0), targeta de crèdit - automàtica (1), xec electrònic (2), xec per correu (3).</p></li>
+<li><p><strong>PaymentMethod:</strong> Indica com el client paga la seva factura: transferència bancària - automàtica (0), targeta de crèdit - automàtica (1), xec electrònic (2), xec per correu (3).</p></li>
 <li><p><strong>MonthlyCharges:</strong> Indica el total de la quota mensual actual del client per a tots els seus serveis de l’empresa.</p></li>
 <li><p><strong>TotalCharges:</strong> Indica el total de càrrecs del client.</p></li>
 <li><p><strong>Churn:</strong> Indica si el client es talla o no: No (0), Sí (1).</p></li>
 </ul>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Import data</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">'https://github.com/nchelaru/data-prep/raw/master/telco_cleaned_renamed.csv'</span>)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Preview data</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Import data</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">'https://raw.githubusercontent.com/nchelaru/data-prep/refs/heads/master/telco_cleaned_renamed.csv'</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Preview data</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  Gender    SeniorCitizen    Partner    Dependents Tenure    PhoneService
 1 Female No SeniorCitizen    Partner No Dependents      1 No PhoneService
@@ -263,60 +360,260 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 6       820.50    Churn</code></pre>
 </div>
 </div>
+<p>Visualizamos la estructura de los datos:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Import libraries</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(FactoMineR)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(factoextra)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">## FAMD</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>res.famd <span class="ot">&lt;-</span> <span class="fu">FAMD</span>(df, </span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">sup.var =</span> <span class="dv">20</span>,  <span class="do">## Set the target variable "Churn" as a supplementary variable</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">graph =</span> <span class="cn">FALSE</span>, </span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">ncp=</span><span class="dv">25</span>)</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="do">## Inspect principal components</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="fu">get_eigenvalue</span>(res.famd)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>         eigenvalue variance.percent cumulative.variance.percent
-Dim.1  5.2576209974     22.859221728                    22.85922
-Dim.2  2.8559015894     12.416963432                    35.27619
-Dim.3  1.8609475099      8.091076130                    43.36726
-Dim.4  1.1642865191      5.062115300                    48.42938
-Dim.5  1.0499235679      4.564885078                    52.99426
-Dim.6  1.0151452290      4.413674909                    57.40794
-Dim.7  1.0002348062      4.348846984                    61.75678
-Dim.8  0.9842752397      4.279457564                    66.03624
-Dim.9  0.9040349572      3.930586770                    69.96683
-Dim.10 0.8480255300      3.687067522                    73.65390
-Dim.11 0.7663999071      3.332173509                    76.98607
-Dim.12 0.7161111970      3.113526943                    80.09960
-Dim.13 0.6759735982      2.939015644                    83.03861
-Dim.14 0.6217854224      2.703414880                    85.74203
-Dim.15 0.6139100759      2.669174243                    88.41120
-Dim.16 0.5972705738      2.596828582                    91.00803
-Dim.17 0.4825799332      2.098173623                    93.10620
-Dim.18 0.4681727205      2.035533567                    95.14174
-Dim.19 0.4633212480      2.014440209                    97.15618
-Dim.20 0.3250994151      1.413475718                    98.56965
-Dim.21 0.2708359593      1.177547649                    99.74720
-Dim.22 0.0573935382      0.249537123                    99.99674
-Dim.23 0.0007504657      0.003262894                   100.00000</code></pre>
+<pre><code>'data.frame':   7032 obs. of  20 variables:
+ $ Gender          : chr  "Female" "Male" "Male" "Male" ...
+ $ SeniorCitizen   : chr  "No SeniorCitizen" "No SeniorCitizen" "No SeniorCitizen" "No SeniorCitizen" ...
+ $ Partner         : chr  "Partner" "No Partner" "No Partner" "No Partner" ...
+ $ Dependents      : chr  "No Dependents" "No Dependents" "No Dependents" "No Dependents" ...
+ $ Tenure          : int  1 34 2 45 2 8 22 10 28 62 ...
+ $ PhoneService    : chr  "No PhoneService" "PhoneService" "PhoneService" "No PhoneService" ...
+ $ MultipleLines   : chr  "No MultipleLines" "No MultipleLines" "No MultipleLines" "No MultipleLines" ...
+ $ InternetService : chr  "DSL" "DSL" "DSL" "DSL" ...
+ $ OnlineSecurity  : chr  "No OnlineSecurity" "OnlineSecurity" "OnlineSecurity" "OnlineSecurity" ...
+ $ OnlineBackup    : chr  "OnlineBackup" "No OnlineBackup" "OnlineBackup" "No OnlineBackup" ...
+ $ DeviceProtection: chr  "No DeviceProtection" "DeviceProtection" "No DeviceProtection" "DeviceProtection" ...
+ $ TechSupport     : chr  "No TechSupport" "No TechSupport" "No TechSupport" "TechSupport" ...
+ $ StreamingTV     : chr  "No StreamingTV" "No StreamingTV" "No StreamingTV" "No StreamingTV" ...
+ $ StreamingMovies : chr  "No StreamingMovies" "No StreamingMovies" "No StreamingMovies" "No StreamingMovies" ...
+ $ Contract        : chr  "Month-to-month" "One year" "Month-to-month" "One year" ...
+ $ PaperlessBilling: chr  "PaperlessBilling" "No PaperlessBilling" "PaperlessBilling" "No PaperlessBilling" ...
+ $ PaymentMethod   : chr  "Electronic check" "Mailed check" "Mailed check" "Bank transfer (automatic)" ...
+ $ MonthlyCharges  : num  29.9 57 53.9 42.3 70.7 ...
+ $ TotalCharges    : num  29.9 1889.5 108.2 1840.8 151.7 ...
+ $ Churn           : chr  "No Churn" "No Churn" "Churn" "No Churn" ...</code></pre>
 </div>
 </div>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_screeplot</span>(res.famd)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>pydf <span class="op">=</span> pd.read_csv(<span class="st">'https://raw.githubusercontent.com/nchelaru/data-prep/refs/heads/master/telco_cleaned_renamed.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Visualizamos la estructura de los datos:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>pydf.info()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 7032 entries, 0 to 7031
+Data columns (total 20 columns):
+ #   Column            Non-Null Count  Dtype  
+---  ------            --------------  -----  
+ 0   Gender            7032 non-null   object 
+ 1   SeniorCitizen     7032 non-null   object 
+ 2   Partner           7032 non-null   object 
+ 3   Dependents        7032 non-null   object 
+ 4   Tenure            7032 non-null   int64  
+ 5   PhoneService      7032 non-null   object 
+ 6   MultipleLines     7032 non-null   object 
+ 7   InternetService   7032 non-null   object 
+ 8   OnlineSecurity    7032 non-null   object 
+ 9   OnlineBackup      7032 non-null   object 
+ 10  DeviceProtection  7032 non-null   object 
+ 11  TechSupport       7032 non-null   object 
+ 12  StreamingTV       7032 non-null   object 
+ 13  StreamingMovies   7032 non-null   object 
+ 14  Contract          7032 non-null   object 
+ 15  PaperlessBilling  7032 non-null   object 
+ 16  PaymentMethod     7032 non-null   object 
+ 17  MonthlyCharges    7032 non-null   float64
+ 18  TotalCharges      7032 non-null   float64
+ 19  Churn             7032 non-null   object 
+dtypes: float64(2), int64(1), object(17)
+memory usage: 1.1+ MB</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Los datos contienen 20 columnas divididas en: - <strong>Numéricas</strong>: <code>Tenure</code>, <code>MonthlyCharges</code> y <code>TotalCharges</code> - <strong>Categóricas</strong>: <code>Gender</code>, <code>SeniorCitizen</code>, <code>Partner</code>, <code>Dependents</code>, <code>PhoneService</code>, <code>MultipleLines</code>, <code>InternetService</code>, <code>OnlineSecurity</code>, <code>OnlineBackup</code>, <code>DeviceProtection</code>, <code>TechSupport</code>, <code>StreamingTV</code>, <code>StreamingMovies</code>, <code>Contract</code>, <code>PaperlessBilling</code>, <code>PaymentMethod</code> y <code>Churn</code> (variable respuesta)</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Consejo">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Consejo
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>El objetivo de este estudio es poder estudiar las relaciones y asociaciones que existen en los clientes de la empresa Telecom.</p>
+</div>
+</div>
+<section id="entrenamiento" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="entrenamiento"><span class="header-section-number">2.1</span> Entrenamiento</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
+<p>La función <code>FAMD()</code> del paquete <code>FactoMineR</code>se puede utilizar para calcular los planos factoriales. La descripción de la función es la siguiente:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">FAMD</span> (base, <span class="at">ncp =</span> <span class="dv">5</span>, <span class="at">sup.var =</span> <span class="cn">NULL</span>, <span class="at">ind.sup =</span> <span class="cn">NULL</span>, <span class="at">graph =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li><p><code>base</code>: Un <code>data.frame</code> con n filas (individuos) y p columnas (variables).</p></li>
+<li><p><code>ncp</code>: El número de dimensiones que se mantienen en los resultados <em>(por defecto 5)</em></p></li>
+<li><p><code>sup.var</code>: Un vector que indica los índices de las variables suplementarias.</p></li>
+<li><p><code>ind.sup</code>: Un vector que indica los índices de los individuos suplementarios.</p></li>
+<li><p><code>graph</code>: Un valor lógico. Si es <code>VERDADERO</code>, se muestra un gráfico.</p></li>
+</ul>
+<p>A continuación, vamos a calcular el FAMD de la siguiente manera:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="do">## FAMD</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>res.famd <span class="ot">&lt;-</span> <span class="fu">FAMD</span>(df, <span class="at">sup.var =</span> <span class="dv">20</span>, <span class="at">graph =</span> <span class="cn">FALSE</span>, <span class="at">ncp =</span> <span class="dv">25</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>La salida que obtenemos con la función <code>FAMD()</code> es una lista que incluye:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(res.famd)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>*The results are available in the following objects:
+
+  name          description                             
+1 "$eig"        "eigenvalues and inertia"               
+2 "$var"        "Results for the variables"             
+3 "$ind"        "results for the individuals"           
+4 "$quali.var"  "Results for the qualitative variables" 
+5 "$quanti.var" "Results for the quantitative variables"</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<p>La función <code>prince.FAMD()</code> del paquete <code>prince</code>se puede utilizar para calcular los planos factoriales. La descripción de la función es la siguiente:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>famd <span class="op">=</span> prince.FAMD(n_components <span class="op">=</span> <span class="dv">2</span>, n_iter <span class="op">=</span> <span class="dv">3</span>, copy <span class="op">=</span> <span class="va">True</span>, check_input <span class="op">=</span> <span class="va">True</span>,</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    random_state <span class="op">=</span> <span class="dv">42</span>, engine <span class="op">=</span> <span class="st">"sklearn"</span>, handle_unknown <span class="op">=</span> <span class="st">"error"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li><p><code>n_components</code>: El número de dimensiones que se mantienen en los resultados <em>(por defecto 2)</em></p></li>
+<li><p><code>n_iter</code>: El número de iteraciones de las cuales ha de realizar el FAMD <em>(por defecto 3)</em></p></li>
+<li><p><code>copy</code>: Indica si queremos realizar una copia o por el contrario de la base de datos</p></li>
+<li><p><code>check_input</code>: Valida las variables de entrada</p></li>
+<li><p><code>random_state</code>: Asigna una semilla para los cálculos</p></li>
+</ul>
+<p>A continuación, vamos a calcular el FAMD de la siguiente manera:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>famd <span class="op">=</span> prince.FAMD(n_components<span class="op">=</span><span class="dv">10</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>famdPy <span class="op">=</span> famd.fit(pydf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="visualización-e-interpretación" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="visualización-e-interpretación"><span class="header-section-number">2.2</span> Visualización e interpretación</h2>
+<p>Utilizaremos las siguientes funciones del paquete <code>factoextra</code> para poder obtener las interpretaciones correspondientes:</p>
+<ul>
+<li><p><code>get_eigenvalue(res.famd)</code>: Extraer los valores propios/varianzas retenidas por cada dimensión (eje).</p></li>
+<li><p><code>fviz_eig(res.famd)</code>: Visualizar los valores propios/varianzas.</p></li>
+<li><p><code>get_famd_ind(res.famd)</code>: Extraer los resultados para individuos.</p></li>
+<li><p><code>get_famd_var(res.famd)</code>: Extraer los resultados de las variables cuantitativas y cualitativas.</p></li>
+<li><p><code>fviz_famd_ind(res.famd)</code> y <code>fviz_famd_var(res.famd)</code>: Visualizar los resultados para individuos y variables, respectivamente.</p></li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled" title="Aviso">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Aviso
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Recordad que, para la interpretación de FAMD se ha de realizar lo mismo hecho en clases anteriores en métodos como el ACP, ACS y ACM.</p>
+</div>
+</div>
+</section>
+<section id="eigenvalues-y-eigenvectors" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="eigenvalues-y-eigenvectors"><span class="header-section-number">2.3</span> Eigenvalues y Eigenvectors</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
+<p>La proporción de varianzas retenidas (<em>eigenvalues</em>) por las diferentes dimensiones (ejes) se puede extraer utilizando la función <code>get_eigenvalue()</code> del paquete <code>factoextra</code> de la siguiente manera:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>eig.val <span class="ot">&lt;-</span> <span class="fu">get_eigenvalue</span>(res.famd)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(eig.val)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      eigenvalue variance.percent cumulative.variance.percent
+Dim.1   5.257621        22.859222                    22.85922
+Dim.2   2.855902        12.416963                    35.27619
+Dim.3   1.860948         8.091076                    43.36726
+Dim.4   1.164287         5.062115                    48.42938
+Dim.5   1.049924         4.564885                    52.99426
+Dim.6   1.015145         4.413675                    57.40794</code></pre>
+</div>
+</div>
+<p>La función <code>fviz_eig()</code> o <code>fviz_screeplot()</code> del paquete <code>factoextra</code> se puede utilizar para dibujar el diagrama de codo (los porcentajes de inercia explicados por cada dimensión de FAMD):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_screeplot</span>(res.famd)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="FAMD_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="FAMD_files/figure-html/screePlot-R-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
+</div>
+<div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
+<p>La proporción de varianzas retenidas (<em>eigenvalues</em>) por las diferentes dimensiones (ejes) se puede extraer utilizando el método <code>.eigenvalues_</code> de la siguiente manera:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>var <span class="ot">&lt;-</span> <span class="fu">get_famd_var</span>(res.famd)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>var</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>eigenvalues <span class="op">=</span> famd.eigenvalues_</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>famd.eigenvalues_summary</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          eigenvalue % of variance % of variance (cumulative)
+component                                                    
+0             36.181         4.36%                      4.36%
+1             26.517         3.19%                      7.55%
+2             16.198         1.95%                      9.51%
+3             11.046         1.33%                     10.84%
+4             10.134         1.22%                     12.06%
+5              9.378         1.13%                     13.19%
+6              9.195         1.11%                     14.30%
+7              9.107         1.10%                     15.39%
+8              9.077         1.09%                     16.49%
+9              9.066         1.09%                     17.58%</code></pre>
+</div>
+</div>
+<p>La función <code>fviz_eig()</code> o <code>fviz_screeplot()</code> del paquete <code>factoextra</code> se puede utilizar para dibujar el diagrama de codo (los porcentajes de inercia explicados por cada dimensión de FAMD):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Hacer el scree plot</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>plt.plot(<span class="bu">range</span>(<span class="dv">1</span>, <span class="bu">len</span>(eigenvalues) <span class="op">+</span> <span class="dv">1</span>), eigenvalues, marker<span class="op">=</span><span class="st">'o'</span>)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Scree Plot - FAMD'</span>)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Componentes'</span>)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Valor propio (Eigenvalue)'</span>)</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>plt.xticks(<span class="bu">range</span>(<span class="dv">1</span>, <span class="bu">len</span>(eigenvalues) <span class="op">+</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>([&lt;matplotlib.axis.XTick object at 0x0000019752FF2F90&gt;, &lt;matplotlib.axis.XTick object at 0x0000019752FF2AE0&gt;, &lt;matplotlib.axis.XTick object at 0x0000019752FF0830&gt;, &lt;matplotlib.axis.XTick object at 0x000001973987F770&gt;, &lt;matplotlib.axis.XTick object at 0x0000019752F96FC0&gt;, &lt;matplotlib.axis.XTick object at 0x0000019752F94830&gt;, &lt;matplotlib.axis.XTick object at 0x0000019752F94110&gt;, &lt;matplotlib.axis.XTick object at 0x0000019752F95160&gt;, &lt;matplotlib.axis.XTick object at 0x0000019752F21E20&gt;, &lt;matplotlib.axis.XTick object at 0x0000019752F23C20&gt;], [Text(1, 0, '1'), Text(2, 0, '2'), Text(3, 0, '3'), Text(4, 0, '4'), Text(5, 0, '5'), Text(6, 0, '6'), Text(7, 0, '7'), Text(8, 0, '8'), Text(9, 0, '9'), Text(10, 0, '10')])</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>plt.grid(<span class="va">True</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="FAMD_files/figure-html/screePlot-python-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="variables" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="variables"><span class="header-section-number">2.4</span> Variables</h2>
+<section id="todas-las-variables" class="level3" data-number="2.4.1">
+<h3 data-number="2.4.1" class="anchored" data-anchor-id="todas-las-variables"><span class="header-section-number">2.4.1</span> Todas las variables</h3>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
+<p>La función <code>get_mfa_var()</code> del paquete <code>factoextra</code> se utiliza para extraer los resultados de las variables. Por defecto, esta función devuelve una lista con las coordenadas, el coseno<span class="math inline">\(^2\)</span> y la contribución de todas las variables:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>(var <span class="ot">&lt;-</span> <span class="fu">get_famd_var</span>(res.famd))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>FAMD results for variables 
  ===================================================
@@ -326,10 +623,11 @@ Dim.23 0.0007504657      0.003262894                   100.00000</code></pre>
 3 "$contrib" "Contributions"                  </code></pre>
 </div>
 </div>
-<p>Es pot accedir a les diferents fonts de la següent forma:</p>
+<section id="coordenadas-de-las-componentes" class="level4" data-number="2.4.1.1">
+<h4 data-number="2.4.1.1" class="anchored" data-anchor-id="coordenadas-de-las-componentes"><span class="header-section-number">2.4.1.1</span> Coordenadas de las componentes</h4>
+<p>Se puede acceder a los diferentes componentes de la siguiente manera:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Coordinates of variables</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(var<span class="sc">$</span>coord)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(var<span class="sc">$</span>coord)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                      Dim.1        Dim.2        Dim.3        Dim.4        Dim.5
 Tenure         0.4206809111 0.2864370404 5.868863e-02 0.0218736221 0.0457414192
@@ -368,9 +666,12 @@ SeniorCitizen  1.026425e-05 2.015929e-06 5.707411e-12
 Partner        1.362083e-03 8.266294e-06 2.637956e-10</code></pre>
 </div>
 </div>
+</section>
+<section id="coseno2" class="level4" data-number="2.4.1.2">
+<h4 data-number="2.4.1.2" class="anchored" data-anchor-id="coseno2"><span class="header-section-number">2.4.1.2</span> Coseno<span class="math inline">\(^2\)</span></h4>
+<p>A continuación se muestra el coseno<span class="math inline">\(^2\)</span> que representa la calidad de la representación en el mapa factorial.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cos2: quality of representation on the factore map</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(var<span class="sc">$</span>cos2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(var<span class="sc">$</span>cos2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                      Dim.1        Dim.2        Dim.3        Dim.4        Dim.5
 Tenure         1.769724e-01 8.204618e-02 3.444355e-03 4.784553e-04 2.092277e-03
@@ -409,9 +710,12 @@ SeniorCitizen  1.053548e-10 4.063970e-12 3.257454e-23
 Partner        1.855271e-06 6.833162e-11 6.958814e-20</code></pre>
 </div>
 </div>
+</section>
+<section id="contribuciones" class="level4" data-number="2.4.1.3">
+<h4 data-number="2.4.1.3" class="anchored" data-anchor-id="contribuciones"><span class="header-section-number">2.4.1.3</span> Contribuciones</h4>
+<p>En el siguiente apartado, podemos visualizar la contribución de cada una de las varaibles a las dimensiones.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Contributions to the  dimensions</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(var<span class="sc">$</span>contrib)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(var<span class="sc">$</span>contrib)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                      Dim.1        Dim.2        Dim.3       Dim.4       Dim.5
 Tenure          8.001354821 10.029653733 3.1536958900  1.87871471  4.35664277
@@ -450,42 +754,268 @@ SeniorCitizen   0.003789839  0.003512467 7.605160e-07
 Partner         0.502918193  0.014402831 3.515093e-05</code></pre>
 </div>
 </div>
+<p>La siguiente figura muestra la correlación entre las variables, tanto cuantitativas como cualitativas, y las dimensiones principales, así como la contribución de las variables a las dimensiones 1 y 2. Se utilizan las siguientes funciones del paquete <code>factoextra</code>:</p>
+<ul>
+<li><p><code>fviz_famd_var()</code>: para representar gráficamente variables cuantitativas y cualitativas</p></li>
+<li><p><code>fviz_contrib()</code>: para visualizar la contribución de las variables a las dimensiones principales</p></li>
+</ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot of variables</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_famd_var</span>(res.famd, <span class="at">repel =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_famd_var</span>(res.famd, <span class="at">repel =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="FAMD_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="FAMD_files/figure-html/graficoVariables-R-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
+<p>A continuación vamos a visualizar las contribuciones de las variables en la primera dimensión.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Contribution to the first dimension</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_contrib</span>(res.famd, <span class="st">"var"</span>, <span class="at">axes =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Contribution to the first dimension</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_contrib</span>(res.famd, <span class="st">"var"</span>, <span class="at">axes =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="FAMD_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="FAMD_files/figure-html/contribuciones1aDim-R-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
+<p>Seguidamente podemos ver las contribuciones de las variables en la 2a dimensión.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Contribution to the second dimension</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_contrib</span>(res.famd, <span class="st">"var"</span>, <span class="at">axes =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Contribution to the second dimension</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_contrib</span>(res.famd, <span class="st">"var"</span>, <span class="at">axes =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="FAMD_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="FAMD_files/figure-html/contribuciones2aDim-R-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
+<p>La línea discontinua roja en el gráfico anterior indica el valor promedio esperado, si las contribuciones fueran uniformes.</p>
+<p>De los gráficos anteriormente expuestos se puede observar que:</p>
+<ul>
+<li><p>Las variables más contribuyentes a la primera dimensión són:</p>
+<ul>
+<li>…</li>
+</ul></li>
+<li><p>Las variables que más contribuyen a la segunda dimensión son:</p>
+<ul>
+<li>…</li>
+</ul></li>
+</ul>
+</section>
+</div>
+<div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
+<section id="coordenadas-de-las-componentes-1" class="level4" data-number="2.4.1.4">
+<h4 data-number="2.4.1.4" class="anchored" data-anchor-id="coordenadas-de-las-componentes-1"><span class="header-section-number">2.4.1.4</span> Coordenadas de las componentes</h4>
+<p>Se puede acceder a los diferentes componentes de la siguiente manera:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>quanti.var <span class="ot">&lt;-</span> <span class="fu">get_famd_var</span>(res.famd, <span class="st">"quanti.var"</span>)</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>quanti.var </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co">## famd.row_coordinates(pydf)  ## Individuos</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>famd.column_coordinates_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>component                0         1  ...         8             9
+variable                              ...                        
+MonthlyCharges    0.516084  0.326985  ...  0.000024  2.719971e-04
+TotalCharges      0.758263  0.001235  ...  0.001354  1.399417e-06
+Churn             0.031624  0.389555  ...  0.001300  1.998385e-03
+Contract          0.204277  0.430340  ...  0.003679  9.335352e-04
+Dependents        0.014209  0.206706  ...  0.000808  1.045339e-06
+DeviceProtection  0.426754  0.002936  ...  0.006802  1.348613e-07
+Gender            0.000248  0.000380  ...  0.006765  7.022369e-03
+InternetService   0.292035  0.506334  ...  0.005546  1.554956e-03
+MultipleLines     0.206875  0.054604  ...  0.002214  4.321594e-04
+OnlineBackup      0.349894  0.002057  ...  0.001307  1.451828e-03
+OnlineSecurity    0.272749  0.039203  ...  0.010315  1.100983e-03
+PaperlessBilling  0.051292  0.241663  ...  0.001531  2.319590e-02
+Partner           0.143598  0.096932  ...  0.000460  7.417890e-04
+PaymentMethod     0.204439  0.381225  ...  0.020124  1.076496e-03
+PhoneService      0.001444  0.012175  ...  0.000041  1.245809e-05
+SeniorCitizen     0.012635  0.167889  ...  0.000537  4.012970e-03
+StreamingMovies   0.406131  0.088201  ...  0.000606  3.132390e-05
+StreamingTV       0.399842  0.090072  ...  0.003217  1.702668e-03
+TechSupport       0.335530  0.027956  ...  0.000144  5.169755e-06
+Tenure            0.525252  0.173087  ...  0.945035  9.635537e-01
+
+[20 rows x 10 columns]</code></pre>
+</div>
+</div>
+</section>
+<section id="coseno2-1" class="level4" data-number="2.4.1.5">
+<h4 data-number="2.4.1.5" class="anchored" data-anchor-id="coseno2-1"><span class="header-section-number">2.4.1.5</span> Coseno<span class="math inline">\(^2\)</span></h4>
+<p>A continuación se muestra el coseno<span class="math inline">\(^2\)</span> que representa la calidad de la representación en el mapa factorial.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>famd.column_cosine_similarities_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;bound method FAMD.column_cosine_similarities_ of FAMD(n_components=10, random_state=42)&gt;</code></pre>
+</div>
+</div>
+</section>
+<section id="contribuciones-1" class="level4" data-number="2.4.1.6">
+<h4 data-number="2.4.1.6" class="anchored" data-anchor-id="contribuciones-1"><span class="header-section-number">2.4.1.6</span> Contribuciones</h4>
+<p>En el siguiente apartado, podemos visualizar la contribución de cada una de las varaibles a las dimensiones.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>(famd.column_contributions_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>component                0         1  ...         8             9
+variable                              ...                        
+MonthlyCharges    0.014264  0.012331  ...  0.000003  3.000298e-05
+TotalCharges      0.020957  0.000047  ...  0.000149  1.543644e-07
+Churn             0.000874  0.014691  ...  0.000143  2.204343e-04
+Contract          0.005646  0.016229  ...  0.000405  1.029748e-04
+Dependents        0.000393  0.007795  ...  0.000089  1.153075e-07
+DeviceProtection  0.011795  0.000111  ...  0.000749  1.487605e-08
+Gender            0.000007  0.000014  ...  0.000745  7.746111e-04
+InternetService   0.008071  0.019095  ...  0.000611  1.715214e-04
+MultipleLines     0.005718  0.002059  ...  0.000244  4.766988e-05
+OnlineBackup      0.009671  0.000078  ...  0.000144  1.601457e-04
+OnlineSecurity    0.007538  0.001478  ...  0.001136  1.214453e-04
+PaperlessBilling  0.001418  0.009114  ...  0.000169  2.558652e-03
+Partner           0.003969  0.003655  ...  0.000051  8.182395e-05
+PaymentMethod     0.005650  0.014377  ...  0.002217  1.187443e-04
+PhoneService      0.000040  0.000459  ...  0.000004  1.374205e-06
+SeniorCitizen     0.000349  0.006331  ...  0.000059  4.426556e-04
+StreamingMovies   0.011225  0.003326  ...  0.000067  3.455221e-06
+StreamingTV       0.011051  0.003397  ...  0.000354  1.878148e-04
+TechSupport       0.009274  0.001054  ...  0.000016  5.702562e-07
+Tenure            0.014517  0.006527  ...  0.104116  1.062860e-01
+
+[20 rows x 10 columns]</code></pre>
+</div>
+</div>
+<p>La siguiente figura muestra la correlación entre las variables, tanto cuantitativas como cualitativas, y las dimensiones principales, así como la contribución de las variables a las dimensiones 1 y 2.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Coordenadas de las variables (componentes 1 y 2)</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>coords <span class="op">=</span> famd.column_coordinates_</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Elegimos los dos primeros componentes</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> coords[<span class="dv">0</span>]</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> coords[<span class="dv">1</span>]</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">8</span>))</span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>plt.axhline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">'gray'</span>, lw<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>plt.axvline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">'gray'</span>, lw<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Dibujar solo puntos con etiquetas</span></span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>plt.scatter(x, y, color<span class="op">=</span><span class="st">'white'</span>)</span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(coords)):</span>
+<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a>    plt.text(x[i], y[i], coords.index[i], fontsize<span class="op">=</span><span class="dv">9</span>, color<span class="op">=</span><span class="st">"red"</span> , ha<span class="op">=</span><span class="st">'center'</span>, va<span class="op">=</span><span class="st">'center'</span>)</span>
+<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Variables en el plano factorial (FAMD)"</span>)</span>
+<span id="cb41-19"><a href="#cb41-19" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Dim 1"</span>)</span>
+<span id="cb41-20"><a href="#cb41-20" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Dim 2"</span>)</span>
+<span id="cb41-21"><a href="#cb41-21" aria-hidden="true" tabindex="-1"></a>plt.grid(<span class="va">True</span>)</span>
+<span id="cb41-22"><a href="#cb41-22" aria-hidden="true" tabindex="-1"></a>plt.axis(<span class="st">'equal'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(-0.0379131486918263, 0.7961761225283522, -0.025316678052831384, 0.531650239109459)</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="FAMD_files/figure-html/graficoVariables-py-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>A continuación vamos a visualizar las contribuciones de las variables en la primera dimensión.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Obtener coordenadas de las variables</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>coords <span class="op">=</span> famd.column_coordinates_</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcular la contribución (cos²) al eje 1</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Es la coordenada al cuadrado de cada variable en ese eje</span></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>contrib <span class="op">=</span> (coords[<span class="dv">0</span>] <span class="op">**</span> <span class="dv">2</span>)</span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Normalizar en porcentaje</span></span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>contrib_percent <span class="op">=</span> <span class="dv">100</span> <span class="op">*</span> contrib <span class="op">/</span> contrib.<span class="bu">sum</span>()</span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Ordenar de mayor a menor</span></span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a>contrib_percent <span class="op">=</span> contrib_percent.sort_values(ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcular la media</span></span>
+<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a>mean_contrib <span class="op">=</span> <span class="dv">100</span> <span class="op">/</span> <span class="bu">len</span>(contrib_percent)</span>
+<span id="cb44-16"><a href="#cb44-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-17"><a href="#cb44-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Graficar</span></span>
+<span id="cb44-18"><a href="#cb44-18" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb44-19"><a href="#cb44-19" aria-hidden="true" tabindex="-1"></a>sns.barplot(x<span class="op">=</span>contrib_percent.values, y<span class="op">=</span>contrib_percent.index, palette<span class="op">=</span><span class="st">"Blues_d"</span>)</span>
+<span id="cb44-20"><a href="#cb44-20" aria-hidden="true" tabindex="-1"></a>plt.axvline(mean_contrib, color<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, label<span class="op">=</span><span class="ss">f'Media = </span><span class="sc">{</span>mean_contrib<span class="sc">:.2f}</span><span class="ss">%'</span>)</span>
+<span id="cb44-21"><a href="#cb44-21" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Contribución al componente 1 (%)'</span>)</span>
+<span id="cb44-22"><a href="#cb44-22" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Contribución de variables al eje 1 (FAMD)'</span>)</span>
+<span id="cb44-23"><a href="#cb44-23" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb44-24"><a href="#cb44-24" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb44-25"><a href="#cb44-25" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="FAMD_files/figure-html/contribuciones1aDim-py-3.png" class="img-fluid figure-img" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Seguidamente podemos ver las contribuciones de las variables en la 2a dimensión.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Obtener coordenadas de las variables</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>coords <span class="op">=</span> famd.column_coordinates_</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcular la contribución (cos²) al eje 1</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Es la coordenada al cuadrado de cada variable en ese eje</span></span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>contrib <span class="op">=</span> (coords[<span class="dv">1</span>] <span class="op">**</span> <span class="dv">2</span>)</span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Normalizar en porcentaje</span></span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>contrib_percent <span class="op">=</span> <span class="dv">100</span> <span class="op">*</span> contrib <span class="op">/</span> contrib.<span class="bu">sum</span>()</span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Ordenar de mayor a menor</span></span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a>contrib_percent <span class="op">=</span> contrib_percent.sort_values(ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcular la media</span></span>
+<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a>mean_contrib <span class="op">=</span> <span class="dv">100</span> <span class="op">/</span> <span class="bu">len</span>(contrib_percent)</span>
+<span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-17"><a href="#cb45-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Graficar</span></span>
+<span id="cb45-18"><a href="#cb45-18" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb45-19"><a href="#cb45-19" aria-hidden="true" tabindex="-1"></a>sns.barplot(x<span class="op">=</span>contrib_percent.values, y<span class="op">=</span>contrib_percent.index, palette<span class="op">=</span><span class="st">"Blues_d"</span>)</span>
+<span id="cb45-20"><a href="#cb45-20" aria-hidden="true" tabindex="-1"></a>plt.axvline(mean_contrib, color<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, label<span class="op">=</span><span class="ss">f'Media = </span><span class="sc">{</span>mean_contrib<span class="sc">:.2f}</span><span class="ss">%'</span>)</span>
+<span id="cb45-21"><a href="#cb45-21" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Contribución al componente 2 (%)'</span>)</span>
+<span id="cb45-22"><a href="#cb45-22" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Contribución de variables al eje 2 (FAMD)'</span>)</span>
+<span id="cb45-23"><a href="#cb45-23" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb45-24"><a href="#cb45-24" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb45-25"><a href="#cb45-25" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="FAMD_files/figure-html/contribuciones2aDim-py-5.png" class="img-fluid figure-img" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>La línea discontinua roja en el gráfico anterior indica el valor promedio esperado, si las contribuciones fueran uniformes.</p>
+<p>De los gráficos anteriormente expuestos se puede observar que:</p>
+<ul>
+<li><p>Las variables más contribuyentes a la primera dimensión són:</p>
+<ul>
+<li>…</li>
+</ul></li>
+<li><p>Las variables que más contribuyen a la segunda dimensión son:</p>
+<ul>
+<li>…</li>
+</ul></li>
+</ul>
+</section>
+</div>
+</div>
+</div>
+</section>
+<section id="variables-cuantitativas" class="level3" data-number="2.4.2">
+<h3 data-number="2.4.2" class="anchored" data-anchor-id="variables-cuantitativas"><span class="header-section-number">2.4.2</span> Variables cuantitativas</h3>
+<p>Para extraer los resultados de las variables cuantitativas, se debe realizar el siguiente proceso:</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" role="tab" aria-controls="tabset-6-1" aria-selected="true">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" role="tab" aria-controls="tabset-6-2" aria-selected="false">Python</a></li></ul>
+<div class="tab-content">
+<div id="tabset-6-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-6-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>(quanti.var <span class="ot">&lt;-</span> <span class="fu">get_famd_var</span>(res.famd, <span class="st">"quanti.var"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>FAMD results for quantitative variables 
  ===================================================
@@ -495,47 +1025,53 @@ Partner         0.502918193  0.014402831 3.515093e-05</code></pre>
 3 "$contrib" "Contributions"                  </code></pre>
 </div>
 </div>
+<p>A continuación vamos a visualizar el círculo unitario tal y como extraiamos de la aplicación del <strong>ACP</strong>. Para no superponer las etiquetas de las variables numéricas, vamos a utilizar el parámetro <code>repel = TRUE</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_famd_var</span>(res.famd, <span class="st">"quanti.var"</span>, <span class="at">repel =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">col.var =</span> <span class="st">"black"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_famd_var</span>(res.famd, <span class="st">"quanti.var"</span>, <span class="at">repel =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">col.var =</span> <span class="st">"black"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="FAMD_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="FAMD_files/figure-html/circuloUnitario-R-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
+<p>El gráfico de variables (círculo unitario) muestra la relación entre las variables, la calidad de su representación, así como la correlación entre las variables y las dimensiones.</p>
+<p>Las variables cuantitativas más contribuyentes se pueden resaltar en el diagrama de dispersión mediante el argumento <code>col.var = "contrib"</code>. Esto produce un degradado de colores, que se puede personalizar mediante el argumento <code>gradient.cols</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_famd_var</span>(res.famd, <span class="st">"quanti.var"</span>, <span class="at">col.var =</span> <span class="st">"contrib"</span>, </span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">gradient.cols =</span> <span class="fu">c</span>(<span class="st">"#00AFBB"</span>, <span class="st">"#E7B800"</span>, <span class="st">"#FC4E07"</span>),</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">repel =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_famd_var</span>(res.famd, <span class="st">"quanti.var"</span>, <span class="at">col.var =</span> <span class="st">"contrib"</span>, <span class="at">gradient.cols =</span> <span class="fu">c</span>(<span class="st">"#00AFBB"</span>, <span class="st">"#E7B800"</span>, <span class="st">"#FC4E07"</span>), <span class="at">repel =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="FAMD_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="FAMD_files/figure-html/circulo Unitario Contribuciones-R-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>Del mismo modo, puede resaltar variables cuantitativas utilizando sus valores cos2 que representan la calidad de la representación en el mapa factorial. Si una variable está bien representada por dos dimensiones, la suma del cos2 se cierra a uno. Para algunos de los elementos, es posible que se requieran más de 2 dimensiones para representar perfectamente los datos.</p>
+<p>Del mismo modo, puede resaltar variables cuantitativas utilizando sus valores cos<span class="math inline">\(^2\)</span> que representan la calidad de la representación en el mapa factorial. Si una variable está bien representada por dos dimensiones, la suma del cos<span class="math inline">\(^2\)</span> se aproxima a uno. Para algunos de los elementos, es posible que se requieran más de 2 dimensiones para representar perfectamente los datos.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Color by cos2 values: quality on the factor map</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_famd_var</span>(res.famd, <span class="st">"quanti.var"</span>, <span class="at">col.var =</span> <span class="st">"cos2"</span>,</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">gradient.cols =</span> <span class="fu">c</span>(<span class="st">"#00AFBB"</span>, <span class="st">"#E7B800"</span>, <span class="st">"#FC4E07"</span>), </span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">repel =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_famd_var</span>(res.famd, <span class="st">"quanti.var"</span>, <span class="at">col.var =</span> <span class="st">"cos2"</span>, <span class="at">gradient.cols =</span> <span class="fu">c</span>(<span class="st">"#00AFBB"</span>, <span class="st">"#E7B800"</span>, <span class="st">"#FC4E07"</span>), <span class="at">repel =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="FAMD_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="FAMD_files/figure-html/circulo unitario calidad-R-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
+</div>
+<div id="tabset-6-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-2-tab">
+
+</div>
+</div>
+</div>
+</section>
+<section id="variables-cualitativas" class="level3" data-number="2.4.3">
+<h3 data-number="2.4.3" class="anchored" data-anchor-id="variables-cualitativas"><span class="header-section-number">2.4.3</span> Variables cualitativas</h3>
 <p>Al igual que las variables cuantitativas, los resultados de las variables cualitativas se pueden extraer de la siguiente manera:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>quali.var <span class="ot">&lt;-</span> <span class="fu">get_famd_var</span>(res.famd, <span class="st">"quali.var"</span>)</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>quali.var </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>(quali.var <span class="ot">&lt;-</span> <span class="fu">get_famd_var</span>(res.famd, <span class="st">"quali.var"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>FAMD results for qualitative variable categories 
  ===================================================
@@ -545,22 +1081,31 @@ Partner         0.502918193  0.014402831 3.515093e-05</code></pre>
 3 "$contrib" "Contributions"                  </code></pre>
 </div>
 </div>
+<p>Para visualizar las variables cualitativas, se ha de escribir el siguiente código:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_famd_var</span>(res.famd, <span class="st">"quali.var"</span>, <span class="at">col.var =</span> <span class="st">"contrib"</span>, </span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">gradient.cols =</span> <span class="fu">c</span>(<span class="st">"#00AFBB"</span>, <span class="st">"#E7B800"</span>, <span class="st">"#FC4E07"</span>)</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>             )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: true</span></span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a><span class="co">#| error: false</span></span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_famd_var</span>(res.famd, <span class="st">"quali.var"</span>, <span class="at">col.var =</span> <span class="st">"contrib"</span>, <span class="at">gradient.cols =</span> <span class="fu">c</span>(<span class="st">"#00AFBB"</span>, <span class="st">"#E7B800"</span>, <span class="st">"#FC4E07"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="FAMD_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="FAMD_files/figure-html/varsCualitativasContribucion-R-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
+<p>La gráfica anterior muestra las categorías de las variables categóricas.</p>
+</section>
+</section>
+<section id="individuos" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="individuos"><span class="header-section-number">2.5</span> Individuos</h2>
 <p>Si se desean hacer gráficos individuales se realiza lo siguiente.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>ind <span class="ot">&lt;-</span> <span class="fu">get_famd_ind</span>(res.famd)</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>ind</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>(ind <span class="ot">&lt;-</span> <span class="fu">get_famd_ind</span>(res.famd))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>FAMD results for individuals 
  ===================================================
@@ -570,27 +1115,47 @@ Partner         0.502918193  0.014402831 3.515093e-05</code></pre>
 3 "$contrib" "Contributions"                  </code></pre>
 </div>
 </div>
-<p>Para trazar individuos, use la función <code>fviz_mfa_ind()</code> [in factoextra]. De forma predeterminada, los individuos están coloreados en azul. Sin embargo, al igual que las variables, también es posible colorear a los individuos por sus valores de cos2 y contribución:</p>
+<p>Para representar gráficamente a los individuos, utilizaremos la función <code>fviz_mfa_ind()</code> del paquete <code>factoextra</code>. Por defecto, los individuos están coloreados en azul. Sin embargo, al igual que las variables, también es posible colorear a los individuos por sus valores de cos2 y contribución:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_famd_ind</span>(res.famd, <span class="at">col.ind =</span> <span class="st">"cos2"</span>, </span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">gradient.cols =</span> <span class="fu">c</span>(<span class="st">"#00AFBB"</span>, <span class="st">"#E7B800"</span>, <span class="st">"#FC4E07"</span>),</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">repel =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_famd_ind</span>(res.famd, <span class="at">col.ind =</span> <span class="st">"cos2"</span>, </span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">gradient.cols =</span> <span class="fu">c</span>(<span class="st">"#00AFBB"</span>, <span class="st">"#E7B800"</span>, <span class="st">"#FC4E07"</span>), <span class="at">repel =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>Las categorias de las variables cualitativas se muestran en negro. Para poder eliminar dichas modalidades, utilizamos el parámetro <code>invisible = "quali.var"</code>.</p>
+<p>Los individuos con perfiles similares se encuentran cerca en el mapa factorial.</p>
 <p>Es posible colorear a los individuos utilizando cualquiera de las variables cualitativas en la tabla de datos inicial. Para ello, se utiliza el argumento habillage en la función <code>fviz_famd_ind()</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_mfa_ind</span>(res.famd, </span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">habillage =</span> <span class="st">"Churn"</span>, <span class="co"># color by groups </span></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">palette =</span> <span class="fu">c</span>(<span class="st">"#00AFBB"</span>, <span class="st">"#E7B800"</span>, <span class="st">"#FC4E07"</span>),</span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">addEllipses =</span> <span class="cn">TRUE</span>, <span class="at">ellipse.type =</span> <span class="st">"confidence"</span>, </span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">repel =</span> <span class="cn">TRUE</span> <span class="co"># Avoid text overlapping</span></span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>             ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_mfa_ind</span>(res.famd, </span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">habillage =</span> <span class="st">"Churn"</span>, <span class="co"># color by groups </span></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">palette =</span> <span class="fu">c</span>(<span class="st">"#00AFBB"</span>, <span class="st">"#E7B800"</span>, <span class="st">"#FC4E07"</span>),</span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">addEllipses =</span> <span class="cn">TRUE</span>, <span class="at">ellipse.type =</span> <span class="st">"confidence"</span>, </span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">repel =</span> <span class="cn">TRUE</span> <span class="co"># Avoid text overlapping</span></span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>             ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>Si lo que queremos es colorear los individuos usando múltiples variables categóricas al mismo tiempo, se deberá de utilizar la función <code>fviz_ellipses()</code> del paquete <code>factoextra</code> de la siguiente forma:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_ellipses</span>(res.famd, <span class="fu">c</span>(<span class="st">"Churn"</span>, <span class="st">"Gender"</span>), <span class="at">repel =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_ellipses</span>(res.famd, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">geom =</span> <span class="st">"point"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_ellipses</span>(res.famd, <span class="fu">c</span>(<span class="st">"Churn"</span>, <span class="st">"Gender"</span>), <span class="at">repel =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="FAMD_files/figure-html/multiples varCat en planoFactorial - R-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>También se puede identificar que variables categóricas queremos representar con el id de las variables:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_ellipses</span>(res.famd, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">geom =</span> <span class="st">"point"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="FAMD_files/figure-html/multiples varCat en planoFactorial por id - R-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
 </div>
 
 
+</section>
 </section>
 
 <p>Aquesta web està creada por Dante Conti y Sergi Ramírez, (c) 2024</p></main> <!-- /main -->
@@ -820,8 +1385,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -932,7 +1495,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
-      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {
