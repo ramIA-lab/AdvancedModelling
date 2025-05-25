@@ -86,15 +86,21 @@ Respecte als mètodes avançats d'anàlisi de dades, es veuran tècniques d'anà
 
 ### Geostatatistica  
 
-[Geostatatistica](material/05_GeospatialAnalysis/teoria/)
+[Geostatatistica](material/05_GeospatialAnalysis/teoriaGeoestadistica-PMAAD.pdf/)
 
-[Geomodelling](material/05_GeospatialAnalysis/teoria/)
+[Lab sesion 10 - Geostatistica](material/05_GeospatialAnalysis/laboratorio/GeoEstadistica.R)
 
-[Lab sesion 10 - Geostatistica](material/05_GeospatialAnalysis/laboratorio/)
-
-[Lab sesion 11 - Geomodelling](material/05_GeospatialAnalysis/laboratorio/)
+[Lab sesion 11 - Geomodelling](material/05_GeospatialAnalysis/laboratorio/POINT-Processes-Script.R)
 
 ## Texual Analysis
+
+### *CA-GALT* 
+
+[CA-GALT](material/06_TextualAnalysis/teoria/CA-OnTextualData.pdf)
+
+[Textual Analysis](material/06_TextualAnalysis/teoria/PMAAD-TextualAnlysis-Review.pdf)
+
+[Lab sesion 12 - Topic Modelling](material/06_TextualAnalysis/laboratorio/CA-OnTextualData.R)
 
 ### *Topic Modelling* 
 
